@@ -1,0 +1,14 @@
+.svgRoot {
+  height: 100%;
+  width: 100%;
+  pointer-events: all;
+}
+
+.svgContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.scrollableSVGcontainer {
+  overflow-y: scroll;
+}

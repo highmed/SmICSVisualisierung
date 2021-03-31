@@ -1,0 +1,108 @@
+# Official framework image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/node/tags/
+image: node:14
+
+stages:
+  - Build
+  - Static and Dynamic Tests
+  - Docs
+  - Deploy
+
+# This folder is cached between builds
+# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  # this is required in (nearly) all jobs since we cannot completely trust the caches (and at some point they are empty
+  # or outdated)
+  - npm install
+
+Build Client:
+  stage: Build
+  script:
+    - npm run build-client
+  artifacts:
+    paths:
+      - build/public/
+
+Build Server:
+  stage: Build
+  script:
+    - npm run build-server
+    # Also make sure that the most recent type annotations have been committed
+    - if [[ -n $(git status --porcelain) ]]; then echo "Updated type annotations in src/server/data_io/type_declarations/generated/ have not been committed yet"; exit 1; fi
+  artifacts:
+    paths:
+      - build/server/
+
+#Linter (ESLint):
+#  stage: Static and Dynamic Tests
+#  allow_failure: true
+#  dependencies: []
+#  script:
+#    - npm install eslint
+#    - ./node_modules/.bin/eslint `find src/public -wholename '*.js'`
+#    - echo "Needs checking if it works"
+#    - exit 1
+
+Unit Tests:
+  stage: Static and Dynamic Tests
+  script:
+    - npm run test
+
+Test Startup:
+  stage: Static and Dynamic Tests
+  script:
+    # timeout is part of the GNU core utils and present in Docker image node:14
+    - status=0 # it might not be changed in the next line
+    - timeout --preserve-status 10s npm run start || status=$?
+    # see: https://nodejs.org/api/process.html#process_exit_codes
+    # exit non-zero if npm/node exited with something in [1, 128]; beyond that is cause by sending signals
+    - if [ $status -ge 1 ] && [ $status -le 128 ] ; then echo "command \"npm run start\" failed with status code $status"; exit $status; fi
+
+#Generate Documentation:
+#  stage: Docs
+#  dependencies: []
+#  needs: []
+#  allow_failure: true
+#  script:
+#    - npm install jsdoc
+#    - ./node_modules/.bin/jsdoc -v
+#    - source=$( find src -wholename '*.js' )
+#    - ./node_modules/.bin/jsdoc src/**/*.js -d build/docs/
+#    - echo "Needs checking it it works"
+#    - exit 1
+#  artifacts:
+#    paths:
+#      - build/docs/
+
+Deploy to internal Server:
+  image: ubuntu:latest # this is the latest LTS version of Ubuntu
+  stage: Deploy
+  when: manual
+  only:
+    refs: # only if the pipeline has been scheduled on or runs for the master branch
+      - master
+      - schedules
+  dependencies:
+    - Build Server
+    - Build Client
+  environment:
+    name: Internal Testing at ivismic
+    url: http://ivismic.igd.fraunhofer.de
+  before_script:
+    # this disables "npm install"
+    # prepare the SSH connection
+    - apt-get update -q
+    - apt-get install ssh sshpass -yqq
+    - mkdir -p ~/.ssh  # create if not yet existing
+    # add ivismic.igd.fraunhofer.de (146.140.218.52) to the known hosts (with cipher ssh-ed25519)
+    - echo "ivismic.igd.fraunhofer.de ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBfcRm76NqcVJ65efSA9aufRj3F8jEBjuOLdy81WL+0E" >> ~/.ssh/known_hosts
+    - echo "146.140.218.52 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBfcRm76NqcVJ65efSA9aufRj3F8jEBjuOLdy81WL+0E" >> ~/.ssh/known_hosts
+    # from here on, SSH connections can be established
+  script:
+    - sshpass -p "$DEPLOY_PASSWORD" ssh -l "$DEPLOY_USER" ivismic.igd.fraunhofer.de "echo hi"
+    - echo TODO
+    - exit 1

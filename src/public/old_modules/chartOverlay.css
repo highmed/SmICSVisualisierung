@@ -1,0 +1,57 @@
+.overlayDiv {
+  z-index: 801;
+  position: absolute;
+  top: 0;
+  left: 0;
+  vertical-align: middle;
+  background: white;
+  /* background: #dddddd; */
+  /* background: rgba(150, 150, 150, 0.5); */
+  /* background: #d0ff00; */
+  /* opacity: 0.5; */
+  height: 100%;
+  width: 100%;
+}
+
+.loadingCircle {
+  position: relative;
+  top: calc(50% - 40px - 20px);
+  left: calc(50% - 40px - 20px);
+  /* border: 20px solid #ffffff; */
+  border: 20px solid #91a6e9;
+  border-top: 20px solid rgb(41, 35, 92);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  /* animation: spin 2s linear infinite; */
+  animation: spin 2s ease infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.overlayDiv.available {
+  /* background: #01bb01; */
+  display: none;
+}
+
+.overlayDiv.loading {
+  /* background: #0000ff; */
+}
+
+.overlayDiv.error {
+  word-wrap: break-word;
+  background: #ff0000;
+  font-size: 18px;
+  color: white;
+}
+
+.overlayDiv.invisible {
+  display: none;
+}

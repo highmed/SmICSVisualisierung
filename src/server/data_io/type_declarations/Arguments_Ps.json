@@ -1,0 +1,18 @@
+{
+  "$id": "args/Arguments_Ps",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "patientList": {
+      "type": "array",
+      "description": "patient IDs",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "patientList"
+  ]
+}

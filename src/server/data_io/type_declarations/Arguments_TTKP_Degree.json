@@ -1,0 +1,46 @@
+{
+  "$id": "args/Arguments_TTKP_Degree",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "starttime": {
+      "type": "string",
+      "moment": {
+        "validate": [
+          {
+            "test": "isSameOrAfter",
+            "value": "1980-01-01T00:00:00Z"
+          }
+        ]
+      }
+    },
+    "endtime": {
+      "type": "string",
+      "moment": {
+        "validate": [
+          {
+            "test": "isSameOrAfter",
+            "value": {
+              "$data": "1/starttime"
+            }
+          },
+          {
+            "test": "isSameOrBefore",
+            "value": "2100-01-01T00:00:00Z"
+          }
+        ]
+      }
+    },
+    "patientID": {
+      "type": "string"
+    },
+    "hospital": {
+      "type": "string"
+    },
+    "degree": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": ["starttime", "endtime", "patientID", "hospital", "degree"]
+}

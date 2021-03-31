@@ -1,0 +1,93 @@
+.legend_overlay {
+  background: rgba(255, 255, 255, 0.8);
+
+  position: fixed;
+
+  height: calc(100% - 100px);
+  top: 100px;
+  width: 100%;
+
+  z-index: 803;
+
+  box-shadow: inset 0 0 100px #000000;
+  // box-shadow: inset 0 0 100px rgb(41, 35, 92);
+  // border: black 2px solid;
+
+  padding: 50px;
+
+  display: grid;
+
+  grid-template-areas: "epikurve kontaktnetz linelist";
+  grid-template-columns: 33% 33% auto;
+  grid-template-rows: 100%;
+}
+
+.module_legend > h3 {
+  font-size: 2em;
+  text-decoration: underline;
+}
+
+.module_legend > h4 {
+  font-size: 1.5em;
+}
+
+.module_legend {
+  // border: 2px black solid;
+  border-radius: 25px;
+  text-align: center;
+
+  padding: 10px;
+  margin: 10px;
+
+  box-shadow: inset 0 0 100px #ffffff;
+
+  overflow-y: scroll;
+  // width: 100%;
+  // height: 100%;
+}
+
+// .module_legend_container {
+//   width: 100%;
+//   height: 100%;
+//   overflow-y: scroll;
+// }
+
+.epikurve_legend {
+  grid-area: epikurve;
+}
+
+.kontaktnetz_legend {
+  grid-area: kontaktnetz;
+}
+
+.linelist_legend {
+  grid-area: linelist;
+}
+
+.legend_overlay img {
+  width: 100%;
+}
+
+.spacer_div {
+  height: 1px;
+  border: solid black 3px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+// ::-webkit-scrollbar {
+//   width: 13px;
+//   height: 13px;
+// }
+// ::-webkit-scrollbar-thumb {
+//   background: linear-gradient(13deg, #5998eb 14%, #29235c 64%);
+//   border-radius: 10px;
+// }
+// ::-webkit-scrollbar-thumb:hover {
+//   background: linear-gradient(13deg, #5565db 14%, #29235c 64%);
+// }
+// ::-webkit-scrollbar-track {
+//   background: #ffffff;
+//   border-radius: 10px;
+//   box-shadow: inset 7px 10px 12px #f0f0f0;
+// }

@@ -1,0 +1,7 @@
+{
+  "$id": "args/Arguments_Empty",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {},
+  "required": []
+}

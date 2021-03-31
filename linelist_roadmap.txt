@@ -1,0 +1,22 @@
+Linelist implementaiton Roadmap
+
+1. Linelist ohne Interaktion etc
+- Patienten-Liste (Legende) rechts
+2. Linelist mit Zoom-Interaktion
+- zoom listener + boundaries
+3. Linelist mit Drag-Interaktion
+- on-click listeners + boundaries
+4. Linelist mit Scroll-Interaktion
+- linbks den Scroll-Balken
+- Linelist ist unten/oben bündig!
+5. Mouseline
+- Zeitstempel der Mouseline unten + links/rechts Seite korrekt implementieren
+6. Click-Interaktion (Bewegungen zum highlighten)
+7. Mouse-Over / Tooltip Interaktion
+8. "Minimale Anzeige"
+
+
+- Background-Rects
+
+
+ALLGEMEIN: Legende irgendwo einfügen

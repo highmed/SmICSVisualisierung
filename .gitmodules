@@ -1,0 +1,3 @@
+[submodule "src/server/foreign_libraries/libraries/praktikumcf2020"]
+	path = src/server/foreign_libraries/libraries/praktikumcf2020
+	url = git@gitlab.gcc.informatik.tu-darmstadt.de:highmed/praktikumcf2020.git

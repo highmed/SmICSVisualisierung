@@ -1,0 +1,43 @@
+Parameter, die man einstellen kann:
+- starttime: String       (Datepicker)
+- endtime: String         (Datepicker)
+- patientList: String[]   (String Input + comma separation)
+- pathogenList: String[]  (String Input + comma separation)
+- station: String[]       (String Input + comma separation)
+(- hospital: "1")
+
+Filter, die über die Module hinweg eingestellt/beachtet werden können:
+- min_t
+- max_t
+- selected_patients
+- selected_stations
+- selected_pathogen(s) ?
+
+
+- - - - - PARAMETER - - - - -
+
+
+- - - - - FILTER - - - - -
+
+--> filter_data() in jedem Vis-Modul
+- speichert gefilterte Daten
+- bei jedem Modul ein boolean, on volle oder gefilterte Daten angezeigt werden sollen
+- und bei jedem Modul ein freeze-boolean zum Einfrieren und ENTKOPPELN der vis von allen callbacks
+- filter_data() wird aufgerufen bei neuen daten und bei Filter-Änderungen
+- BSP Epikurve:
+  - ruft einen callback auf -> setzen von min_t und max_t exemplarisch!!!
+
+- Epikurve:
+  - keine Filter-Effekte, außer dass timeLense umgestellt wird
+
+- Linelist:
+  - Bewegungen und Inspections werden gefiltert
+  - bei Überlappung wird Beginn/Ende neu gesetzt!
+  - Die Backgrounds werden neu berechnet!
+  - Patienten-Filter: ausgrauen der anderen
+
+- Kontaktnetzwerk
+  - Zeitliches filtern filtert die Edges
+  - Patienten-filtern -> ausgrauen/opacity der Nodes und Edges
+
+Pathogen und Station -> KEIN FILTERING, gibt jeweils nur eins in BFAST

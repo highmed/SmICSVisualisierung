@@ -1,0 +1,434 @@
+{
+  "accept": {
+    "eng": "Accept",
+    "ger": "Akzeptieren",
+    "rus": "Принять",
+    "cov": "Akzeptieren"
+  },
+  "cancel": {
+    "eng": "Cancel",
+    "ger": "Abbrechen",
+    "rus": "Отменить",
+    "cov": "Abbrechen"
+  },
+  "hide": {
+    "eng": "hide",
+    "ger": "verstecken",
+    "rus": "скрыть",
+    "cov": "ausblenden"
+  },
+  "show": {
+    "eng": "show",
+    "ger": "zeigen",
+    "rus": "показать",
+    "cov": "einblenden"
+  },
+  "Standorte": {
+    "eng": "Locations",
+    "ger": "Standorte",
+    "rus": "- ? -",
+    "cov": "Standorte"
+  },
+  "EpidemieKeim": {
+    "eng": "Epidemic curve-Pathogen",
+    "ger": "Epikurve-Keim",
+    "rus": "Epi-Pathogen",
+    "cov": "Epidemiologische Kurve"
+  },
+  "stay_and_infected_duration": {
+    "eng": "Duration stay/infected",
+    "ger": "Aufenthalts-/Krankheitsdauer",
+    "rus": "- ? -",
+    "cov": "Aufenthals-/Krankheitsdauer"
+  },
+  "Kontaktnetzwerk": {
+    "eng": "Contactnetwork",
+    "ger": "Kontaktnetzwerk",
+    "rus": "- ? -",
+    "cov": "Kontaktnetzwerk"
+  },
+  "Linelist": {
+    "eng": "Patient Timeline View",
+    "ger": "Linelist",
+    "rus": "Linelist",
+    "cov": "Patienten-Historie"
+  },
+  "Storyline": {
+    "eng": "Transmission Pathway View",
+    "ger": "Storyline",
+    "rus": "Storyline",
+    "cov": "Kontaknachverfolgung"
+  },
+  "UncertaintyNetzwerk": {
+    "eng": "Uncertainty network",
+    "ger": "Unsicherheits-Netz",
+    "rus": "- ? -",
+    "cov": "Unsicherheits-Netz"
+  },
+  "Database": {
+    "eng": "Database",
+    "ger": "Datenbank",
+    "rus": "- ? -",
+    "cov": "SARS-2 Fälle"
+  },
+  "Timespan": {
+    "eng": "Timespan",
+    "ger": "Zeitraum",
+    "rus": "- ? -",
+    "cov": "Zeitraum"
+  },
+  "KeimID": {
+    "eng": "PathogenID",
+    "ger": "KeimID",
+    "rus": "- ? -",
+    "cov": "Virus"
+  },
+  "PatientIDs": {
+    "eng": "Pat-IDs",
+    "ger": "Pat-IDs",
+    "rus": "- ? -",
+    "cov": "Patienten"
+  },
+  "Grad": {
+    "eng": "Depth",
+    "ger": "Grad",
+    "rus": "- ? -",
+    "cov": "Kontakttiefe"
+  },
+  "StationIDs": {
+    "eng": "Ward-IDs",
+    "ger": "Stat-IDs",
+    "rus": "- ? -",
+    "cov": "Stationen"
+  },
+  "wholeHospital": {
+    "eng": "whole hospital",
+    "ger": "ganze Klinik",
+    "rus": "- ? -",
+    "cov": "gesamte Klinik"
+  },
+  "firstInfections": {
+    "eng": "first infections with copystrains",
+    "ger": "Ersterkrankungen mit Copystrains",
+    "rus": "- ? -",
+    "cov": "neue Fälle"
+  },
+  "firstInfections_CS": {
+    "eng": "first infections - no copystrains",
+    "ger": "Ersterkrankungen Copystrain bereinigt",
+    "rus": "- ? -",
+    "cov": "Gesamtanzahl Fälle"
+  },
+  "totalCases": {
+    "eng": "total cases",
+    "ger": "Gesamtanzahl Fälle",
+    "rus": "- ? -",
+    "cov": "Gesamtanzahl Fälle"
+  },
+  "days": {
+    "eng": "days",
+    "ger": "Tage",
+    "rus": "- ? -",
+    "cov": "Tage"
+  },
+  "epicurveTitlePerDay": {
+    "eng": "Epidemic curve first infections (per day)",
+    "ger": "Epidemiekurve Ersterkrankungen (pro Tag)",
+    "rus": "- ? -",
+    "cov": "Epidemiologische Kurve (neue Patienten mit COVID-19) (pro Tag)"
+  },
+  "epicurveTitlePer": {
+    "eng": "Epidemic curve first infections (per",
+    "ger": "Epidemiekurve Ersterkrankungen (pro",
+    "rus": "- ? -",
+    "cov": "Epidemiologische Kurve (neue Patienten mit COVID-19) (pro"
+  },
+  "epicurveTitlePerDay_cov": {
+    "eng": "Epidemic curve first infections (per day)",
+    "ger": "Epidemiekurve Ersterkrankungen (pro Tag)",
+    "rus": "- ? -",
+    "cov": "Tagesaktuelle Fallzahl der stationären COVID-19 Patienten (pro Tag)"
+  },
+  "epicurveTitlePer_cov": {
+    "eng": "Epidemic curve first infections (per",
+    "ger": "Epidemiekurve Ersterkrankungen (pro",
+    "rus": "- ? -",
+    "cov": "Tagesaktuelle Fallzahl der stationären COVID-19 Patienten (pro"
+  },
+  "noDataLoaded": {
+    "eng": "No data loaded so far.",
+    "ger": "Keine Daten bisher geladen.",
+    "rus": "- ? -",
+    "cov": "noch keine Daten geladen"
+  },
+  "dateFormat": {
+    "eng": "dd YYYY.MM.DD hh:mm:ss",
+    "ger": "dd DD.MM.YYYY HH:mm:ss",
+    "rus": "- ? -",
+    "cov": "dd DD.MM.YYYY HH:mm:ss"
+  },
+  "duration": {
+    "eng": "duration",
+    "ger": "Dauer",
+    "rus": "- ? -",
+    "cov": "Dauer"
+  },
+  "result": {
+    "eng": "result",
+    "ger": "Ergebnis",
+    "rus": "- ? -",
+    "cov": "Ergebnis"
+  },
+  "pathogen": {
+    "eng": "pathogen",
+    "ger": "Keim",
+    "rus": "- ? -",
+    "cov": "Virus"
+  },
+  "antibiotic": {
+    "eng": "antibiotic",
+    "ger": "Antibiotikum",
+    "rus": "- ? -",
+    "cov": "n/a"
+  },
+  "material": {
+    "eng": "material",
+    "ger": "Material",
+    "rus": "- ? -",
+    "cov": "Material"
+  },
+  "begin": {
+    "eng": "start time",
+    "ger": "Beginn",
+    "rus": "- ? -",
+    "cov": "Beginn"
+  },
+  "end": {
+    "eng": "end time",
+    "ger": "Ende",
+    "rus": "- ? -",
+    "cov": "Ende"
+  },
+  "showAll": {
+    "eng": "show all",
+    "ger": "alle anzeigen",
+    "rus": "- ? -",
+    "cov": "alle Patienten anzeigen"
+  },
+  "minimalView": {
+    "eng": "minimal view",
+    "ger": "minimale Anzeige",
+    "rus": "- ? -",
+    "cov": "minimale Anzeige"
+  },
+  "normalView": {
+    "eng": "default view",
+    "ger": "normale Anzeige",
+    "rus": "-",
+    "cov": "normale Anzeige"
+  },
+  "sortManually": {
+    "eng": "sorted manually",
+    "ger": "manuell sortiert",
+    "rus": "- ? -",
+    "cov": "manuell sortiert"
+  },
+  "sortInital": {
+    "eng": "sorted by initial disease",
+    "ger": "nach Ersterkrankung sortiert",
+    "rus": "- ? -",
+    "cov": "nach Neuerkrankung sortiert"
+  },
+  "colorSelect": {
+    "eng": "colored by selection",
+    "ger": "selektive Einfärbung",
+    "rus": "- ? -",
+    "cov": "Auswahl einfärben"
+  },
+  "colorWard": {
+    "eng": "colored by ward",
+    "ger": "Station Farben",
+    "rus": "- ? -",
+    "cov": "Farben nach Station"
+  },
+  "colorMovement": {
+    "eng": "colored by movement",
+    "ger": "Bewegung Farben",
+    "rus": "- ? -",
+    "cov": "Farben nach Bewegung"
+  },
+  "treatmentOn": {
+    "eng": "show treatments",
+    "ger": "Behandlungen anzeigen",
+    "rus": "- ? -",
+    "cov": "Behandlungen einblenden"
+  },
+  "treatmentOff": {
+    "eng": "hide treatments",
+    "ger": "Behandlungen verbergen",
+    "rus": "- ? -",
+    "cov": "Behandlungen ausblenden"
+  },
+  "examAll": {
+    "eng": "all examinations",
+    "ger": "alle Untersuchungen",
+    "rus": "- ? -",
+    "cov": "alle Untersuchungen einblenden"
+  },
+  "examRel": {
+    "eng": "relevant examinations",
+    "ger": "relevante Untersuchungen",
+    "rus": "- ? -",
+    "cov": "relevante Untersuchungen einblenden"
+  },
+  "examOff": {
+    "eng": "examinations off",
+    "ger": "keine Untersuchungen",
+    "rus": "- ? -",
+    "cov": "Untersuchungen ausblenden"
+  },
+  "hypothesis": {
+    "eng": "no hypothesis",
+    "ger": "keine Hypothesen",
+    "rus": "- ? -",
+    "cov": "keine Hypothesen"
+  },
+  "backwardtracking": {
+    "eng": "backward tracking",
+    "ger": "Rückverfolgung",
+    "rus": "- ? -",
+    "cov": "Rückverfolgung"
+  },
+  "forwardtracking": {
+    "eng": "forward tracking",
+    "ger": "Vorverfolgung",
+    "rus": "- ? -",
+    "cov": "Übertragungsgefahr"
+  },
+  "nodepth": {
+    "eng": "no depth",
+    "ger": "Grad 0",
+    "rus": "- ? -",
+    "cov": "keine Kontakte"
+  },
+  "depthone": {
+    "eng": "depth 1",
+    "ger": "Grad 1",
+    "rus": "- ? -",
+    "cov": "direkte Kontakte"
+  },
+  "depthn": {
+    "eng": "depth n",
+    "ger": "Grad n",
+    "rus": "- ? -",
+    "cov": "alle Kontakte"
+  },
+  "nopathsel": {
+    "eng": "no pathogen selected",
+    "ger": "Kein Erreger ausgewählt",
+    "rus": "- ? -",
+    "cov": "- - - -"
+  },
+  "criticalpath": {
+    "eng": "critical path",
+    "ger": "kritischer Patient",
+    "rus": "- ? -",
+    "cov": "kritischer Patient"
+  },
+  "transmissionath": {
+    "eng": "transmission path",
+    "ger": "Übertragungsweg",
+    "rus": "- ? -",
+    "cov": "Übertragungsweg"
+  },
+  "allpatients": {
+    "eng": "all patients",
+    "ger": "alle Patienten",
+    "rus": "- ? -",
+    "cov": "alle Patienten"
+  },
+  "selpatients": {
+    "eng": "selected patients",
+    "ger": "ausgewählte Patienten",
+    "rus": "- ? -",
+    "cov": "ausgewählte Patienten"
+  },
+  "selwards": {
+    "eng": "selected wards",
+    "ger": "ausgewählte Stationen",
+    "rus": "- ? -",
+    "cov": "ausgewählte Stationen"
+  },
+  "wardselection": {
+    "eng": "ward selection",
+    "ger": "Stations-Auswahl",
+    "rus": "- ? -",
+    "cov": "Stations-Auswahl"
+  },
+  "patientselection": {
+    "eng": "patient selection",
+    "ger": "Patienten-Auswahl",
+    "rus": "- ? -",
+    "cov": "Patienten-Auswahl"
+  },
+  "deflines": {
+    "eng": "default movement lines",
+    "ger": "Linienstärke: normal",
+    "rus": "- ? -",
+    "cov": "Linienstärke: normal"
+  },
+  "thinlines": {
+    "eng": "thin movement lines",
+    "ger": "Linienstärke: dünn",
+    "rus": "- ? -",
+    "cov": "Linienstärke: dünn"
+  },
+  "hypcircoff": {
+    "eng": "no circles",
+    "ger": "Hypothesen nicht hervorheben",
+    "rus": "- ? -",
+    "cov": "Hypothesen nicht hervorheben"
+  },
+  "hypcircon": {
+    "eng": "hypothesis circles",
+    "ger": "Hypothesen hervorheben",
+    "rus": "- ? -",
+    "cov": "Hypothesen hervorheben"
+  },
+  "UnknownContact": {
+    "eng": "unknown",
+    "ger": "unbekannt",
+    "rus": " - ",
+    "cov": "unbekannt"
+  },
+  "willBeInfected": {
+    "eng": "will be infected",
+    "ger": "wird infiziert",
+    "rus": " - ",
+    "cov": "wird infiziert"
+  },
+  "infectedCarrier": {
+    "eng": "infected - carrier",
+    "ger": "Träger",
+    "rus": " - ",
+    "cov": "positiv geflaggt"
+  },
+  "infectedDiseased": {
+    "eng": "infected - diseased",
+    "ger": "Krank",
+    "rus": " - ",
+    "cov": "diagnostiziert"
+  },
+  "HospitalIDs": {
+    "eng": "HospitalIDs",
+    "ger": "Krankenhaus",
+    "rus": "Krankenhaus",
+    "cov": "Krankenhaus"
+  },
+  "AnnotationTimeline": {
+    "eng": "Patient-Detail View",
+    "ger": "Patient-Detail Ansicht",
+    "rus": "AnnotationTimeline RUS",
+    "cov": "Patient-Detail Ansicht"
+  }
+}

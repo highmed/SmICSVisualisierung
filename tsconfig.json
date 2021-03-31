@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "build/server",
+    "allowJs": false,
+    "target": "ES5",
+    "sourceMap": true,
+    "locale": "en",
+    "resolveJsonModule": true,
+    "moduleResolution": "Node",
+
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "strict": true
+  },
+  "include": ["src/server/**/*"],
+  "exclude": ["src/server/foreign_libraries/**/*"]
+}

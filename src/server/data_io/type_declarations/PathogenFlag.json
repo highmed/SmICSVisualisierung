@@ -1,0 +1,46 @@
+{
+  "$id": "data/PathogenFlag",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "uniqueItems": true,
+  "items": {
+    "type": "object",
+    "properties": {
+      "PatientID": {
+        "type": "string"
+      },
+      "Flag": {
+        "type": "boolean"
+      },
+      "KeimID": {
+        "type": "string"
+      },
+      "Keim_l": {
+        "type": "string",
+        "minLength": 1
+      },
+      "DokumentationsDatum": {
+        "type": "string",
+        "moment": {
+          "validate": [
+            {
+              "test": "isSameOrAfter",
+              "value": "1980-01-01T00:00:00Z"
+            },
+            {
+              "test": "isSameOrBefore",
+              "value": "2100-01-01T00:00:00Z"
+            }
+          ]
+        }
+      }
+    },
+    "required": [
+      "PatientID",
+      "Flag",
+      "KeimID",
+      "Keim_l",
+      "DokumentationsDatum"
+    ]
+  }
+}

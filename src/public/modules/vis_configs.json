@@ -1,0 +1,9 @@
+{
+  "colors": {
+    "negative": "#377eb8",
+    "unknown": "#646464",
+    "willBeInfected": "646464",
+    "infectedCarrier": "#ff7f00",
+    "infectedDiseased": "#d7191c"
+  }
+}

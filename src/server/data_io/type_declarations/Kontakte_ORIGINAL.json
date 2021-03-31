@@ -1,0 +1,64 @@
+{
+  "$id": "data/Kontakte",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "uniqueItems": true,
+  "items": {
+    "type": "object",
+    "properties": {
+      "paID": {
+        "type": "string",
+        "description": "Patient A"
+      },
+      "pbID": {
+        "type": "string",
+        "description": "Patient B"
+      },
+      "Beginn": {
+        "type": "string",
+        "moment": {
+          "validate": [
+            {
+              "test": "isSameOrAfter",
+              "value": "1980-01-01T00:00:00Z"
+            }
+          ]
+        }
+      },
+      "Ende": {
+        "type": "string",
+        "moment": {
+          "validate": [
+            {
+              "test": "isSameOrAfter",
+              "value": {
+                "$data": "1/Beginn"
+              }
+            },
+            {
+              "test": "isSameOrBefore",
+              "value": "2100-01-01T00:00:00Z"
+            }
+          ]
+        }
+      },
+      "StationID": {
+        "type": "string"
+      },
+      "Grad": {
+        "type": "integer",
+        "description": "This might be missing, and in that case it would implicitly mean degree 1",
+        "minimum": 1,
+        "default": 1
+      }
+    },
+    "required": [
+      "paID",
+      "pbID",
+      "Beginn",
+      "Ende",
+      "StationID",
+      "Grad"
+    ]
+  }
+}

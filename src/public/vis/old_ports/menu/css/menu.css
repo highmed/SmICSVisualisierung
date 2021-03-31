@@ -1,0 +1,93 @@
+.menuContainer {
+  background-color: #aaaaaa;
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+/* .menuContainer .refreshButton {
+    width: 30px;
+    height: 30px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: 50px;
+    border: solid black 1px;
+}
+
+.menuContainer .refreshButton:hover {
+    box-shadow: inset 0 0 10px black;
+}
+
+.menuContainer .refreshButton:focus {
+    outline: 0;
+} */
+
+.menuContainer > div {
+  min-height: 20px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: 5px;
+  /* text-align: right; */
+  text-align: left;
+}
+
+/* .menuContainer>button {
+    flex-grow: 0;
+    cursor: pointer;
+} */
+
+.menuContainer .timeStamp {
+  font-weight: bold;
+}
+
+.menuContainer .text {
+  /* font-style: italic; */
+  font-size: 0.9em;
+}
+
+.textContainerTEMP > span {
+  display: block;
+  text-align: center;
+}
+
+.filterValueTEMP {
+  padding-right: 20px;
+}
+
+.minimizeButton {
+  width: 25px;
+  height: 25px;
+  /* flex-grow: 0;
+    flex-shrink: 0; */
+  /* position: absolute; */
+  /* right: 15; */
+  cursor: pointer;
+  border-radius: 50px;
+  border: solid black 1px;
+}
+
+.minimizeButton:hover {
+  box-shadow: inset 0 0 10px black;
+}
+
+.minimizeButton:focus {
+  outline: 0;
+}
+
+.downloadButton {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: solid black 1px;
+}
+
+.downloadButton:hover {
+  box-shadow: inset 0 0 10px black;
+}
+
+.downloadButton:focus {
+  outline: 0;
+}

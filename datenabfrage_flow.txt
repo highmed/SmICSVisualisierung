@@ -1,0 +1,18 @@
+onGetVisData()
+    # sammelt alle Namen für raw_, parsed_ und module_data zusammen für open und not_open
+    
+    onGetData_into_cache()
+    # ZWEI Funktionsweisen:
+    # für open und closed modules
+    # checkt ob daten schon im cache sind; wenn nein, holen und in cache ablegen
+    # wenn alle geholt sind, dann callback
+            is_in_cache()
+            saveToCache()
+    
+        FEHLT NOCH
+        -> daten-parsen funktionen aufrufen
+        -> modul/vis funktionen aufrufen + emitting der Daten an die Module
+        -> + Check auf error; error ansonsten absopeiuchern/emitten
+        -> erneuter Aufruf into_cache mit false-flag
+        
+        X-> !! Parameter erzeugen abhängig von raw data procedure

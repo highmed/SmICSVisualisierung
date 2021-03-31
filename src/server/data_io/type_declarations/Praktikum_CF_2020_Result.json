@@ -1,0 +1,92 @@
+{
+  "$id": "data/Praktikum_CF_2020_Result",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeID": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "moment": {
+              "validate": [
+                {
+                  "test": "isSameOrAfter",
+                  "value": "1980-01-01T00:00:00Z"
+                },
+                {
+                  "test": "isSameOrBefore",
+                  "value": "2100-01-01T00:00:00Z"
+                }
+              ]
+            }
+          },
+          "personID": {
+            "type": "string"
+          },
+          "LocationID": {
+            "type": "string"
+          },
+          "pathogens": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "properties": {
+                "pathogenID": {
+                  "type": "string"
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "screening": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "pathogenID",
+                "result"
+              ]
+            }
+          }
+        },
+        "required": [
+          "nodeID",
+          "time",
+          "personID",
+          "LocationID",
+          "pathogens"
+        ]
+      }
+    },
+    "edges": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeID_start": {
+            "type": "string"
+          },
+          "nodeID_end": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nodeID_start",
+          "nodeID_end"
+        ]
+      }
+    }
+  },
+  "required": [
+    "nodes",
+    "edges"
+  ]
+}

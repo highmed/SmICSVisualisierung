@@ -1,0 +1,5 @@
+node_modules/*
+_public/*
+_server/*
+test/*
+_electron_builds/*

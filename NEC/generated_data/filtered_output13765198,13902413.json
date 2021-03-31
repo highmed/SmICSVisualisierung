@@ -1,0 +1,95 @@
+[
+  {
+    "PatientID": 13765198,
+    "StationID": ["9RX11X"],
+    "RoomID": ["19RX11X3"],
+    "MovementTypeID": [[3, 29]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.4539745151205312,
+    "LabGroundTruth": false,
+    "PathogenGroundTruth": [
+      "Kein Nachweis von Pilzen.",
+      "Kein Wachstum von Bakterien"
+    ]
+  },
+  {
+    "PatientID": 13902413,
+    "StationID": ["X66_1_"],
+    "RoomID": ["X66_1_1_"],
+    "MovementTypeID": [[4, 91]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.6052591642896555,
+    "LabGroundTruth": true,
+    "PathogenGroundTruth": ["Achromobacter species"]
+  },
+  {
+    "PatientID": 13902413,
+    "StationID": ["9X__15"],
+    "RoomID": ["9X__151_"],
+    "MovementTypeID": [[4, 91]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.6052591642896555,
+    "LabGroundTruth": true,
+    "PathogenGroundTruth": ["Achromobacter species"]
+  },
+  {
+    "PatientID": 13902413,
+    "StationID": ["X9_169"],
+    "RoomID": ["1X9_169X"],
+    "MovementTypeID": [[3, 27]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.6052591642896555,
+    "LabGroundTruth": true,
+    "PathogenGroundTruth": ["Achromobacter species"]
+  },
+  {
+    "PatientID": 13902413,
+    "StationID": ["X6016X"],
+    "RoomID": ["1X6016X_"],
+    "MovementTypeID": [[3, 27]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.6052591642896555,
+    "LabGroundTruth": true,
+    "PathogenGroundTruth": ["Achromobacter species"]
+  },
+  {
+    "PatientID": 13902413,
+    "StationID": ["X6016X"],
+    "RoomID": ["1X6016X_"],
+    "MovementTypeID": [[3, 30]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.6052591642896555,
+    "LabGroundTruth": true,
+    "PathogenGroundTruth": ["Achromobacter species"]
+  },
+  {
+    "PatientID": 13902413,
+    "StationID": ["X6091X"],
+    "RoomID": ["X6091X1X"],
+    "MovementTypeID": [[4, 91]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.6052591642896555,
+    "LabGroundTruth": true,
+    "PathogenGroundTruth": ["Achromobacter species"]
+  },
+  {
+    "PatientID": 13902413,
+    "StationID": ["X6091X"],
+    "RoomID": ["X6091X1X"],
+    "MovementTypeID": [[4, 91]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.6052591642896555,
+    "LabGroundTruth": true,
+    "PathogenGroundTruth": ["Achromobacter species"]
+  },
+  {
+    "PatientID": 13902413,
+    "StationID": ["X6091X"],
+    "RoomID": ["X6091X1X"],
+    "MovementTypeID": [[4, 91]],
+    "Date": ["2011-04-08 23:59:59"],
+    "Prediction": 0.6052591642896555,
+    "LabGroundTruth": true,
+    "PathogenGroundTruth": ["Achromobacter species"]
+  }
+]
