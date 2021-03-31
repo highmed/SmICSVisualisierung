@@ -1,5 +1,5 @@
 # based on https://nodejs.org/fr/docs/guides/nodejs-docker-webapp/
-FROM node:13-alpine
+FROM node:14-alpine
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -16,7 +16,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-RUN npm run build-server
+RUN npm run build
 
 EXPOSE 3231
 CMD [ "npm", "run", "server" ]
