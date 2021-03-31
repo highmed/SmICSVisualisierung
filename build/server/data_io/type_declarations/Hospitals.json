@@ -1,0 +1,45 @@
+{
+    "$id": "data/Hospitals",
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "uniqueItems": true,
+    "items": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "BEZL": {
+                "type": "string",
+                "description": "Bezeichnung (lang)",
+                "minLength": 1
+            },
+            "BEZK": {
+                "type": "string",
+                "description": "Bezeichnung (kurz)",
+                "minLength": 1,
+                "maxLength": 10
+            },
+            "Lat": {
+                "type": "number",
+                "description": "the latitude of the hospital in degrees",
+                "minimum": -90.0,
+                "maximum": 90.0
+            },
+            "Lon": {
+                "type": "number",
+                "description": "the longitude of the hospital in degrees",
+                "minimum": -180.0,
+                "maximum": 180.0
+            }
+        },
+        "required": [
+            "id",
+            "BEZL",
+            "BEZK",
+            "Lat",
+            "Lon"
+        ]
+    }
+}

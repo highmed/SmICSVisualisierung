@@ -1,0 +1,5 @@
+{
+    "$id": "data/Kontakte",
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object"
+}

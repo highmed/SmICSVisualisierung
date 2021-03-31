@@ -1,0 +1,113 @@
+{
+    "$id": "data/ErregerProTag",
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "uniqueItems": true,
+    "items": {
+        "type": "object",
+        "properties": {
+            "StationID": {
+                "oneOf": [
+                    {
+                        "type": "string",
+                        "description": "if the information is given for a single requested station; if 'klinik' this means the entire hospital"
+                    },
+                    {
+                        "type": "null",
+                        "description": "if the information is given for the entire hospital"
+                    }
+                ]
+            },
+            "Datum": {
+                "type": "string",
+                "moment": {
+                    "validate": [
+                        {
+                            "test": "isSameOrAfter",
+                            "value": "1980-01-01T00:00:00Z"
+                        },
+                        {
+                            "test": "isSameOrBefore",
+                            "value": "2100-01-01T00:00:00Z"
+                        }
+                    ]
+                }
+            },
+            "ErregerID": {
+                "type": "string"
+            },
+            "ErregerBEZL": {
+                "type": "string",
+                "minLength": 1
+            },
+            "Anzahl": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "Anzahl_cs": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "MAVG7": {
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    {
+                        "type": "null"
+                    }
+                ],
+                "default": null
+            },
+            "MAVG28": {
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    {
+                        "type": "null"
+                    }
+                ],
+                "default": null
+            },
+            "MAVG7_cs": {
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    {
+                        "type": "null"
+                    }
+                ],
+                "default": null
+            },
+            "MAVG28_cs": {
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    {
+                        "type": "null"
+                    }
+                ],
+                "default": null
+            }
+        },
+        "required": [
+            "StationID",
+            "Datum",
+            "ErregerID",
+            "ErregerBEZL",
+            "Anzahl",
+            "Anzahl_cs",
+            "MAVG7",
+            "MAVG28",
+            "MAVG7_cs",
+            "MAVG28_cs"
+        ]
+    }
+}

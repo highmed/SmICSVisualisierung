@@ -1,0 +1,104 @@
+{
+    "$id": "data/Bewegungen",
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "uniqueItems": true,
+    "items": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "string"
+            },
+            "Beginn": {
+                "type": "string",
+                "moment": {
+                    "validate": [
+                        {
+                            "test": "isSameOrAfter",
+                            "value": "1980-01-01T00:00:00Z"
+                        }
+                    ]
+                }
+            },
+            "Ende": {
+                "type": "string",
+                "moment": {
+                    "validate": [
+                        {
+                            "test": "isSameOrAfter",
+                            "value": {
+                                "$data": "1/Beginn"
+                            }
+                        },
+                        {
+                            "test": "isSameOrBefore",
+                            "value": "2100-01-01T00:00:00Z"
+                        }
+                    ]
+                },
+                "description": "ist immer da, falls ein Aufenthalt noch nicht abgeschlossen ist steht hier das aktuelle Datum drin"
+            },
+            "PatientID": {
+                "type": "string"
+            },
+            "FallID": {
+                "type": "string"
+            },
+            "StationID": {
+                "type": "string"
+            },
+            "LfdNr": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "Station": {
+                "type": "string"
+            },
+            "ZimmerNr": {
+                "type": "string",
+                "description": "this is only called 'number', but is really a textual identifier"
+            },
+            "CaseID": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "CaseType_l": {
+                "type": "string",
+                "minLength": 1
+            },
+            "CaseType_k": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 10
+            },
+            "BewegungsartID": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "Bewegungsart_l": {
+                "type": "string",
+                "minLength": 1
+            },
+            "Bewegungsart_k": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 10
+            },
+            "BewegungstypID": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "Bewegungstyp": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "required": [
+            "Beginn",
+            "Ende",
+            "PatientID",
+            "FallID",
+            "BewegungstypID"
+        ]
+    }
+}
