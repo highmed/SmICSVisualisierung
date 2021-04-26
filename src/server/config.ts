@@ -52,7 +52,7 @@ export default class CONFIG {
    */
   private static readonly rest_api_config = {
     protocol: "http",
-    hostname: "localhost",
+    hostname: "smics",
     port: 9787,
     path: "/api/StoredProcedures/", // needs to end with a slash
   }

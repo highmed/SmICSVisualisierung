@@ -14,6 +14,9 @@ class Header_Menu extends Component {
     super(props)
 
     this.state = {}
+    this.hostname = window.location.hostname
+    this.protocol = window.location.protocol
+    this.port = 9787
   }
 
   create_button = (name, symbol, callback, toggled) => {
@@ -95,7 +98,10 @@ class Header_Menu extends Component {
       <BarChartIcon />,
       () => {
         console.log("STATISTIC MODULE BUTTON PRESSED")
-        window.open("http://localhost:9787", "_blank")
+        window.open(
+          this.protocol + "//" + this.hostname + ":" + this.port,
+          "_blank"
+        )
       }
     )
 
