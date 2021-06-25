@@ -52,10 +52,10 @@ The actual installation of the main parts is quite straightforward, although the
 
 ```bash
 cd to/change/into/a/new/directory
-git clone git@gitlab.gcc.informatik.tu-darmstadt.de:highmed/infectioncontrolsystem2.git
+git clone git@github.com:highmed/SmICSVisualisierung.git
 
 # change into the project
-cd infectioncontrolsystem2
+cd SmICSVisualisierung
 npm install
 ```
 
