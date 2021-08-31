@@ -10,6 +10,11 @@ class Kontaktnetzwerk extends Component {
     this.width
     this.height
 
+    this.state = {
+      locations: [],
+      selected_location_index: undefined,
+    }
+
     this.socket = props.socket
     this.translate = props.translate
     this.get_color = props.get_color
@@ -198,6 +203,30 @@ class Kontaktnetzwerk extends Component {
     this.parameters = data.parameters
     this.timestamp = data.timestamp
 
+    this.reset_view()
+
+    this.locations = []
+    this.location_prop_names = []
+    this.selected_location_index = undefined
+    data.data.graph_data.forEach((gd, i) => {
+      this.locations.push(gd.name)
+      this.location_prop_names.push(gd.propname)
+      if (i === 0) {
+        this.selected_location_index = i
+      }
+    })
+
+    this.setState((prevState) => {
+      prevState.locations = this.locations
+      prevState.selected_location_index = this.selected_location_index
+
+      return prevState
+    })
+
+    this.draw_vis()
+  }
+
+  reset_view = () => {
     this.zoom = 1
     this.lastZoomK = 1
     this.lastZoomX = 0
@@ -209,8 +238,6 @@ class Kontaktnetzwerk extends Component {
     this.old_scal_fact = 1
 
     this.gGraphics.attr("transform", "translate(" + 0 + " " + 0 + ")")
-
-    this.draw_vis()
   }
 
   draw_vis = (zooming) => {
@@ -251,6 +278,8 @@ class Kontaktnetzwerk extends Component {
     if (this.data === undefined) {
       return
     }
+
+    data = this.data.graph_data[this.selected_location_index]
 
     // TODO: temporär
     let selected_pathogen = "869"
@@ -568,8 +597,11 @@ class Kontaktnetzwerk extends Component {
       let tmpObj = {
         title: `Bewegungen von ${d.patient_id}`,
         header: [
-          "StationID",
+          // "StationID",
+          // "Station",
+          // this.locations[this.selected_location_index],
           "Station",
+          "Raum",
           "Bewegungstyp",
           "Bewegungsart",
           "Beginn",
@@ -587,8 +619,11 @@ class Kontaktnetzwerk extends Component {
         let mins = duration.minutes()
         let secs = duration.seconds()
         tmpObj.content.push([
+          // m.StationID,
+          // m.Station,
+          // m[this.location_prop_names[this.selected_location_index]],
           m.StationID,
-          m.Station,
+          m.Raum,
           m.Bewegungstyp,
           m.Bewegungsart_l,
           moment(m.Beginn).format("dd DD.MM.YYYY HH:mm:ss"),
@@ -615,7 +650,13 @@ class Kontaktnetzwerk extends Component {
     } else if (tooltipArt === "link") {
       let tmpObj = {
         title: `Kontakt von ${d.source.patient_id} und ${d.target.patient_id}`,
-        header: ["StationID", "Beginn", "Ende", "Dauer"],
+        // header: ["StationID", "Beginn", "Ende", "Dauer"],
+        header: [
+          this.locations[this.selected_location_index],
+          "Beginn",
+          "Ende",
+          "Dauer",
+        ],
         content: [],
       }
 
@@ -663,10 +704,52 @@ class Kontaktnetzwerk extends Component {
     }
   }
 
+  switchLocation = (e) => {
+    let self = this
+    let newLocation_index = e.target.value
+    this.selected_location_index = newLocation_index
+    this.setState((prevState) => {
+      prevState.selected_location_index = newLocation_index
+      return prevState
+    })
+
+    this.reset_view()
+
+    self.draw_vis()
+  }
+
   render() {
+    let self = this
+
+    let selections = []
+    this.state.locations.forEach((s_id, i) => {
+      console.log("render", s_id)
+      selections.push(
+        <option key={s_id} value={i}>
+          {s_id}
+        </option>
+      )
+    })
+    let selection = null
+    if (selections.length > 0) {
+      selection = (
+        <select
+          onChange={this.switchLocation}
+          value={this.state.selected_location_index}
+        >
+          {selections}
+        </select>
+      )
+    }
     return (
       <div style={{ width: "100%", height: "100%", background: "white" }}>
         <svg className="svgRoot" ref={(element) => (this.svgRoot = element)} />
+        <div
+          className="testdiv2"
+          style={{ position: "absolute", top: "10px", left: "100px" }}
+        >
+          {selection}
+        </div>
       </div>
     )
   }

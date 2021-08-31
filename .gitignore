@@ -1,3 +1,4 @@
+build/
 .idea/
 
 # exclude unzipped NEC example data

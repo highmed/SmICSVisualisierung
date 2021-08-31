@@ -37,6 +37,8 @@ const procedure_arguments: { readonly [key: string]: string[] } = {
     "degree",
     "hospital",
   ],
+  RKIalgo: ["starttime", "endtime"],
+  // Arguments_RKIalgo: ["starttime", "endtime"],
 }
 
 export default procedure_arguments

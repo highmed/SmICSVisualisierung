@@ -430,5 +430,59 @@
     "ger": "Patient-Detail Ansicht",
     "rus": "AnnotationTimeline RUS",
     "cov": "Patient-Detail Ansicht"
+  },
+  "EpiTopTitle": {
+    "eng": "TODO",
+    "ger": "TODO",
+    "rus": "TODO",
+    "cov": "Tagesaktuelle Fallzahl der stationären COVID-19 Patienten"
+  },
+  "EpiBottomTitle": {
+    "eng": "TODO",
+    "ger": "TODO",
+    "rus": "TODO",
+    "cov": "Neue Fälle der stationären COVID-19 Patienten"
+  },
+  "MREclass": {
+    "eng": "TODO",
+    "ger": "MRE Klasse",
+    "rus": "TODO",
+    "cov": "MRE Klasse"
+  },
+  "ResultComment": {
+    "eng": "TODO",
+    "ger": "Befundkommentar",
+    "rus": "TODO",
+    "cov": "Befundkommentar"
+  },
+  "loadData": {
+    "eng": "Load Data",
+    "ger": "Lade Daten",
+    "rus": "TODO",
+    "cov": "Lade Daten"
+  },
+  "showCache": {
+    "eng": "Show Cache",
+    "ger": "Zeige Cache",
+    "rus": "TODO",
+    "cov": "Zeige Cache"
+  },
+  "deleteCache": {
+    "eng": "Delete Cache",
+    "ger": "Lösche Cache",
+    "rus": "TODO",
+    "cov": "Lösche Cache"
+  },
+  "help_legend": {
+    "eng": "Help/Legend",
+    "ger": "Hilfe/Legende",
+    "rus": "TODO",
+    "cov": "Hilfe/Legende"
+  },
+  "statistic_module": {
+    "eng": "Open statistic module",
+    "ger": "Statistik Modul öffnen",
+    "rus": "TODO",
+    "cov": "Statistik Modul öffnen"
   }
 }

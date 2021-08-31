@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
 import BarChartIcon from "@material-ui/icons/BarChart"
+import HomeIcon from "@material-ui/icons/Home"
 import IconButton from "@material-ui/core/IconButton"
 import AutorenewIcon from "@material-ui/icons/Autorenew"
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever"
@@ -17,6 +18,8 @@ class Header_Menu extends Component {
     this.hostname = window.location.hostname
     this.protocol = window.location.protocol
     this.port = 9787
+
+    this.translate = props.translate
   }
 
   create_button = (name, symbol, callback, toggled) => {
@@ -25,6 +28,7 @@ class Header_Menu extends Component {
       <Button
         className="data-button"
         key={name}
+        title={name}
         variant={variant}
         onClick={() => {
           callback()
@@ -69,35 +73,37 @@ class Header_Menu extends Component {
     // )
 
     let requestData = this.create_button(
-      "Load Data",
+      this.translate("loadData"),
       <AutorenewIcon />,
       this.props.requestVisData
     )
 
+    // !DEV: nur zum debuggen benötigt
     let showCache = this.create_button(
-      "Show Cache",
+      this.translate("showCache"),
       <CloudDownloadIcon />,
       this.props.requestCacheData
     )
 
-    let deleteeCache = this.create_button(
-      "Delete Cache",
+    let deleteCache = this.create_button(
+      this.translate("deleteCache"),
       <DeleteForeverIcon />,
       this.props.clearCache
     )
 
     let help_legend = this.create_button(
-      "Toggle Help/Legend",
+      this.translate("help_legend"),
       <HelpOutlineIcon />,
       this.props.toggle_global_legend,
       this.props.global_legend
     )
 
     let statistic_module = this.create_button(
-      "Open Statistic Module",
-      <BarChartIcon />,
+      this.translate("statistic_module"),
+      // <BarChartIcon />,
+      <HomeIcon />,
       () => {
-        console.log("STATISTIC MODULE BUTTON PRESSED")
+        // console.log("STATISTIC MODULE BUTTON PRESSED")
         window.open(
           this.protocol + "//" + this.hostname + ":" + this.port,
           "_blank"
@@ -211,8 +217,8 @@ class Header_Menu extends Component {
       requestData,
       statistic_module,
       help_legend,
-      // showCache,
-      // deleteeCache,
+      showCache,
+      // deleteCache,
     ]
 
     let ui_elements_spaced = []

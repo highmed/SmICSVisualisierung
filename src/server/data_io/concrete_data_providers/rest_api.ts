@@ -3,6 +3,7 @@ import {
   Arguments_Ps,
   Arguments_TTEsKSs,
   Arguments_TTKP_Degree,
+  Arguments_RKIalgo,
   Bewegungen,
   DiagnosticResults,
   ErregerProTag,
@@ -156,6 +157,12 @@ export class RestAPI extends AbstractDataSource {
     )
   }
 
+  public RKIalgo = async (
+    parameters: Arguments_RKIalgo
+  ): Promise<ValidationResult<Arguments_RKIalgo>> => {
+    return this._low_level_call("RKIalgo", parameters, "data/RKIalgo")
+  }
+
   public Patient_DiagnosticResults_Ps = async (
     parameters: Arguments_Ps
   ): Promise<ValidationResult<DiagnosticResults>> => {
@@ -199,11 +206,14 @@ export class RestAPI extends AbstractDataSource {
     )
 
     const response = await fetch(this.url.concat(procedureName), {
+      // !DEV-REST-API (switch method)
       method: "POST",
+      // method: "GET", // zum entwickeln auf vs code extension rest api
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      // !DEV-REST-API (comment body)
       body: body,
     })
 

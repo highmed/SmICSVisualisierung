@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="6000"
+   height="3000"
+   viewBox="0 0 1587.5 793.75002"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="datacache_flow.svg">
+  <defs
+     id="defs2">
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker2380"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path2378"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker2220"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path2218"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mstart"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path1870"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         transform="scale(0.4) translate(10,0)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1311"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path1309"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1211"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1209"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker940"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path938"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker6313"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path6311"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1202"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path1200"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1168"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         id="path1166"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path849"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path843"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1168-3"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1166-6"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1311-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path1309-0"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="2489.1829"
+     inkscape:cy="792.39003"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1020"
+     inkscape:window-x="3840"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     units="px" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,496.75001)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="23.519718"
+       y="-455.09647"
+       id="text836"><tspan
+         sodipodi:role="line"
+         id="tspan834"
+         x="23.519718"
+         y="-455.09647"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.26458332">Click on RefreshButton</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="24.588793"
+       y="-393.62448"
+       id="text1150"><tspan
+         sodipodi:role="line"
+         id="tspan1148"
+         x="24.588793"
+         y="-393.62448"
+         style="stroke-width:0.26458332">App.js / requestVisData()</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="47.573975"
+       y="-338.56696"
+       id="text1160"><tspan
+         sodipodi:role="line"
+         id="tspan1158"
+         x="47.573975"
+         y="-338.56696"
+         style="stroke-width:0.26458332">.findOpenModules()</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1168)"
+       d="m 74.835469,-383.46823 v 28.86511"
+       id="path1162"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1202)"
+       d="m 113.32228,-350.86134 v -31.00327"
+       id="path1164"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1168-3)"
+       d="m 85.526249,-447.84736 v 39.55589"
+       id="path1162-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="218.09193"
+       y="-392.55536"
+       id="text6301"><tspan
+         sodipodi:role="line"
+         id="tspan6299"
+         x="218.09193"
+         y="-392.55536"
+         style="stroke-width:0.26458332">socket.emit(&quot;getVisData&quot;, request_parameters: open+closed modules)</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker6313)"
+       d="m 150.74001,-396.29717 h 62.54107"
+       id="path6303"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="342.63953"
+       y="-348.18866"
+       id="text6365"><tspan
+         sodipodi:role="line"
+         id="tspan6363"
+         x="342.63953"
+         y="-348.18866"
+         style="stroke-width:0.26458332">websocket_api.ts / onGetVisData(client, data)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="380.5918"
+       y="-327.34164"
+       id="text912"><tspan
+         sodipodi:role="line"
+         x="380.5918"
+         y="-327.34164"
+         style="stroke-width:0.26458332"
+         id="tspan1169">sammeln (unique) von &quot;needed data&quot;:</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker940)"
+       d="m 410.52599,-381.86461 v 20.31249"
+       id="path930"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.32291667, 2.64583333;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 9.6217028,-316.11631 H 171.0525 v -60.40291 h 497.65583"
+       id="path1008"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="261.92413"
+       y="-451.35468"
+       id="text1012"><tspan
+         sodipodi:role="line"
+         id="tspan1010"
+         x="261.92413"
+         y="-451.35468"
+         style="font-size:22.57777786px;stroke-width:0.26458332">FRONTEND</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="182.08939"
+       y="-335.84076"
+       id="text1012-3"><tspan
+         sodipodi:role="line"
+         id="tspan1010-6"
+         x="182.08939"
+         y="-335.84076"
+         style="font-size:22.57777786px;stroke-width:0.26458332">BACKEND</tspan></text>
+    <path
+       style="fill:none;stroke:#0000ff;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 345.84677,-387.21 h 216.48829 l -10.69078,28.59784 h -12.02711 v 13.89802 h 22.98518 v -13.63075 h -11.75986"
+       id="path1034"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="389.43921"
+       y="-310.00668"
+       id="text912-7"><tspan
+         sodipodi:role="line"
+         x="389.43921"
+         y="-310.00668"
+         style="stroke-width:0.26458332"
+         id="tspan914-3">- OPEN MODULES</tspan><tspan
+         sodipodi:role="line"
+         x="389.43921"
+         y="-296.77753"
+         style="stroke-width:0.26458332"
+         id="tspan920-5">        - module data</tspan><tspan
+         sodipodi:role="line"
+         x="389.43921"
+         y="-283.54834"
+         style="stroke-width:0.26458332"
+         id="tspan922-6">        - parsed data</tspan><tspan
+         sodipodi:role="line"
+         x="389.43921"
+         y="-270.31918"
+         style="stroke-width:0.26458332"
+         id="tspan928-7">        - raw data</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="485.65628"
+       y="-292.90146"
+       id="text912-0"><tspan
+         sodipodi:role="line"
+         x="485.65628"
+         y="-292.90146"
+         style="stroke-width:0.26458332"
+         id="tspan924-1">- CLOSED MODULES</tspan><tspan
+         sodipodi:role="line"
+         x="485.65628"
+         y="-279.6723"
+         style="stroke-width:0.26458332"
+         id="tspan916-8">        - module data</tspan><tspan
+         sodipodi:role="line"
+         x="485.65628"
+         y="-266.44312"
+         style="stroke-width:0.26458332"
+         id="tspan926-7">        - parsed data</tspan><tspan
+         sodipodi:role="line"
+         x="485.65628"
+         y="-253.21396"
+         style="stroke-width:0.26458332"
+         id="tspan928-9">        - raw data</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="84.457169"
+       y="-284.04395"
+       id="text1175"><tspan
+         sodipodi:role="line"
+         id="tspan1173"
+         x="84.457169"
+         y="-284.04395"
+         style="stroke-width:0.26458332">.onGetData_into_cache(</tspan><tspan
+         sodipodi:role="line"
+         x="84.457169"
+         y="-270.81479"
+         style="stroke-width:0.26458332"
+         id="tspan1177">    client,</tspan><tspan
+         sodipodi:role="line"
+         x="84.457169"
+         y="-257.5856"
+         style="stroke-width:0.26458332"
+         id="tspan1179">    <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan1195">payload</tspan>,</tspan><tspan
+         sodipodi:role="line"
+         x="84.457169"
+         y="-244.35645"
+         style="stroke-width:0.26458332"
+         id="tspan1185">    LISTS of needed data,</tspan><tspan
+         sodipodi:role="line"
+         x="84.457169"
+         y="-231.12727"
+         style="stroke-width:0.26458332"
+         id="tspan1187">    true (for open modules)</tspan><tspan
+         sodipodi:role="line"
+         x="84.457169"
+         y="-217.89812"
+         style="stroke-width:0.26458332"
+         id="tspan1189">)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="562.86969"
+       y="-360.48303"
+       id="text1183"><tspan
+         sodipodi:role="line"
+         id="tspan1181"
+         x="562.86969"
+         y="-360.48303"
+         style="fill:#0000ff;fill-opacity:1;stroke-width:0.26458332">=payload</tspan></text>
+    <path
+       style="fill:none;stroke:#f70000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 383.26448,-321.99623 h 205.26301 v 78.0427 H 385.9372 v -78.0427 l -177.46697,73.23185 -5.47903,7.75081 H 92.475255 v -13.36348 H 206.19844 l -0.13364,9.2208"
+       id="path1193"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1211)"
+       d="m 360.81385,-340.17056 -153.4127,67.35192"
+       id="path1201"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="59.868374"
+       y="-193.17232"
+       id="text1275"><tspan
+         sodipodi:role="line"
+         id="tspan1273"
+         x="59.868374"
+         y="-193.17232"
+         style="stroke-width:0.26458332">1. testen, ob typeof <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan1277">payload</tspan>.parameters === object und !== null</tspan><tspan
+         sodipodi:role="line"
+         x="59.868374"
+         y="-179.94315"
+         style="stroke-width:0.26458332"
+         id="tspan1289">        --&gt; ansonsten return + dataError ans FRONTEND</tspan><tspan
+         sodipodi:role="line"
+         x="59.868374"
+         y="-166.71399"
+         style="stroke-width:0.26458332"
+         id="tspan1287" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="58.799297"
+       y="-154.68553"
+       id="text1293"><tspan
+         sodipodi:role="line"
+         id="tspan1291"
+         x="58.799297"
+         y="-154.68553"
+         style="stroke-width:0.26458332">2.</tspan><tspan
+         sodipodi:role="line"
+         x="58.799297"
+         y="-141.45636"
+         style="stroke-width:0.26458332"
+         id="tspan1295">        - raw data: aus procedure_arguments.ts fuer procedureName die Arguments aus parameters rauslesen</tspan><tspan
+         sodipodi:role="line"
+         x="58.799297"
+         y="-128.2272"
+         style="stroke-width:0.26458332"
+         id="tspan1297">        - hash_ID erzeugen</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1311)"
+       d="m 235.10119,-116.50594 v 47.625"
+       id="path1301"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32291663;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Mstart)"
+       d="m 313.72024,-113.65174 v 47.625"
+       id="path1301-2"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       x="200.98669"
+       y="-44.0359"
+       id="text2208"><tspan
+         sodipodi:role="line"
+         id="tspan2206"
+         x="200.98669"
+         y="-44.0359"
+         style="stroke-width:0.26458335">.is_in_cache(hash_ID, procedureName) -&gt; returns boolean</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2.64583337;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#marker2220)"
+       d="m 331.8631,-118.77382 h 395.11003 v -310.13022 h 42.76312"
+       id="path2210"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       x="802.16626"
+       y="-115.06331"
+       id="text2308"><tspan
+         sodipodi:role="line"
+         id="tspan2306"
+         x="802.16626"
+         y="-115.06331"
+         style="stroke-width:0.26458335">if raw data for this procedure name is NOT cached (ignoring GetDataSources case...)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       x="328.56085"
+       y="-98.725311"
+       id="text2312"><tspan
+         sodipodi:role="line"
+         id="tspan2310"
+         x="328.56085"
+         y="-98.725311"
+         style="stroke-width:0.26458335">false</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       x="781.31866"
+       y="-433.4957"
+       id="text2308-3"><tspan
+         sodipodi:role="line"
+         id="tspan2306-7"
+         x="781.31866"
+         y="-433.4957"
+         style="stroke-width:0.26458335">if raw data for this procedure is already in cache</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       x="320.68546"
+       y="-121.21532"
+       id="text2312-5"><tspan
+         sodipodi:role="line"
+         id="tspan2310-9"
+         x="320.68546"
+         y="-121.21532"
+         style="stroke-width:0.26458335">true</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       x="806.61945"
+       y="-405.91885"
+       id="text2352"><tspan
+         sodipodi:role="line"
+         id="tspan2350"
+         x="806.61945"
+         y="-405.91885"
+         style="stroke-width:0.26458335">raw_data_counter++</tspan><tspan
+         sodipodi:role="line"
+         x="806.61945"
+         y="-392.6897"
+         style="stroke-width:0.26458335"
+         id="tspan2354" /><tspan
+         sodipodi:role="line"
+         x="806.61945"
+         y="-379.46051"
+         style="stroke-width:0.26458335"
+         id="tspan2356">FALLS raw_data_counter === alle_needed_raw_data.length</tspan><tspan
+         sodipodi:role="line"
+         x="806.61945"
+         y="-366.23135"
+         style="stroke-width:0.26458335;fill:#007900;fill-opacity:1"
+         id="tspan2358">--&gt; onGetParsedData_into_cache(</tspan><tspan
+         sodipodi:role="line"
+         x="806.61945"
+         y="-353.0022"
+         style="stroke-width:0.26458335;fill:#007900;fill-opacity:1"
+         id="tspan2360">    client,</tspan><tspan
+         sodipodi:role="line"
+         x="806.61945"
+         y="-339.77301"
+         style="stroke-width:0.26458335;fill:#007900;fill-opacity:1"
+         id="tspan2364">    payload,</tspan><tspan
+         sodipodi:role="line"
+         x="806.61945"
+         y="-326.54385"
+         style="stroke-width:0.26458335;fill:#007900;fill-opacity:1"
+         id="tspan2366">    dataObject,</tspan><tspan
+         sodipodi:role="line"
+         x="806.61945"
+         y="-313.31467"
+         style="stroke-width:0.26458335;fill:#007900;fill-opacity:1"
+         id="tspan2368">    open_modules</tspan><tspan
+         sodipodi:role="line"
+         x="806.61945"
+         y="-300.08551"
+         style="stroke-width:0.26458335;fill:#007900;fill-opacity:1"
+         id="tspan2362">)</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2.64583337;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#marker2380)"
+       d="M 332.75057,-110.05148 H 793.25596"
+       id="path2370"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       x="829.27979"
+       y="-84.755928"
+       id="text2474"><tspan
+         sodipodi:role="line"
+         id="tspan2472"
+         x="829.27979"
+         y="-84.755928"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335">1. creating Promise &quot;response&quot;</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="-71.526764"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2476">- select_data_source.ts / resolveDataSource</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="-58.297592"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2478">--&gt; returns AbstractDataSource (new RestAPI)</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="-45.068424"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2480">- .then(</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="-31.839258"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2482">    retrunedRestAPI.callByName(procedureName, parameters)</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="-18.61009"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2486">=== Procedure Aufruf RESTAPI</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="-5.3809233"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2484">)</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="7.8482442"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2488" /><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="21.077412"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2490">2. after calling the procedure:</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="34.30658"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2492">response</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="47.535748"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2494">    .then(data):</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="60.764915"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2496">        <tspan
+   style="fill:#8c4ab2;fill-opacity:1"
+   id="tspan2534">.saveToCache(data, payload, &quot;raw_data&quot;, procedureName, error=undefined)</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="73.99408"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2500">        raw_data_counter++</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="87.223251"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2498">        FALLS raw_data_counter === alle_needed_raw_data.length</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="100.45242"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2502">       <tspan
+   style="fill:#007700;fill-opacity:1"
+   id="tspan2530"> --&gt; onGetParsedData_into_cache(</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="113.68159"
+         style="fill:#007700;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2504">            client,</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="126.91075"
+         style="fill:#007700;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2506">            payload,</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="140.13992"
+         style="fill:#007700;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2508">            dataObject,</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="153.36908"
+         style="fill:#007700;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2510">            open_modules</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="166.59825"
+         style="fill:#007700;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2512">        )</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="179.82742"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2526">    .catch(error):</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="193.05659"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2528">       <tspan
+   style="fill:#8c4ab2;fill-opacity:1"
+   id="tspan2532"> .saveToCache(data=undefined, ..., error)</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="206.28575"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2544">        raw_data_counter++</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="219.51492"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2546">       <tspan
+   style="fill:#007e00;fill-opacity:1"
+   id="tspan2558"> --&gt; onGetParsedData_into_cache(</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="232.74409"
+         style="fill:#007e00;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2548">            client,</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="245.97325"
+         style="fill:#007e00;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2550">            payload,</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="259.20242"
+         style="fill:#007e00;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2552">            dataObject,</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="272.43158"
+         style="fill:#007e00;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2554">            open_modules</tspan><tspan
+         sodipodi:role="line"
+         x="829.27979"
+         y="285.66077"
+         style="fill:#007e00;fill-opacity:1;stroke-width:0.26458335"
+         id="tspan2556">        )</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       x="359.21027"
+       y="70.889969"
+       id="text2562"><tspan
+         sodipodi:role="line"
+         id="tspan2560"
+         x="359.21027"
+         y="70.889969"
+         style="stroke-width:0.26458335">NEXT TODO HIER:</tspan><tspan
+         sodipodi:role="line"
+         x="359.21027"
+         y="84.119133"
+         style="stroke-width:0.26458335"
+         id="tspan2564">onGetParsedData_into_cache</tspan></text>
+  </g>
+</svg>

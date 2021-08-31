@@ -584,6 +584,44 @@ const data_parser: { [key: string]: any } = {
       }
     },
   },
+  rki_data_by_day: {
+    needed_raw_data: ["RKIalgo"],
+    call_function: (input_data: any, parameters: any) => {
+      let { RKIalgo } = input_data
+
+      let parsed_rki: any[] = []
+
+      if (RKIalgo.error === undefined) {
+        let data = RKIalgo.data
+
+        data.Zeitstempel.forEach((ts_string: string, index: number) => {
+          parsed_rki.push({
+            timestamp: new Date(ts_string).getTime(),
+            Zeitstempel: ts_string,
+            outbreak_prob: data.Ausbruchswahrscheinlichkeit[index],
+            pValue: data["p-Value"][index],
+            pathogen_count: data.Erregeranzahl[index],
+            endemisches_niveau: data["Endemisches Niveau"][index],
+            epidemisches_niveau: data["Epidemisches Niveau"][index],
+            "Endemisches Niveau": data["Endemisches Niveau"][index],
+            "Epidemisches Niveau": data["Epidemisches Niveau"][index],
+            upper_limit: data.Obergrenze[index],
+            cases_below_upper_limit: data["Faelle unter der Obergrenze"][index],
+            cases_above_upper_limit: data["Faelle ueber der Obergrenze"][index],
+            classification: data["Klassifikation der Alarmfaelle"][index],
+          })
+        })
+      }
+
+      parsed_rki.forEach((d: any) => {
+        if (d.StationID === null || d.StationID === undefined) {
+          d.StationID = "klinik"
+        }
+      })
+
+      return parsed_rki
+    },
+  },
 }
 
 export default data_parser

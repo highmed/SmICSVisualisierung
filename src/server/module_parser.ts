@@ -501,11 +501,12 @@ const module_parser: { [key: string]: any } = {
   },
   epikurve: {
     needed_raw_data: ["Labor_ErregerProTag_TTEsKSs"],
-    needed_parsed_data: [],
+    // needed_raw_data: ["Labor_ErregerProTag_TTEsKSs"],
+    needed_parsed_data: ["rki_data_by_day"],
     // TODO: PRO ERREGER!!! aktuell alle Erreger in Reihe geschalten
     // TODO: die initial timestamps for timelense sind null...
     call_function: (input_data: any, parameters: any, callback: Function) => {
-      let { Labor_ErregerProTag_TTEsKSs } = input_data
+      let { Labor_ErregerProTag_TTEsKSs, rki_data_by_day } = input_data
 
       let { starttime, endtime, station, pathogenList } = parameters
 
@@ -514,8 +515,6 @@ const module_parser: { [key: string]: any } = {
       let stationIDs: String[] = []
       let pathogenIDs: String[] = []
       let dayDataSets: any = {}
-      let weekDataSets: any = {}
-      let monthDataSets: any = {}
 
       if (Labor_ErregerProTag_TTEsKSs.error === undefined) {
         // Fuer jede Station und jeden Pathogen eine Kurve erzeugen
@@ -531,10 +530,28 @@ const module_parser: { [key: string]: any } = {
             d.MAVG7_cs = d.anzahl_gesamt_av7
             d.MAVG28_cs = d.anzahl_gesamt_av28
           }
+
+          // // fuer jeden Tag die Ausbruchswahrscheinlichkeit
+          // // und die anderen Daten asu RKIalgo rauslesen
+          // if (rki_data_by_day.error === undefined) {
+          //   let index = rki_data_by_day.data.findIndex(
+          //     (rki_d: any) =>
+          //       rki_d.timestamp === new Date(d.Datum.split("T")[0]).getTime()
+          //   )
+          //   console.log(index)
+          //   if (index >= 0) {
+          //     console.log("geht rein")
+          //     d = {
+          //       ...d,
+          //       ...rki_data_by_day.data[index],
+          //     }
+          //     console.log(d)
+          //   }
+          // }
         })
 
         raw_data.forEach((d: any, i: any) => {
-          if (d.StationID === null) [(d.StationID = "Klinik")]
+          if (d.StationID === null) [(d.StationID = "klinik")]
 
           d.timestamp = new Date(d.Datum.split(".")[0]).getTime()
           // unsere Datenbank liefer da glaube ich einfach nichts zurueck
@@ -559,82 +576,44 @@ const module_parser: { [key: string]: any } = {
             (p: any) => pathogen === p.ErregerID
           )
 
-          stationIDs.forEach((stationID: String) => {
+          data.forEach((d: any) => {
+            // fuer jeden Tag die Ausbruchswahrscheinlichkeit
+            // und die anderen Daten asu RKIalgo rauslesen
+            if (rki_data_by_day.error === undefined) {
+              let index = rki_data_by_day.data.findIndex(
+                (rki_d: any) =>
+                  rki_d.timestamp ===
+                    new Date(d.Datum.split("T")[0]).getTime() &&
+                  rki_d.StationID === d.StationID
+                // && rki_d.pathogen === d.ErregerID
+              )
+              console.log(index)
+              if (index >= 0) {
+                console.log("geht rein")
+                // d = {
+                //   ...d,
+                //   ...rki_data_by_day.data[index],
+                // }
+                d.rki_data = rki_data_by_day.data[index]
+                console.log(d)
+              }
+            }
+          })
+
+          stationIDs.forEach((stationID: any) => {
             if (dayDataSets["K" + pathogen] === undefined) {
               dayDataSets["K" + pathogen] = {}
             }
 
-            dayDataSets["K" + pathogen]["S" + stationID] = data.filter(
+            dayDataSets["K" + pathogen][stationID] = data.filter(
               (d: any) => d.StationID === stationID
             )
 
-            let weekData: any = []
-            let monthData: any = []
-            dayDataSets["K" + pathogen]["S" + stationID].forEach(
-              (d: any, i: any) => {
-                if (i % 7 === 0) {
-                  weekData.push({
-                    timestamps: [],
-                    Anzahl: 0,
-                    Anzahl_cs: 0,
-                    avg7: [],
-                    avg28: [],
-                    avg7_cs: [],
-                    avg28_cs: [],
-                  })
-                }
-
-                let lastWeekData = weekData[weekData.length - 1]
-                lastWeekData.timestamps.push(d.timestamp)
-                lastWeekData.Anzahl += d.Anzahl
-                lastWeekData.Anzahl_cs += d.Anzahl_cs
-                lastWeekData.avg7.push(d.MAVG7 ? d.MAVG7 : 0)
-                lastWeekData.avg28.push(d.MAVG28 ? d.MAVG28 : 0)
-                lastWeekData.avg7_cs.push(d.MAVG7_cs ? d.MAVG7 : 0)
-                lastWeekData.avg28_cs.push(d.MAVG28_cs ? d.MAVG28_cs : 0)
-
-                if (i % 28 === 0) {
-                  monthData.push({
-                    timestamps: [],
-                    Anzahl: 0,
-                    Anzahl_cs: 0,
-                    avg7: [],
-                    avg28: [],
-                    avg7_cs: [],
-                    avg28_cs: [],
-                  })
-                }
-                let lastMonthData = monthData[monthData.length - 1]
-                lastMonthData.timestamps.push(d.timestamp)
-                lastMonthData.Anzahl += d.Anzahl
-                lastMonthData.Anzahl_cs += d.Anzahl_cs
-                lastMonthData.avg7.push(d.MAVG7 ? d.MAVG7 : 0)
-                lastMonthData.avg28.push(d.MAVG28 ? d.MAVG28 : 0)
-                lastMonthData.avg7_cs.push(d.MAVG7_cs ? d.MAVG7_cs : 0)
-                lastMonthData.avg28_cs.push(d.MAVG28_cs ? d.MAVG28_cs : 0)
-              }
-            )
-            // TODO: die letzten dataObjects vom Monat und der Woche sind eventuell weniger als 7 oder 28 Tage
-            let lastWeekDays = weekData[weekData.length - 1]
-            let ratioDaysLastWeek = 7 / lastWeekDays.timestamps.length
-            lastWeekDays.Anzahl = lastWeekDays.Anzahl * ratioDaysLastWeek
-            lastWeekDays.Anzahl_cs = lastWeekDays.Anzahl_cs * ratioDaysLastWeek
-
-            let lastMonthDays = monthData[monthData.length - 1]
-            let ratioDaysLastMonth = 28 / lastMonthDays.timestamps.length
-            lastMonthDays.Anzahl = lastMonthDays.Anzahl * ratioDaysLastMonth
-            lastMonthDays.Anzahl_cs =
-              lastMonthDays.Anzahl_cs * ratioDaysLastMonth
-
-            if (weekDataSets["K" + pathogen] === undefined) {
-              weekDataSets["K" + pathogen] = {}
-            }
-
-            if (monthDataSets["K" + pathogen] === undefined) {
-              monthDataSets["K" + pathogen] = {}
-            }
-            weekDataSets["K" + pathogen]["S" + stationID] = weekData
-            monthDataSets["K" + pathogen]["S" + stationID] = monthData
+            let accumulated_count = 0
+            let copy_day
+            dayDataSets["K" + pathogen][
+              stationID
+            ].forEach((d: any, i: Number) => {})
           })
         })
         /**
@@ -653,10 +632,11 @@ const module_parser: { [key: string]: any } = {
       callback({
         timestamp: new Date().getTime(),
         // data: { dayDataSets, weekDataSets, monthDataSets },
-        data: [dayDataSets, weekDataSets, monthDataSets],
+        data: dayDataSets,
         initial_timelense_timestamps,
         stationIDs,
         pathogenIDs,
+        rki_data_by_day,
       })
       // return {
       //   timestamp: new Date().getTime(),
@@ -794,531 +774,6 @@ const module_parser: { [key: string]: any } = {
         data: Labordaten,
       }
 
-      // Patient_Bewegung_Ps.data = [
-      //   {
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     Beginn: "2021-01-01T09:00:00+01:00",
-      //     Ende: "2021-01-01T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000001",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     Beginn: "2021-01-01T09:00:00+01:00",
-      //     Ende: "2021-01-05T15:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000001",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     Beginn: "2021-01-05T15:00:00+01:00",
-      //     Ende: "2021-01-05T15:00:00+01:00",
-      //     Bewegungstyp: "Entlassung",
-      //     BewegungstypID: 2,
-      //     FallID: "00000001",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-02T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000002",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-07T15:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000002",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     Beginn: "2021-01-07T15:00:00+01:00",
-      //     Ende: "2021-01-07T15:00:00+01:00",
-      //     Bewegungstyp: "Entlassung",
-      //     BewegungstypID: 2,
-      //     FallID: "00000002",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     Beginn: "2021-01-03T09:00:00+01:00",
-      //     Ende: "2021-01-03T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000004",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     Beginn: "2021-01-03T09:00:00+01:00",
-      //     Ende: "2021-01-09T15:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000004",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     Beginn: "2021-01-09T15:00:00+01:00",
-      //     Ende: "2021-01-09T15:00:00+01:00",
-      //     Bewegungstyp: "Entlassung",
-      //     BewegungstypID: 2,
-      //     FallID: "00000004",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-02T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000003",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung X",
-      //   },
-      //   {
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-03T11:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000003",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung X",
-      //   },
-      //   {
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     Beginn: "2021-01-03T11:00:00+01:00",
-      //     Ende: "2021-01-09T15:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000003",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     Beginn: "2021-01-09T15:00:00+01:00",
-      //     Ende: "2021-01-09T15:00:00+01:00",
-      //     Bewegungstyp: "Entlassung",
-      //     BewegungstypID: 2,
-      //     FallID: "00000003",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
-      //     Beginn: "2021-01-04T09:00:00+01:00",
-      //     Ende: "2021-01-04T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000006",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
-      //     Beginn: "2021-01-04T09:00:00+01:00",
-      //     Ende: "2021-03-26T16:54:34.5259828+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000006",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-02T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung X",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-04T15:30:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung X",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-06T16:00:00+01:00",
-      //     Ende: "2021-01-08T14:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung Y",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-08T14:00:00+01:00",
-      //     Ende: "2021-03-26T16:54:34.5726622+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-04T15:30:00+01:00",
-      //     Ende: "2021-01-06T16:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
-      //     Beginn: "2021-01-05T09:00:00+01:00",
-      //     Ende: "2021-01-05T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000007",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
-      //     Beginn: "2021-01-05T09:00:00+01:00",
-      //     Ende: "2021-03-26T16:54:34.6222734+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000007",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      // ]
-
-      // Patient_Labordaten_Ps.data = [
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     FallID: "00000001",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-01T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-01T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-01T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     FallID: "00000001",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-03T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-03T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-03T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "03",
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     FallID: "00000001",
-      //     ProbeID: "03",
-      //     Eingangsdatum: "2021-01-05T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-05T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-05T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     FallID: "00000002",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-02T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-02T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-02T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     FallID: "00000002",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-04T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-04T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-04T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "03",
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     FallID: "00000002",
-      //     ProbeID: "03",
-      //     Eingangsdatum: "2021-01-07T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-07T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-07T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     FallID: "00000004",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-03T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-03T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-03T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     FallID: "00000004",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-06T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-06T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-06T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "03",
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     FallID: "00000004",
-      //     ProbeID: "03",
-      //     Eingangsdatum: "2021-01-09T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-09T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-09T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     FallID: "00000003",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-03T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-03T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-03T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     FallID: "00000003",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-07T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-07T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-07T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "03",
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     FallID: "00000003",
-      //     ProbeID: "03",
-      //     Eingangsdatum: "2021-01-09T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-09T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-09T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
-      //     FallID: "00000006",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-04T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-04T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-04T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
-      //     FallID: "00000006",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-09T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-09T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-09T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     FallID: "00000005",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-04T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-04T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-04T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     FallID: "00000005",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-08T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-08T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-08T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
-      //     FallID: "00000007",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-05T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-05T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-05T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
-      //     FallID: "00000007",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-09T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-09T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-09T10:30:00+01:00",
-      //   },
-      // ]
-
-      // console.log("####################")
-      // console.log(Patient_Bewegung_Ps)
-      // let {
-      //   Patient_Bewegung_Ps,
-      //   Patient_Labordaten_Ps,
-      //   generate_mibi_investigations,
-      // } = input_data
       /**
        * Vis-Structures for contact network:
        * - edges + attributes and tooltip data
@@ -1332,1885 +787,15 @@ const module_parser: { [key: string]: any } = {
       // example data to implement visualization
       // data parsing etc. afterwards
 
-      let nodes: any[] = []
-      let links: any[] = []
+      // let nodes: any[] = []
+      // let links: any[] = []
 
-      // nodes = [
-      //   {
-      //     id: 62411,
-      //     name: "P62411",
-      //     infectionStates: ["statusHoltKeim", "statusKrank"],
-      //     krankSeit: 1329782400000,
-      //     index: 0,
-      //     x: 301.36140600497407,
-      //     y: 295.4941782487901,
-      //     vy: -0.000153690684488412,
-      //     vx: -0.000468263295139551,
-      //   },
-      //   {
-      //     id: 63104,
-      //     name: "P63104",
-      //     infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //     traegerSeit: 1328572800000,
-      //     krankSeit: 1329177600000,
-      //     index: 1,
-      //     x: 304.73986022307236,
-      //     y: 317.67447059512057,
-      //     vy: -0.00006474368434483453,
-      //     vx: -0.00020680156954801425,
-      //   },
-      //   {
-      //     id: 63842,
-      //     name: "P63842",
-      //     infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //     traegerSeit: 1327881600000,
-      //     krankSeit: 1329782400000,
-      //     index: 2,
-      //     x: 319.6702689581378,
-      //     y: 290.75612193516184,
-      //     vy: 0.0002232866999310125,
-      //     vx: -0.0005555171070168726,
-      //   },
-      //   {
-      //     id: 64716,
-      //     name: "P64716",
-      //     infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //     traegerSeit: 1328572800000,
-      //     krankSeit: 1329782400000,
-      //     index: 3,
-      //     x: 335.01506011744345,
-      //     y: 320.2613424198333,
-      //     vy: 0.0000501530813957485,
-      //     vx: -0.000039083269311904807,
-      //   },
-      //   {
-      //     id: 67867,
-      //     name: "P67867",
-      //     infectionStates: ["statusHoltKeim", "statusKrank"],
-      //     krankSeit: 1326931200000,
-      //     index: 4,
-      //     x: 284.4931948822117,
-      //     y: 288.57382394545607,
-      //     vy: -0.00013478717960187792,
-      //     vx: -0.00024641209863588857,
-      //   },
-      //   {
-      //     id: 68475,
-      //     name: "P68475",
-      //     infectionStates: ["statusHoltKeim", "statusKrank"],
-      //     krankSeit: 1322092800000,
-      //     index: 5,
-      //     x: 343.8027280021645,
-      //     y: 288.5201716858705,
-      //     vy: -0.00005114385439489201,
-      //     vx: -0.0003686979847042175,
-      //   },
-      //   {
-      //     id: 70448,
-      //     name: "P70448",
-      //     infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //     traegerSeit: 1329177600000,
-      //     index: 6,
-      //     x: 316.9542365462891,
-      //     y: 334.5652546639921,
-      //     vy: -0.00012853970969834797,
-      //     vx: -0.00024213241304932827,
-      //   },
-      //   {
-      //     id: 76101,
-      //     name: "P76101",
-      //     infectionStates: ["statusHoltKeim", "statusKrank"],
-      //     krankSeit: 1328486400000,
-      //     index: 7,
-      //     x: 320.86949133101933,
-      //     y: 269.8378272524703,
-      //     vy: 0.00012014433771040666,
-      //     vx: 0.00043706819436035543,
-      //   },
-      //   {
-      //     id: 113749,
-      //     name: "P113749",
-      //     infectionStates: ["statusHoltKeim", "statusKrank"],
-      //     krankSeit: 1289952000000,
-      //     index: 8,
-      //     x: 341.0406972335478,
-      //     y: 309.0114982556013,
-      //     vy: -0.000143245491356989,
-      //     vx: -0.0003916512921204337,
-      //   },
-      //   {
-      //     id: 175082,
-      //     name: "P175082",
-      //     infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //     traegerSeit: 1331596800000,
-      //     index: 9,
-      //     x: 282.050692525735,
-      //     y: 325.30502981887923,
-      //     vy: 0.0000013876599708414128,
-      //     vx: -0.0002826845692433017,
-      //   },
-      // ]
+      let graph_data: any[] = []
 
-      // links = [
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 63104,
-      //         stationID: 279,
-      //         start_ts: 1327675156000,
-      //         end_ts: 1327917806000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 63104,
-      //         stationID: 279,
-      //         start_ts: 1328216039000,
-      //         end_ts: 1335031380000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 63104,
-      //         stationID: 279,
-      //         start_ts: 1335204180000,
-      //         end_ts: 1335605580000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 0,
-      //   },
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 63842,
-      //         stationID: 279,
-      //         start_ts: 1327675156000,
-      //         end_ts: 1333704780000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 1,
-      //   },
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 64716,
-      //       name: "P64716",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329782400000,
-      //       index: 3,
-      //       x: 335.01506011744345,
-      //       y: 320.2613424198333,
-      //       vy: 0.0000501530813957485,
-      //       vx: -0.000039083269311904807,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1327675156000,
-      //         end_ts: 1330161333000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1330174990000,
-      //         end_ts: 1331380278000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 2,
-      //   },
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 67867,
-      //       name: "P67867",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1326931200000,
-      //       index: 4,
-      //       x: 284.4931948822117,
-      //       y: 288.57382394545607,
-      //       vy: -0.00013478717960187792,
-      //       vx: -0.00024641209863588857,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 67867,
-      //         stationID: 279,
-      //         start_ts: 1327675156000,
-      //         end_ts: 1331900819000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 3,
-      //   },
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 68475,
-      //       name: "P68475",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1322092800000,
-      //       index: 5,
-      //       x: 343.8027280021645,
-      //       y: 288.5201716858705,
-      //       vy: -0.00005114385439489201,
-      //       vx: -0.0003686979847042175,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 68475,
-      //         stationID: 279,
-      //         start_ts: 1327675156000,
-      //         end_ts: 1330088345000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 4,
-      //   },
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1327675156000,
-      //         end_ts: 1335031380000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1335204180000,
-      //         end_ts: 1335632600000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1335816180000,
-      //         end_ts: 1336240829000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1336420980000,
-      //         end_ts: 1336842216000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1337025780000,
-      //         end_ts: 1337446980000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1337630580000,
-      //         end_ts: 1338562980000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1338840180000,
-      //         end_ts: 1339862580000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1340049780000,
-      //         end_ts: 1340384580000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1340784180000,
-      //         end_ts: 1341673429000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1341939780000,
-      //         end_ts: 1342279016000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 5,
-      //   },
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 76101,
-      //       name: "P76101",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1328486400000,
-      //       index: 7,
-      //       x: 320.86949133101933,
-      //       y: 269.8378272524703,
-      //       vy: 0.00012014433771040666,
-      //       vx: 0.00043706819436035543,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1327675156000,
-      //         end_ts: 1330515180000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 6,
-      //   },
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 113749,
-      //       name: "P113749",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1289952000000,
-      //       index: 8,
-      //       x: 341.0406972335478,
-      //       y: 309.0114982556013,
-      //       vy: -0.000143245491356989,
-      //       vx: -0.0003916512921204337,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1331922169000,
-      //         end_ts: 1335031380000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1335204180000,
-      //         end_ts: 1335632600000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1335816180000,
-      //         end_ts: 1336240829000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1336420980000,
-      //         end_ts: 1336842216000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1337025780000,
-      //         end_ts: 1337446980000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1337630580000,
-      //         end_ts: 1338562980000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 62411,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1338840180000,
-      //         end_ts: 1339064977000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 7,
-      //   },
-      //   {
-      //     source: {
-      //       id: 62411,
-      //       name: "P62411",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1329782400000,
-      //       index: 0,
-      //       x: 301.36140600497407,
-      //       y: 295.4941782487901,
-      //       vy: -0.000153690684488412,
-      //       vx: -0.000468263295139551,
-      //     },
-      //     target: {
-      //       id: 175082,
-      //       name: "P175082",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1331596800000,
-      //       index: 9,
-      //       x: 282.050692525735,
-      //       y: 325.30502981887923,
-      //       vy: 0.0000013876599708414128,
-      //       vx: -0.0002826845692433017,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 62411,
-      //         target: 175082,
-      //         stationID: 279,
-      //         start_ts: 1331833782000,
-      //         end_ts: 1334747629000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 8,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     target: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63104,
-      //         target: 63842,
-      //         stationID: 279,
-      //         start_ts: 1326881713000,
-      //         end_ts: 1327002834000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 63842,
-      //         stationID: 279,
-      //         start_ts: 1327070214000,
-      //         end_ts: 1327102106000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 63842,
-      //         stationID: 279,
-      //         start_ts: 1327155499000,
-      //         end_ts: 1327917806000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 63842,
-      //         stationID: 279,
-      //         start_ts: 1328216039000,
-      //         end_ts: 1333704780000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 9,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     target: {
-      //       id: 64716,
-      //       name: "P64716",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329782400000,
-      //       index: 3,
-      //       x: 335.01506011744345,
-      //       y: 320.2613424198333,
-      //       vy: 0.0000501530813957485,
-      //       vx: -0.000039083269311904807,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63104,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1326881713000,
-      //         end_ts: 1327917806000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1328216039000,
-      //         end_ts: 1330161333000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1330174990000,
-      //         end_ts: 1331380278000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 10,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     target: {
-      //       id: 67867,
-      //       name: "P67867",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1326931200000,
-      //       index: 4,
-      //       x: 284.4931948822117,
-      //       y: 288.57382394545607,
-      //       vy: -0.00013478717960187792,
-      //       vx: -0.00024641209863588857,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63104,
-      //         target: 67867,
-      //         stationID: 279,
-      //         start_ts: 1326881713000,
-      //         end_ts: 1327917806000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 67867,
-      //         stationID: 279,
-      //         start_ts: 1328216039000,
-      //         end_ts: 1331900819000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 11,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     target: {
-      //       id: 68475,
-      //       name: "P68475",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1322092800000,
-      //       index: 5,
-      //       x: 343.8027280021645,
-      //       y: 288.5201716858705,
-      //       vy: -0.00005114385439489201,
-      //       vx: -0.0003686979847042175,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63104,
-      //         target: 68475,
-      //         stationID: 279,
-      //         start_ts: 1326881713000,
-      //         end_ts: 1327917806000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 68475,
-      //         stationID: 279,
-      //         start_ts: 1328216039000,
-      //         end_ts: 1330088345000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 12,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     target: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63104,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1326881713000,
-      //         end_ts: 1327917806000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1328216039000,
-      //         end_ts: 1335605580000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 13,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     target: {
-      //       id: 76101,
-      //       name: "P76101",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1328486400000,
-      //       index: 7,
-      //       x: 320.86949133101933,
-      //       y: 269.8378272524703,
-      //       vy: 0.00012014433771040666,
-      //       vx: 0.00043706819436035543,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63104,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1326881713000,
-      //         end_ts: 1327917806000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63104,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1328216039000,
-      //         end_ts: 1330515180000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 14,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     target: {
-      //       id: 113749,
-      //       name: "P113749",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1289952000000,
-      //       index: 8,
-      //       x: 341.0406972335478,
-      //       y: 309.0114982556013,
-      //       vy: -0.000143245491356989,
-      //       vx: -0.0003916512921204337,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63104,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1331922169000,
-      //         end_ts: 1335605580000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 15,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63104,
-      //       name: "P63104",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329177600000,
-      //       index: 1,
-      //       x: 304.73986022307236,
-      //       y: 317.67447059512057,
-      //       vy: -0.00006474368434483453,
-      //       vx: -0.00020680156954801425,
-      //     },
-      //     target: {
-      //       id: 175082,
-      //       name: "P175082",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1331596800000,
-      //       index: 9,
-      //       x: 282.050692525735,
-      //       y: 325.30502981887923,
-      //       vy: 0.0000013876599708414128,
-      //       vx: -0.0002826845692433017,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63104,
-      //         target: 175082,
-      //         stationID: 279,
-      //         start_ts: 1331833782000,
-      //         end_ts: 1334747629000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 16,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     target: {
-      //       id: 64716,
-      //       name: "P64716",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329782400000,
-      //       index: 3,
-      //       x: 335.01506011744345,
-      //       y: 320.2613424198333,
-      //       vy: 0.0000501530813957485,
-      //       vx: -0.000039083269311904807,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63842,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1325848799000,
-      //         end_ts: 1327002834000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1327070214000,
-      //         end_ts: 1327102106000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1327155499000,
-      //         end_ts: 1330161333000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 64716,
-      //         stationID: 279,
-      //         start_ts: 1330174990000,
-      //         end_ts: 1331380278000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 17,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     target: {
-      //       id: 67867,
-      //       name: "P67867",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1326931200000,
-      //       index: 4,
-      //       x: 284.4931948822117,
-      //       y: 288.57382394545607,
-      //       vy: -0.00013478717960187792,
-      //       vx: -0.00024641209863588857,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63842,
-      //         target: 67867,
-      //         stationID: 279,
-      //         start_ts: 1325848799000,
-      //         end_ts: 1327002834000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 67867,
-      //         stationID: 279,
-      //         start_ts: 1327070214000,
-      //         end_ts: 1327102106000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 67867,
-      //         stationID: 279,
-      //         start_ts: 1327155499000,
-      //         end_ts: 1331900819000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 18,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     target: {
-      //       id: 68475,
-      //       name: "P68475",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1322092800000,
-      //       index: 5,
-      //       x: 343.8027280021645,
-      //       y: 288.5201716858705,
-      //       vy: -0.00005114385439489201,
-      //       vx: -0.0003686979847042175,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63842,
-      //         target: 68475,
-      //         stationID: 279,
-      //         start_ts: 1325848799000,
-      //         end_ts: 1327002834000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 68475,
-      //         stationID: 279,
-      //         start_ts: 1327070214000,
-      //         end_ts: 1327102106000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 68475,
-      //         stationID: 279,
-      //         start_ts: 1327155499000,
-      //         end_ts: 1330088345000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 19,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     target: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63842,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1325848799000,
-      //         end_ts: 1327002834000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1327070214000,
-      //         end_ts: 1327102106000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1327155499000,
-      //         end_ts: 1333704780000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 20,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     target: {
-      //       id: 76101,
-      //       name: "P76101",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1328486400000,
-      //       index: 7,
-      //       x: 320.86949133101933,
-      //       y: 269.8378272524703,
-      //       vy: 0.00012014433771040666,
-      //       vx: 0.00043706819436035543,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63842,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1325848799000,
-      //         end_ts: 1327002834000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1327070214000,
-      //         end_ts: 1327102106000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 63842,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1327155499000,
-      //         end_ts: 1330515180000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 21,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     target: {
-      //       id: 113749,
-      //       name: "P113749",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1289952000000,
-      //       index: 8,
-      //       x: 341.0406972335478,
-      //       y: 309.0114982556013,
-      //       vy: -0.000143245491356989,
-      //       vx: -0.0003916512921204337,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63842,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1331922169000,
-      //         end_ts: 1333704780000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 22,
-      //   },
-      //   {
-      //     source: {
-      //       id: 63842,
-      //       name: "P63842",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1327881600000,
-      //       krankSeit: 1329782400000,
-      //       index: 2,
-      //       x: 319.6702689581378,
-      //       y: 290.75612193516184,
-      //       vy: 0.0002232866999310125,
-      //       vx: -0.0005555171070168726,
-      //     },
-      //     target: {
-      //       id: 175082,
-      //       name: "P175082",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1331596800000,
-      //       index: 9,
-      //       x: 282.050692525735,
-      //       y: 325.30502981887923,
-      //       vy: 0.0000013876599708414128,
-      //       vx: -0.0002826845692433017,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 63842,
-      //         target: 175082,
-      //         stationID: 279,
-      //         start_ts: 1331833782000,
-      //         end_ts: 1333704780000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 23,
-      //   },
-      //   {
-      //     source: {
-      //       id: 64716,
-      //       name: "P64716",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329782400000,
-      //       index: 3,
-      //       x: 335.01506011744345,
-      //       y: 320.2613424198333,
-      //       vy: 0.0000501530813957485,
-      //       vx: -0.000039083269311904807,
-      //     },
-      //     target: {
-      //       id: 67867,
-      //       name: "P67867",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1326931200000,
-      //       index: 4,
-      //       x: 284.4931948822117,
-      //       y: 288.57382394545607,
-      //       vy: -0.00013478717960187792,
-      //       vx: -0.00024641209863588857,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 64716,
-      //         target: 67867,
-      //         stationID: 279,
-      //         start_ts: 1324641496000,
-      //         end_ts: 1330161333000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 64716,
-      //         target: 67867,
-      //         stationID: 279,
-      //         start_ts: 1330174990000,
-      //         end_ts: 1331380278000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 24,
-      //   },
-      //   {
-      //     source: {
-      //       id: 64716,
-      //       name: "P64716",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329782400000,
-      //       index: 3,
-      //       x: 335.01506011744345,
-      //       y: 320.2613424198333,
-      //       vy: 0.0000501530813957485,
-      //       vx: -0.000039083269311904807,
-      //     },
-      //     target: {
-      //       id: 68475,
-      //       name: "P68475",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1322092800000,
-      //       index: 5,
-      //       x: 343.8027280021645,
-      //       y: 288.5201716858705,
-      //       vy: -0.00005114385439489201,
-      //       vx: -0.0003686979847042175,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 64716,
-      //         target: 68475,
-      //         stationID: 279,
-      //         start_ts: 1324641496000,
-      //         end_ts: 1330088345000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 25,
-      //   },
-      //   {
-      //     source: {
-      //       id: 64716,
-      //       name: "P64716",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329782400000,
-      //       index: 3,
-      //       x: 335.01506011744345,
-      //       y: 320.2613424198333,
-      //       vy: 0.0000501530813957485,
-      //       vx: -0.000039083269311904807,
-      //     },
-      //     target: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 64716,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1324641496000,
-      //         end_ts: 1330161333000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 64716,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1330174990000,
-      //         end_ts: 1331380278000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 26,
-      //   },
-      //   {
-      //     source: {
-      //       id: 64716,
-      //       name: "P64716",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger", "statusKrank"],
-      //       traegerSeit: 1328572800000,
-      //       krankSeit: 1329782400000,
-      //       index: 3,
-      //       x: 335.01506011744345,
-      //       y: 320.2613424198333,
-      //       vy: 0.0000501530813957485,
-      //       vx: -0.000039083269311904807,
-      //     },
-      //     target: {
-      //       id: 76101,
-      //       name: "P76101",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1328486400000,
-      //       index: 7,
-      //       x: 320.86949133101933,
-      //       y: 269.8378272524703,
-      //       vy: 0.00012014433771040666,
-      //       vx: 0.00043706819436035543,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 64716,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1324641496000,
-      //         end_ts: 1330161333000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 64716,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1330174990000,
-      //         end_ts: 1330515180000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 27,
-      //   },
-      //   {
-      //     source: {
-      //       id: 67867,
-      //       name: "P67867",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1326931200000,
-      //       index: 4,
-      //       x: 284.4931948822117,
-      //       y: 288.57382394545607,
-      //       vy: -0.00013478717960187792,
-      //       vx: -0.00024641209863588857,
-      //     },
-      //     target: {
-      //       id: 68475,
-      //       name: "P68475",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1322092800000,
-      //       index: 5,
-      //       x: 343.8027280021645,
-      //       y: 288.5201716858705,
-      //       vy: -0.00005114385439489201,
-      //       vx: -0.0003686979847042175,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 67867,
-      //         target: 68475,
-      //         stationID: 279,
-      //         start_ts: 1322576514000,
-      //         end_ts: 1330088345000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 28,
-      //   },
-      //   {
-      //     source: {
-      //       id: 67867,
-      //       name: "P67867",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1326931200000,
-      //       index: 4,
-      //       x: 284.4931948822117,
-      //       y: 288.57382394545607,
-      //       vy: -0.00013478717960187792,
-      //       vx: -0.00024641209863588857,
-      //     },
-      //     target: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 67867,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1322576514000,
-      //         end_ts: 1331900819000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 29,
-      //   },
-      //   {
-      //     source: {
-      //       id: 67867,
-      //       name: "P67867",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1326931200000,
-      //       index: 4,
-      //       x: 284.4931948822117,
-      //       y: 288.57382394545607,
-      //       vy: -0.00013478717960187792,
-      //       vx: -0.00024641209863588857,
-      //     },
-      //     target: {
-      //       id: 76101,
-      //       name: "P76101",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1328486400000,
-      //       index: 7,
-      //       x: 320.86949133101933,
-      //       y: 269.8378272524703,
-      //       vy: 0.00012014433771040666,
-      //       vx: 0.00043706819436035543,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 67867,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1322576514000,
-      //         end_ts: 1322661781000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 67867,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1322671974000,
-      //         end_ts: 1330515180000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 30,
-      //   },
-      //   {
-      //     source: {
-      //       id: 67867,
-      //       name: "P67867",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1326931200000,
-      //       index: 4,
-      //       x: 284.4931948822117,
-      //       y: 288.57382394545607,
-      //       vy: -0.00013478717960187792,
-      //       vx: -0.00024641209863588857,
-      //     },
-      //     target: {
-      //       id: 175082,
-      //       name: "P175082",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1331596800000,
-      //       index: 9,
-      //       x: 282.050692525735,
-      //       y: 325.30502981887923,
-      //       vy: 0.0000013876599708414128,
-      //       vx: -0.0002826845692433017,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 67867,
-      //         target: 175082,
-      //         stationID: 279,
-      //         start_ts: 1331833782000,
-      //         end_ts: 1331900819000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 31,
-      //   },
-      //   {
-      //     source: {
-      //       id: 68475,
-      //       name: "P68475",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1322092800000,
-      //       index: 5,
-      //       x: 343.8027280021645,
-      //       y: 288.5201716858705,
-      //       vy: -0.00005114385439489201,
-      //       vx: -0.0003686979847042175,
-      //     },
-      //     target: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 68475,
-      //         target: 70448,
-      //         stationID: 279,
-      //         start_ts: 1319708940000,
-      //         end_ts: 1330088345000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 32,
-      //   },
-      //   {
-      //     source: {
-      //       id: 68475,
-      //       name: "P68475",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1322092800000,
-      //       index: 5,
-      //       x: 343.8027280021645,
-      //       y: 288.5201716858705,
-      //       vy: -0.00005114385439489201,
-      //       vx: -0.0003686979847042175,
-      //     },
-      //     target: {
-      //       id: 76101,
-      //       name: "P76101",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1328486400000,
-      //       index: 7,
-      //       x: 320.86949133101933,
-      //       y: 269.8378272524703,
-      //       vy: 0.00012014433771040666,
-      //       vx: 0.00043706819436035543,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 68475,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1319708940000,
-      //         end_ts: 1320493718000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 68475,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1320503414000,
-      //         end_ts: 1322661781000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 68475,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1322671974000,
-      //         end_ts: 1330088345000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 33,
-      //   },
-      //   {
-      //     source: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     target: {
-      //       id: 76101,
-      //       name: "P76101",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1328486400000,
-      //       index: 7,
-      //       x: 320.86949133101933,
-      //       y: 269.8378272524703,
-      //       vy: 0.00012014433771040666,
-      //       vx: 0.00043706819436035543,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 70448,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1317387544000,
-      //         end_ts: 1320493718000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 70448,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1320503414000,
-      //         end_ts: 1322661781000,
-      //         delete: true,
-      //       },
-      //       {
-      //         source: 70448,
-      //         target: 76101,
-      //         stationID: 279,
-      //         start_ts: 1322671974000,
-      //         end_ts: 1330515180000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 34,
-      //   },
-      //   {
-      //     source: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     target: {
-      //       id: 113749,
-      //       name: "P113749",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1289952000000,
-      //       index: 8,
-      //       x: 341.0406972335478,
-      //       y: 309.0114982556013,
-      //       vy: -0.000143245491356989,
-      //       vx: -0.0003916512921204337,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 70448,
-      //         target: 113749,
-      //         stationID: 279,
-      //         start_ts: 1331922169000,
-      //         end_ts: 1339064977000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 35,
-      //   },
-      //   {
-      //     source: {
-      //       id: 70448,
-      //       name: "P70448",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1329177600000,
-      //       index: 6,
-      //       x: 316.9542365462891,
-      //       y: 334.5652546639921,
-      //       vy: -0.00012853970969834797,
-      //       vx: -0.00024213241304932827,
-      //     },
-      //     target: {
-      //       id: 175082,
-      //       name: "P175082",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1331596800000,
-      //       index: 9,
-      //       x: 282.050692525735,
-      //       y: 325.30502981887923,
-      //       vy: 0.0000013876599708414128,
-      //       vx: -0.0002826845692433017,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 70448,
-      //         target: 175082,
-      //         stationID: 279,
-      //         start_ts: 1331833782000,
-      //         end_ts: 1334747629000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 36,
-      //   },
-      //   {
-      //     source: {
-      //       id: 76101,
-      //       name: "P76101",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1328486400000,
-      //       index: 7,
-      //       x: 320.86949133101933,
-      //       y: 269.8378272524703,
-      //       vy: 0.00012014433771040666,
-      //       vx: 0.00043706819436035543,
-      //     },
-      //     target: {
-      //       id: 113749,
-      //       name: "P113749",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1289952000000,
-      //       index: 8,
-      //       x: 341.0406972335478,
-      //       y: 309.0114982556013,
-      //       vy: -0.000143245491356989,
-      //       vx: -0.0003916512921204337,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 76101,
-      //         target: 113749,
-      //         stationID: 295,
-      //         start_ts: 1320493718000,
-      //         end_ts: 1320501233000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 37,
-      //   },
-      //   {
-      //     source: {
-      //       id: 113749,
-      //       name: "P113749",
-      //       infectionStates: ["statusHoltKeim", "statusKrank"],
-      //       krankSeit: 1289952000000,
-      //       index: 8,
-      //       x: 341.0406972335478,
-      //       y: 309.0114982556013,
-      //       vy: -0.000143245491356989,
-      //       vx: -0.0003916512921204337,
-      //     },
-      //     target: {
-      //       id: 175082,
-      //       name: "P175082",
-      //       infectionStates: ["statusHoltKeim", "statusTraeger"],
-      //       traegerSeit: 1331596800000,
-      //       index: 9,
-      //       x: 282.050692525735,
-      //       y: 325.30502981887923,
-      //       vy: 0.0000013876599708414128,
-      //       vx: -0.0002826845692433017,
-      //     },
-      //     contacts: [
-      //       {
-      //         source: 113749,
-      //         target: 175082,
-      //         stationID: 279,
-      //         start_ts: 1331922169000,
-      //         end_ts: 1334747629000,
-      //         delete: true,
-      //       },
-      //     ],
-      //     index: 38,
-      //   },
-      // ]
+      let location_properties: any[] = [
+        { name: "Station", propname: "StationID" },
+        { name: "Raum", propname: "Raum" },
+      ]
 
       let pathogens_with_name: any[] = []
 
@@ -3229,533 +814,365 @@ const module_parser: { [key: string]: any } = {
         Patient_Labordaten_Ps.error === undefined &&
         generate_mibi_investigations.error === undefined
       ) {
-        nodes = []
-        links = []
+        // for (let location_id = 0; location_id < 2; location_id++) {
+        location_properties.forEach((loc_prop: any, loc_prop_index: number) => {
+          // })
 
-        let { status_changes } = generate_mibi_investigations.data
+          let nodes: any[] = []
+          let links: any[] = []
 
-        // TODO: SMICS-0.8
-        // Patientenliste wegen Nth-Degree rauslesen
-        let new_patient_list: any[] = []
-        Patient_Bewegung_Ps.data.forEach((mov: any) => {
-          if (!new_patient_list.includes(mov.PatientID)) {
-            new_patient_list.push(mov.PatientID)
-          }
-        })
-        patientList = new_patient_list
+          let { status_changes } = generate_mibi_investigations.data
 
-        // nodes erzeugen; jeder node speichert zu jedem Keim den letzten/schlimmsten Infektionsstatus
-        patientList.forEach((patient_id: any) => {
-          let all_pathogen_status: any = {}
-          console.log("GET OWN PROPERTY NAMES")
-          console.log(status_changes, patient_id)
-          let all_tested_pathogens = Object.getOwnPropertyNames(
-            status_changes[patient_id]
-          )
+          // TODO: SMICS-0.8
+          // Patientenliste wegen Nth-Degree rauslesen
+          let new_patient_list: any[] = []
+          Patient_Bewegung_Ps.data.forEach((mov: any) => {
+            if (!new_patient_list.includes(mov.PatientID)) {
+              new_patient_list.push(mov.PatientID)
+            }
+            if (status_changes[mov.PatientID] === undefined) {
+              status_changes[mov.PatientID] = {}
+            }
+          })
+          patientList = new_patient_list
 
-          let all_movements: any[] = []
+          // nodes erzeugen; jeder node speichert zu jedem Keim den letzten/schlimmsten Infektionsstatus
+          patientList.forEach((patient_id: any) => {
+            let all_pathogen_status: any = {}
+            console.log("GET OWN PROPERTY NAMES")
+            console.log(status_changes, patient_id)
+            let all_tested_pathogens = Object.getOwnPropertyNames(
+              status_changes[patient_id]
+            )
 
-          all_movements = Patient_Bewegung_Ps.data.filter(
-            (movement: any) => movement.PatientID === patient_id
-          )
+            let all_movements: any[] = []
 
-          all_tested_pathogens.forEach((pathogen_id: any) => {
-            let status: any = "unknown"
-            // TODO: SMICS-0.8
-            status = "negative"
+            all_movements = Patient_Bewegung_Ps.data.filter(
+              (movement: any) => movement.PatientID === patient_id
+            )
 
-            let status_timestamp = undefined
-            let pathogen_status_changes_of_patient: any[] =
-              status_changes[patient_id][pathogen_id]
+            all_tested_pathogens.forEach((pathogen_id: any) => {
+              let status: any = "unknown"
+              // TODO: SMICS-0.8
+              status = "negative"
 
-            pathogen_status_changes_of_patient.forEach((status_change: any) => {
-              let { new_status, timestamp } = status_change
-              let worse_status: any = get_worse_carrier_status(
-                status,
-                new_status
+              let status_timestamp = undefined
+              let pathogen_status_changes_of_patient: any[] =
+                status_changes[patient_id][pathogen_id]
+
+              pathogen_status_changes_of_patient.forEach(
+                (status_change: any) => {
+                  let { new_status, timestamp } = status_change
+                  let worse_status: any = get_worse_carrier_status(
+                    status,
+                    new_status
+                  )
+
+                  // TODO: hier wird der letzte schlechteste Status gesucht
+                  // TODO: nicht der letzte!
+                  if (worse_status !== status) {
+                    status = worse_status
+                    status_timestamp = timestamp
+                  }
+                }
               )
 
-              // TODO: hier wird der letzte schlechteste Status gesucht
-              // TODO: nicht der letzte!
-              if (worse_status !== status) {
-                status = worse_status
-                status_timestamp = timestamp
+              all_pathogen_status[pathogen_id] = {
+                status,
+                status_timestamp,
+              }
+            })
+            nodes.push({
+              id: patient_id,
+              patient_id,
+              all_pathogen_status,
+              all_movements,
+            })
+          })
+
+          // links erzeugen (= Kontaktzeiten etc.)
+
+          /**
+           * - copy all movements
+           * - sort all movements
+           * - initialize buckets
+           * - iterate all movements:
+           *    - for every movement, save index i to the current patient
+           *    - --> = last_movement
+           * - iterate all movements:
+           *    - delete patient from old bucket
+           *    - "end" current contacts
+           *    - push ended contact on contacts_of_patient
+           *    - push patient into new bucket
+           *    - "start" new contact
+           */
+
+          let movements = Patient_Bewegung_Ps.data.filter(
+            (movement: any) => movement.BewegungstypID !== 4
+          )
+
+          movements.forEach((movement: any) => {
+            movement.timestamp = new Date(movement.Beginn).getTime()
+          })
+
+          movements.sort((a: any, b: any) => a.timestamp - b.timestamp)
+
+          let buckets: any = {
+            home: [],
+            tmp_home: [],
+          }
+          let current_contacts: any = {}
+
+          // just helper object
+          let patient_is_on_station: any = {}
+
+          patientList.forEach((patient_id: any) => {
+            buckets.home.push(patient_id)
+            patient_is_on_station[patient_id] = "home"
+
+            current_contacts[patient_id] = []
+          })
+
+          /**
+           * find last movement for every patient (save index)
+           */
+          let last_movement_index: any = {}
+          movements.forEach((movement: any, i: Number) => {
+            last_movement_index[movement.PatientID] = i
+          })
+
+          /**
+           * Wenn
+           * BewegungsID === 4 -> skip
+           * BewegungsID === 6 oder 2-> leave klinik
+           * BewegungsID === 3 oder 7 -> Zimmerwechsel/ Abw-Ende
+           *
+           * 1: "Aufnahme"
+           * 2: "Entlassung"
+           * 3: "Wechsel"
+           * 4: "ambulanter Besuch"
+           * 6: "Abwesenheit-Beginn"
+           * 7: "Abwesenheit-Ende"
+           *
+           * else ist das StationsWechsel? oder bleibt StationsID gleich?
+           * Wenn ja, dann ausführen, ansonsten skip
+           *
+           */
+          movements.forEach((movement: any, i: Number) => {
+            let { BewegungstypID, PatientID, timestamp, StationID } = movement
+
+            StationID = movement[loc_prop.propname]
+
+            let new_station = StationID
+
+            if (last_movement_index[PatientID] === i) {
+              // falls es sich um letzte Bewegung des Patienten handelt
+              new_station = "home"
+            } else if (BewegungstypID === 2 || BewegungstypID === 6) {
+              new_station = "tmp_home"
+            }
+
+            // falls new_station !== old_station (ansonsten laufen kontakte weiter/nichts passiert)
+            let old_station: any = patient_is_on_station[PatientID]
+            if (old_station !== new_station) {
+              /**
+               * 1 Patient aus altem Bucket entfernen
+               * 2 falls old_station !== home und !== tmp_home
+               *    - aktuell laufende Kontakte des Patienten beenden
+               *    - und diese (nicht redundant) aufs Array für links pushen
+               * 3 Patient in neuen Bucket schieben
+               * 4 falls new_station !== home und !== tmp_home
+               *    - neue Kontakte des Patienten anfangen
+               */
+
+              // 1 Patient aus altem Bucket entfernen
+              let patients_on_old_station: any[] = buckets[old_station].filter(
+                (pat_id: any) => pat_id !== PatientID
+              )
+              if (
+                patients_on_old_station.length <= 0 &&
+                old_station !== "home" &&
+                old_station !== "tmp_home"
+              ) {
+                delete buckets[old_station]
+              } else {
+                buckets[old_station] = patients_on_old_station
+              }
+
+              // 2 falls old_station !== home und !== tmp_home
+              // - aktuell laufende Kontakte des Patienten beenden
+              // - und diese (nicht redundant) aufs Array für links pushen
+              /**
+               * contact-data-structure
+               * {
+               *    patient_a,
+               *    patient_b,
+               *    station_id,
+               *    begin (ts),
+               *    end (undefined)
+               * }
+               */
+              // if (PatientID == 175082) {
+              //   console.log(PatientID)
+              //   console.log(old_station, new_station)
+              //   console.log(current_contacts[PatientID])
+              //   console.log(" ")
+              // }
+              if (old_station !== "home" && old_station !== "tmp_home") {
+                let old_contact_patients: any[] = patients_on_old_station
+                // terminate running contacts
+                // and save them in their link
+                // and create the link if there is none
+                current_contacts[PatientID].forEach((contact: any) => {
+                  let copy_contact: any = JSON.parse(JSON.stringify(contact))
+                  copy_contact.end = timestamp
+
+                  let { patient_a, patient_b } = copy_contact
+
+                  // is there a link for pA and pB ?
+                  // --> create if not
+                  // save contact into that link
+                  let index = links.findIndex((l: any) => {
+                    return (
+                      (l.patient_a === patient_a &&
+                        l.patient_b === patient_b) ||
+                      (l.patient_a === patient_b && l.patient_b === patient_a)
+                    )
+                  })
+
+                  if (index === -1) {
+                    // es gibt noch keinen link
+                    // --> link erzeugen
+                    links.push({
+                      source: patient_a,
+                      target: patient_b,
+                      patient_a,
+                      patient_b,
+                      contacts: [],
+                    })
+                    index = links.length - 1
+                  }
+
+                  links[index].contacts.push(copy_contact)
+                })
+                current_contacts[PatientID] = []
+
+                // terminate/delete running contacts on other patients
+                old_contact_patients.forEach((old_contact_patient_id: any) => {
+                  current_contacts[old_contact_patient_id] = current_contacts[
+                    old_contact_patient_id
+                  ].filter((cont: any) => cont.patient_b !== PatientID)
+                })
+              }
+
+              // 3 Patient in neuen Bucket schieben
+              if (buckets[new_station] === undefined) {
+                buckets[new_station] = []
+              }
+              buckets[new_station].push(PatientID)
+              patient_is_on_station[PatientID] = new_station
+
+              // 4 falls new_station !== home und !== tmp_home
+              // - neue Kontakte des Patienten anfangen
+              if (new_station !== "home" && new_station !== "tmp_home") {
+                let new_contact_patients: any[] = buckets[new_station].filter(
+                  (pid: any) => pid !== PatientID
+                )
+                new_contact_patients.forEach((pat_id: any) => {
+                  current_contacts[PatientID].push({
+                    patient_a: PatientID,
+                    patient_b: pat_id,
+                    station_id: new_station,
+                    begin: timestamp,
+                    end: undefined,
+                  })
+
+                  current_contacts[pat_id].push({
+                    patient_a: pat_id,
+                    patient_b: PatientID,
+                    station_id: new_station,
+                    begin: timestamp,
+                    end: undefined,
+                  })
+                })
+                // console.log("nochmal current_contacts")
+                // console.log(current_contacts)
+              }
+            }
+          })
+
+          let simulation = d3
+            .forceSimulation(nodes)
+            .force(
+              "link",
+              d3.forceLink(links).id((d: any) => d.id)
+            )
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter(500, 500))
+          // .on("tick", () => {
+          // console.log("tick counter:", ++tick_counter)
+          // })
+
+          // let sim_done = false
+          setTimeout(() => {
+            simulation.stop()
+            // sim_done = true
+            console.log("SIMULATION DONE")
+
+            let min_x = Number.MAX_VALUE
+            let max_x = Number.MIN_VALUE
+
+            let min_y = Number.MAX_VALUE
+            let max_y = Number.MIN_VALUE
+
+            nodes.forEach((node: any) => {
+              let new_x = node.x
+              let new_y = node.y
+
+              if (new_x < min_x) {
+                min_x = new_x
+              }
+
+              if (new_y < min_y) {
+                min_y = new_y
+              }
+
+              if (new_x > max_x) {
+                max_x = new_x
+              }
+
+              if (new_y > max_y) {
+                max_y = new_y
               }
             })
 
-            all_pathogen_status[pathogen_id] = {
-              status,
-              status_timestamp,
-            }
-          })
-          nodes.push({
-            id: patient_id,
-            patient_id,
-            all_pathogen_status,
-            all_movements,
-          })
-        })
+            let vis_offset_y = -min_y - (max_y - min_y) / 2
+            let vis_offset_x = -min_x - (max_x - min_x) / 2
 
-        // links erzeugen (= Kontaktzeiten etc.)
-
-        /**
-         * - copy all movements
-         * - sort all movements
-         * - initialize buckets
-         * - iterate all movements:
-         *    - for every movement, save index i to the current patient
-         *    - --> = last_movement
-         * - iterate all movements:
-         *    - delete patient from old bucket
-         *    - "end" current contacts
-         *    - push ended contact on contacts_of_patient
-         *    - push patient into new bucket
-         *    - "start" new contact
-         */
-
-        let movements = Patient_Bewegung_Ps.data.filter(
-          (movement: any) => movement.BewegungstypID !== 4
-        )
-
-        movements.forEach((movement: any) => {
-          movement.timestamp = new Date(movement.Beginn).getTime()
-        })
-
-        movements.sort((a: any, b: any) => a.timestamp - b.timestamp)
-
-        let buckets: any = {
-          home: [],
-          tmp_home: [],
-        }
-        let current_contacts: any = {}
-
-        // just helper object
-        let patient_is_on_station: any = {}
-
-        patientList.forEach((patient_id: any) => {
-          buckets.home.push(patient_id)
-          patient_is_on_station[patient_id] = "home"
-
-          current_contacts[patient_id] = []
-        })
-
-        /**
-         * find last movement for every patient (save index)
-         */
-        let last_movement_index: any = {}
-        movements.forEach((movement: any, i: Number) => {
-          last_movement_index[movement.PatientID] = i
-        })
-
-        /**
-         * Wenn
-         * BewegungsID === 4 -> skip
-         * BewegungsID === 6 oder 2-> leave klinik
-         * BewegungsID === 3 oder 7 -> Zimmerwechsel/ Abw-Ende
-         *
-         * 1: "Aufnahme"
-         * 2: "Entlassung"
-         * 3: "Wechsel"
-         * 4: "ambulanter Besuch"
-         * 6: "Abwesenheit-Beginn"
-         * 7: "Abwesenheit-Ende"
-         *
-         * else ist das StationsWechsel? oder bleibt StationsID gleich?
-         * Wenn ja, dann ausführen, ansonsten skip
-         *
-         */
-        movements.forEach((movement: any, i: Number) => {
-          let { BewegungstypID, PatientID, timestamp, StationID } = movement
-          let new_station = StationID
-
-          if (last_movement_index[PatientID] === i) {
-            // falls es sich um letzte Bewegung des Patienten handelt
-            new_station = "home"
-          } else if (BewegungstypID === 2 || BewegungstypID === 6) {
-            new_station = "tmp_home"
-          }
-
-          // falls new_station !== old_station (ansonsten laufen kontakte weiter/nichts passiert)
-          let old_station: any = patient_is_on_station[PatientID]
-          if (old_station !== new_station) {
-            /**
-             * 1 Patient aus altem Bucket entfernen
-             * 2 falls old_station !== home und !== tmp_home
-             *    - aktuell laufende Kontakte des Patienten beenden
-             *    - und diese (nicht redundant) aufs Array für links pushen
-             * 3 Patient in neuen Bucket schieben
-             * 4 falls new_station !== home und !== tmp_home
-             *    - neue Kontakte des Patienten anfangen
-             */
-
-            // 1 Patient aus altem Bucket entfernen
-            let patients_on_old_station: any[] = buckets[old_station].filter(
-              (pat_id: any) => pat_id !== PatientID
-            )
-            if (
-              patients_on_old_station.length <= 0 &&
-              old_station !== "home" &&
-              old_station !== "tmp_home"
-            ) {
-              delete buckets[old_station]
-            } else {
-              buckets[old_station] = patients_on_old_station
-            }
-
-            // 2 falls old_station !== home und !== tmp_home
-            // - aktuell laufende Kontakte des Patienten beenden
-            // - und diese (nicht redundant) aufs Array für links pushen
-            /**
-             * contact-data-structure
-             * {
-             *    patient_a,
-             *    patient_b,
-             *    station_id,
-             *    begin (ts),
-             *    end (undefined)
-             * }
-             */
-            // if (PatientID == 175082) {
-            //   console.log(PatientID)
-            //   console.log(old_station, new_station)
-            //   console.log(current_contacts[PatientID])
-            //   console.log(" ")
-            // }
-            if (old_station !== "home" && old_station !== "tmp_home") {
-              let old_contact_patients: any[] = patients_on_old_station
-              // terminate running contacts
-              // and save them in their link
-              // and create the link if there is none
-              current_contacts[PatientID].forEach((contact: any) => {
-                let copy_contact: any = JSON.parse(JSON.stringify(contact))
-                copy_contact.end = timestamp
-
-                let { patient_a, patient_b } = copy_contact
-
-                // is there a link for pA and pB ?
-                // --> create if not
-                // save contact into that link
-                let index = links.findIndex((l: any) => {
-                  return (
-                    (l.patient_a === patient_a && l.patient_b === patient_b) ||
-                    (l.patient_a === patient_b && l.patient_b === patient_a)
-                  )
-                })
-
-                if (index === -1) {
-                  // es gibt noch keinen link
-                  // --> link erzeugen
-                  links.push({
-                    source: patient_a,
-                    target: patient_b,
-                    patient_a,
-                    patient_b,
-                    contacts: [],
-                  })
-                  index = links.length - 1
-                }
-
-                links[index].contacts.push(copy_contact)
-              })
-              current_contacts[PatientID] = []
-
-              // terminate/delete running contacts on other patients
-              old_contact_patients.forEach((old_contact_patient_id: any) => {
-                current_contacts[old_contact_patient_id] = current_contacts[
-                  old_contact_patient_id
-                ].filter((cont: any) => cont.patient_b !== PatientID)
-              })
-            }
-
-            // 3 Patient in neuen Bucket schieben
-            if (buckets[new_station] === undefined) {
-              buckets[new_station] = []
-            }
-            buckets[new_station].push(PatientID)
-            patient_is_on_station[PatientID] = new_station
-
-            // 4 falls new_station !== home und !== tmp_home
-            // - neue Kontakte des Patienten anfangen
-            if (new_station !== "home" && new_station !== "tmp_home") {
-              let new_contact_patients: any[] = buckets[new_station].filter(
-                (pid: any) => pid !== PatientID
-              )
-              new_contact_patients.forEach((pat_id: any) => {
-                current_contacts[PatientID].push({
-                  patient_a: PatientID,
-                  patient_b: pat_id,
-                  station_id: new_station,
-                  begin: timestamp,
-                  end: undefined,
-                })
-
-                current_contacts[pat_id].push({
-                  patient_a: pat_id,
-                  patient_b: PatientID,
-                  station_id: new_station,
-                  begin: timestamp,
-                  end: undefined,
-                })
-              })
-              // console.log("nochmal current_contacts")
-              // console.log(current_contacts)
-            }
-          }
-        })
-      }
-
-      // let tick_counter = 0
-
-      let simulation = d3
-        .forceSimulation(nodes)
-        .force(
-          "link",
-          d3.forceLink(links).id((d: any) => d.id)
-        )
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(500, 500))
-      // .on("tick", () => {
-      // console.log("tick counter:", ++tick_counter)
-      // })
-
-      // let sim_done = false
-      setTimeout(() => {
-        simulation.stop()
-        // sim_done = true
-        console.log("SIMULATION DONE")
-
-        let min_x = Number.MAX_VALUE
-        let max_x = Number.MIN_VALUE
-
-        let min_y = Number.MAX_VALUE
-        let max_y = Number.MIN_VALUE
-
-        nodes.forEach((node: any) => {
-          let new_x = node.x
-          let new_y = node.y
-
-          if (new_x < min_x) {
-            min_x = new_x
-          }
-
-          if (new_y < min_y) {
-            min_y = new_y
-          }
-
-          if (new_x > max_x) {
-            max_x = new_x
-          }
-
-          if (new_y > max_y) {
-            max_y = new_y
-          }
-        })
-
-        let vis_offset_y = -min_y - (max_y - min_y) / 2
-        let vis_offset_x = -min_x - (max_x - min_x) / 2
-
-        callback({
-          timestamp: new Date().getTime(),
-          patientList,
-          nodes,
-          links,
-          min_x,
-          max_x,
-          min_y,
-          max_y,
-          vis_offset_x,
-          vis_offset_y,
-          pathogens_with_name,
-        })
-      }, 1000)
-
-      // erstmal nicht ausfegührt da nicht vollständig/ soltle umgeschrieben werden...
-      if (
-        false &&
-        Patient_Bewegung_Ps.error === undefined &&
-        Patient_Labordaten_Ps.error === undefined
-      ) {
-        /**
-         * "copy" of handle_data/switchkeim of old Module "SL_Kontaktnetzwerk"
-         */
-        // Liste aller vorkommenden Keime erzeugen
-        // und anschließend über diese iterieren
-
-        let occuring_pathogens: any = []
-        Patient_Labordaten_Ps.data.forEach((investigation_data: any) => {
-          if (!occuring_pathogens.includes(investigation_data.KeimID)) {
-            occuring_pathogens.push(investigation_data.KeimID)
-            pathogens_with_name.push({
-              id: investigation_data.KeimID,
-              nameK: investigation_data.Keim_k,
-              nameL: investigation_data.Keim_l,
+            graph_data.push({
+              name: loc_prop.name,
+              propname: loc_prop.propname,
+              nodes,
+              links,
+              min_x,
+              max_x,
+              min_y,
+              max_y,
+              vis_offset_x,
+              vis_offset_y,
             })
-          }
+
+            if (loc_prop_index === location_properties.length - 1) {
+              callback({
+                timestamp: new Date().getTime(),
+                patientList,
+                graph_data,
+                pathogens_with_name,
+              })
+            }
+          }, 1000)
         })
-
-        // ab hier alle Pathogens durchgehen
-        let graphen: any = {}
-        let nodes_by_timestamp: any = {}
-
-        pathogens_with_name.forEach((pwn: any) => {
-          let pathogen_id: any = pwn.id
-          let simulation = d3
-            .forceSimulation()
-            .force(
-              "link",
-              d3.forceLink().id((d: any) => d.id)
-            )
-            .force("charge", d3.forceManyBody())
-            // width / 2 und heiight / 2 (beides 1000 festgesetzt -> 500)
-            .force("center", d3.forceCenter(500, 500))
-
-          console.log("ANFANG erzeugen des Graphen")
-          let parsed_data = parse_sl_data(
-            {
-              rawData: {
-                movementData: Patient_Bewegung_Ps.data,
-                microData: Patient_Labordaten_Ps.data,
-              },
-              parameters: {
-                lop: parameters.patientList,
-              },
-            },
-            pathogen_id
-          )
-          // console.log("ENDE PARSED DATA")
-
-          // graphen = {
-          //   ...graphen,
-          //   ...parsed_data.graphsCategorized,
-          // }
-
-          // // nodes_by_timestamp = {
-          // //   ...nodes_by_timestamp,
-          // //   ...parsed_data.nodesByTimestamp
-          // // }
-
-          // let sankeyLeft = (node: any) => node.depth
-
-          // let n = parameters.patientList.length
-
-          // let link_data = graphen["K" + pathogen_id].links
-          // let node_data = graphen["K" + pathogen_id].nodes
-
-          // let storyline = (NL: any) => {
-          //   const san: any = d3_sankey
-          //     .sankey()
-          //     .nodeWidth(1)
-          //     .nodePadding(1)
-          //     .extent([
-          //       [0, 0],
-          //       [1000, 1000],
-          //     ])
-          //     .nodeAlign(sankeyLeft)
-          //     .iterations(100)
-          //   let ret: any = san(NL)
-          //   return ret
-          // }
-
-          // console.log("ANFANG vor storylinecreation")
-
-          // let nodes_and_links = storyline({
-          //   links: link_data,
-          //   nodes: node_data,
-          // })
-
-          // links = nodes_and_links.links
-          // nodes = nodes_and_links.nodes
-
-          // console.log("ENDE Storyline erzeugt (layout sankey), 100 Iterationen")
-
-          // nodes.forEach((n) => {
-          //   n.x_0 = n.x0
-          //   n.x_1 = n.x1
-          //   n.y_0 = n.y0
-          //   n.y_1 = n.y1
-          // })
-          // links.forEach((l) => {
-          //   l.y_0 = l.y0
-          //   l.y_1 = l.y1
-          // })
-
-          // links = links.filter((d: any) => !d.movementLink)
-          // ! das hier ist bis Zeile 1360
-
-          /**
-           * - Erzeugen der Nodes + Meta Data wie Krankheitsstatus für diesen Keim + Datum
-           * - Erzeugen der Links (alle Kontakte zweier Patienten zusammenfassen)
-           */
-
-          // ? Zeile 3176
-          let SL_nodes: any[] = []
-        })
-
-        /**
-         * End of the data-parser copy
-         */
       }
-      return
-
-      let min_x = Number.MAX_VALUE
-      let max_x = Number.MIN_VALUE
-
-      let min_y = Number.MAX_VALUE
-      let max_y = Number.MIN_VALUE
-
-      nodes.forEach((node: any) => {
-        let new_x = node.x
-        let new_y = node.y
-
-        if (new_x < min_x) {
-          min_x = new_x
-        }
-
-        if (new_y < min_y) {
-          min_y = new_y
-        }
-
-        if (new_x > max_x) {
-          max_x = new_x
-        }
-
-        if (new_y > max_y) {
-          max_y = new_y
-        }
-      })
-
-      let vis_offset_y = -min_y - (max_y - min_y) / 2
-      let vis_offset_x = -min_x - (max_x - min_x) / 2
-
-      // verschieben in den positiven Breich
-
-      callback({
-        timestamp: new Date().getTime(),
-        patientList,
-        nodes,
-        links,
-        min_x,
-        max_x,
-        min_y,
-        max_y,
-        vis_offset_x,
-        vis_offset_y,
-        pathogens_with_name,
-      })
-
-      // return {
-      //   timestamp: new Date().getTime(),
-      //   patientList,
-      //   nodes,
-      //   links,
-      //   min_x,
-      //   max_x,
-      //   min_y,
-      //   max_y,
-      //   vis_offset_x,
-      //   vis_offset_y,
-      //   pathogens_with_name,
-      // }
     },
   },
   linelist: {
@@ -4031,6 +1448,7 @@ const module_parser: { [key: string]: any } = {
       let movement_dots: object[] = []
       let investigation_rects: object[] = []
       let status_rects: any[] = []
+      let unknown_rects: any = {}
       let allStations: any[] = []
 
       // generate visualization for movement data (horizontal rectangles)
@@ -4130,19 +1548,32 @@ const module_parser: { [key: string]: any } = {
             })
 
             // generate blank/"unknown" rectangle
-            status_rects.push({
+            let unknown_rect = {
               patient_id: pID,
               pathogen_id: undefined,
               begin: first_ts,
               end: last_ts,
               status: "unknown",
-            })
+            }
+            status_rects.push(unknown_rect)
+            // unknown_rects.push(unknown_rect)
+            unknown_rects[pID] = unknown_rect
 
             console.log(`.........................Status Rects for ${pID}`)
 
-            let tested_pathogens: any[] = Object.getOwnPropertyNames(
-              status_changes[pID]
-            )
+            console.log("pID", pID)
+            console.table(status_changes[pID])
+            // !wenn jemand NIE getestet wurde, gibt es keine
+            // !Labordaten fuer ihn, also kann er nicht in der
+            // !mibiInvestigations-PatientListe auftauchen...
+
+            let tested_pathogens: any[] = []
+            if (status_changes[pID]) {
+              tested_pathogens = Object.getOwnPropertyNames(status_changes[pID])
+            }
+            // let tested_pathogens: any[] = Object.getOwnPropertyNames(
+            //   status_changes[pID]
+            // )
 
             console.log(
               `Tested Pathogens for this Patient... ${tested_pathogens}`
@@ -4225,6 +1656,7 @@ const module_parser: { [key: string]: any } = {
         movement_dots,
         investigation_rects,
         status_rects,
+        unknown_rects,
         allStations,
       })
 

@@ -7,6 +7,7 @@ import * as Arguments_Ps_JSON from "./type_declarations/Arguments_Ps.json"
 import * as Arguments_TTEsKSs_JSON from "./type_declarations/Arguments_TTEsKSs.json"
 import * as Arguments_TTKP_Degree_JSON from "./type_declarations/Arguments_TTKP_Degree.json"
 import * as Arguments_TTPK_JSON from "./type_declarations/Arguments_TTPK.json"
+import * as Arguments_RKIalgo_JSON from "./type_declarations/Arguments_RKIalgo.json"
 import * as Bewegungen_JSON from "./type_declarations/Bewegungen.json"
 import * as ErregerProTag_JSON from "./type_declarations/ErregerProTag.json"
 import * as Hospitals_JSON from "./type_declarations/Hospitals.json"
@@ -15,11 +16,13 @@ import * as Labordaten_JSON from "./type_declarations/Labordaten.json"
 import * as DiagnosticResults_JSON from "./type_declarations/DiagnosticResults.json"
 import * as PathogenFlag_JSON from "./type_declarations/PathogenFlag.json"
 import * as Praktikum_CF_2020_Result_JSON from "./type_declarations/Praktikum_CF_2020_Result.json"
+import * as RKIalgo_JSON from "./type_declarations/RKIalgo.json"
 import { Arguments_Empty } from "./type_declarations/generated/Arguments_Empty"
 import { Arguments_Ps } from "./type_declarations/generated/Arguments_Ps"
 import { Arguments_TTEsKSs } from "./type_declarations/generated/Arguments_TTEsKSs"
 import { Arguments_TTKP_Degree } from "./type_declarations/generated/Arguments_TTKP_Degree"
 import { Arguments_TTPK } from "./type_declarations/generated/Arguments_TTPK"
+import { Arguments_RKIalgo } from "./type_declarations/generated/Arguments_RKIalgo"
 import { Bewegungen } from "./type_declarations/generated/Bewegungen"
 import { ErregerProTag } from "./type_declarations/generated/ErregerProTag"
 import { Hospitals } from "./type_declarations/generated/Hospitals"
@@ -27,6 +30,7 @@ import { Kontakte } from "./type_declarations/generated/Kontakte"
 import { Labordaten } from "./type_declarations/generated/Labordaten"
 import { DiagnosticResults } from "./type_declarations/generated/DiagnosticResults"
 import { PathogenFlag } from "./type_declarations/generated/PathogenFlag"
+import { RKIalgo } from "./type_declarations/generated/RKIalgo"
 import { Praktikum_CF_2020_Result } from "./type_declarations/generated/Praktikum_CF_2020_Result"
 
 /*
@@ -42,6 +46,7 @@ export {
   Arguments_TTEsKSs,
   Arguments_TTKP_Degree,
   Arguments_TTPK,
+  Arguments_RKIalgo,
 }
 const ARGUMENT_SCHEMAS: ReadonlyArray<object> = [
   Arguments_Empty_JSON,
@@ -49,6 +54,7 @@ const ARGUMENT_SCHEMAS: ReadonlyArray<object> = [
   Arguments_TTEsKSs_JSON,
   Arguments_TTKP_Degree_JSON,
   Arguments_TTPK_JSON,
+  Arguments_RKIalgo_JSON,
 ]
 
 export {
@@ -60,6 +66,7 @@ export {
   DiagnosticResults,
   PathogenFlag,
   Praktikum_CF_2020_Result,
+  RKIalgo,
 }
 const DATA_SCHEMAS: ReadonlyArray<object> = [
   Bewegungen_JSON,
@@ -70,6 +77,7 @@ const DATA_SCHEMAS: ReadonlyArray<object> = [
   DiagnosticResults_JSON,
   PathogenFlag_JSON,
   Praktikum_CF_2020_Result_JSON,
+  RKIalgo_JSON,
 ]
 
 // see: https://github.com/ajv-validator/ajv#options for available options

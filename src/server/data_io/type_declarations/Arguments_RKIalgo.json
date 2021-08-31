@@ -1,0 +1,56 @@
+{
+  "$id": "args/Arguments_RKIalgo",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "starttime": {
+      "type": "string",
+      "moment": {
+        "validate": [
+          {
+            "test": "isSameOrAfter",
+            "value": "1980-01-01T00:00:00Z"
+          }
+        ]
+      }
+    },
+    "endtime": {
+      "type": "string",
+      "moment": {
+        "validate": [
+          {
+            "test": "isSameOrAfter",
+            "value": {
+              "$data": "1/starttime"
+            }
+          },
+          {
+            "test": "isSameOrBefore",
+            "value": "2100-01-01T00:00:00Z"
+          }
+        ]
+      }
+    },
+    "pathogenList": {
+      "type": "array",
+      "description": "pathogen IDs",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "hospital": {
+      "type": "string",
+      "minimum": 0
+    },
+    "station": {
+      "type": "array",
+      "description": "station IDs",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["starttime", "endtime"]
+}

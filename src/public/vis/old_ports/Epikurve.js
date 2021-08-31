@@ -45,9 +45,11 @@ class Epikurve extends Component {
       filterValues: [],
       getWithCopyStrain: true,
       dataWithCopyStrain: false,
-      getStationID: this.defaultStation,
-      stationIDs: [this.defaultStation],
+      getStationID: undefined,
+      stationIDs: [],
     }
+
+    this.selected_station = undefined
 
     this.locale = {
       dateTime: "%A, der %e. %B %Y, %X",
@@ -103,9 +105,13 @@ class Epikurve extends Component {
       // left: 0,
       text: 20,
     }
+
+    this.niveau_curve_index = 0
+    this.niveau_curve_names = ["Endemisches Niveau", "Epidemisches Niveau"]
+
     this.meanCurveIndex = 0
     this.meanCurves = [7, 28]
-    this.timeSpanIndex = 0
+
     this.timeSpans = [7, 28]
     this.dataType = 1
     this.dataTypes = [
@@ -120,6 +126,14 @@ class Epikurve extends Component {
         name: () => this.translate("firstInfections_CS"),
       },
     ]
+    this.dataTypeTop = {
+      type: "Anzahl_cs",
+      name: () => this.translate("firstInfections_CS"),
+    }
+    this.dataTypeBottom = {
+      type: "Anzahl",
+      name: () => this.translate("firstInfections"),
+    }
   }
 
   setLocale = (lang) => {
@@ -232,15 +246,6 @@ class Epikurve extends Component {
     self.draw_vis()
   }
 
-  switchTimeSpan = () => {
-    let self = this
-    self.timeSpanIndex++
-    if (self.timeSpanIndex >= self.timeSpans.length) {
-      self.timeSpanIndex = 0
-    }
-    self.draw_vis()
-  }
-
   switchStation = (e) => {
     let self = this
     let newStationID = e.target.value
@@ -266,6 +271,15 @@ class Epikurve extends Component {
     self.meanCurveIndex++
     if (self.meanCurveIndex >= self.meanCurves.length) {
       self.meanCurveIndex = 0
+    }
+    self.draw_vis()
+  }
+
+  switch_niveau_curve_index = () => {
+    let self = this
+    self.niveau_curve_index++
+    if (self.niveau_curve_index >= self.niveau_curve_names.length) {
+      self.niveau_curve_index = 0
     }
     self.draw_vis()
   }
@@ -505,6 +519,23 @@ class Epikurve extends Component {
 
     this.data = data
     this.initial_timelense_timestamps = data.data.initial_timelense_timestamps
+
+    // prepare the selection for the new data
+    let stations = []
+    this.selected_station = undefined
+    data.data.stationIDs.forEach((s_id, i) => {
+      stations.push(s_id)
+      if (i === 0) {
+        this.selected_station = s_id
+      }
+    })
+
+    this.setState((prevState) => {
+      prevState.stationIDs = stations
+      prevState.getStationID = this.selected_station
+      return prevState
+    })
+
     this.draw_vis()
   }
 
@@ -572,14 +603,14 @@ class Epikurve extends Component {
      * from old module
      */
     if (!stationID) {
-      // stationID = self.state.getStationID
-      stationID = data.data.stationIDs[0]
+      stationID = self.state.getStationID
+      // stationID = data.data.stationIDs[0]
     }
     if (!pathogenID) {
       // pathogenID = self.state.getPathogenID
       pathogenID = data.data.pathogenIDs[0]
     }
-    let stationIDname = "S" + stationID
+    let stationIDname = stationID
     let pathogenIDname = "K" + pathogenID
 
     let svg = d3.select(self.svgRoot)
@@ -591,29 +622,36 @@ class Epikurve extends Component {
       2 * self.margin.bottom
     // let data = self.data
     let dataType = self.dataTypes[self.dataType]
-    let timeSpan = self.timeSpans[self.timeSpanIndex]
+    let dataTypeTop = this.dataTypeTop
+    let dataTypeBottom = this.dataTypeBottom
 
     let offsetBottomLinesY = height / 2 + self.margin.top + self.margin.bottom
 
     let meanCurve = self.meanCurves[self.meanCurveIndex]
 
-    let dataTop =
-      data.data.data[self.timeSpanIndex + 1][pathogenIDname][stationIDname]
+    // let timeStampsTop = [
+    //   dataTop[0].timestamps[0],
+    //   dataTop[dataTop.length - 1].timestamps[
+    //     dataTop[dataTop.length - 1].timestamps.length - 1
+    //   ] +
+    //     1000 * 60 * 60 * 24,
+    // // ]
+    // let timeStampsTop = self.initial_timelense_timestamps
 
-    let timeStampsTop = [
-      dataTop[0].timestamps[0],
-      dataTop[dataTop.length - 1].timestamps[
-        dataTop[dataTop.length - 1].timestamps.length - 1
-      ] +
-        1000 * 60 * 60 * 24,
-    ]
     // let timeStampsBottom = [dataBottom[0].timeStamp, dataBottom[dataBottom.length - 1].timeStamp + 1000 * 60 * 60 * 24]
     /**
      * Hier die Bottom Daten filtern
      */
-    let dataBottomOrg = data.data.data[0][pathogenIDname][stationIDname]
+    let dataBottomOrg = data.data.data[pathogenIDname][stationIDname]
+
+    let timeStampsTop = [
+      dataBottomOrg[0].timestamp,
+      dataBottomOrg[dataBottomOrg.length - 1].timestamp + 1000 * 60 * 60 * 24,
+    ]
+    console.log(dataBottomOrg)
+
     let timeStampsBottom = self.initial_timelense_timestamps
-    let dataBottom = data.data.data[0][pathogenIDname][stationIDname].filter(
+    let dataBottom = data.data.data[pathogenIDname][stationIDname].filter(
       (d) =>
         timeStampsBottom[0] <= d.timestamp && d.timestamp < timeStampsBottom[1]
     )
@@ -638,50 +676,69 @@ class Epikurve extends Component {
     /**
      * "Legende" für die Mean-Kurve
      */
-    let legendLine = self.gGraphicsBottom.selectAll(".legendLine").data([0])
+    // let legendLine = self.gGraphicsBottom.selectAll(".legendLine").data([0])
+    let legendLine = self.gGraphicsTop.selectAll(".legendLine2").data([0])
 
     legendLine
       .enter()
       .append("line")
-      .attr("class", "legendLine")
+      .attr("class", "legendLine2")
       .merge(legendLine)
       .transition()
       .duration(self.transition_duration)
       .attr("x1", (width * 3) / 4)
       .attr("x2", (width * 3) / 4 + 20)
-      .attr("y1", -15)
-      .attr("y2", -15)
-      .attr("stroke", "#ff7f00")
+      // .attr("y1", -15)
+      // .attr("y2", -15)
+      .attr("y1", -35)
+      .attr("y2", -35)
+      // .attr("stroke", "#ff7f00")
+      .attr("stroke", "black")
       .attr("stroke-width", 3)
       .attr("fill", "none")
       .attr("opacity", 1)
 
     legendLine.exit().remove()
 
-    let legendText = self.gGraphicsBottom.selectAll(".legendText").data([0])
+    // let legendText = self.gGraphicsBottom.selectAll(".legendText").data([0])
+    let legendText = self.gGraphicsTop.selectAll(".legendText").data([0])
 
     legendText
       .enter()
       .append("text")
       .attr("class", "legendText clickable")
       .on("click", () => {
-        self.swtichMeanCurve()
+        // self.swtichMeanCurve()
+        self.switch_niveau_curve_index()
       })
       .merge(legendText)
       .transition()
       .duration(self.transition_duration)
       .attr("x", (width * 3) / 4 + 25)
-      .attr("y", -10)
+      // .attr("y", -10)
+      .attr("y", -30)
       .attr("font-size", "80%")
       .attr("cursor", "pointer")
-      .text(() => "Mean " + meanCurve + " " + self.translate("days"))
+      // .text(() => "Mean " + meanCurve + " " + self.translate("days"))
+      .text(() => this.niveau_curve_names[this.niveau_curve_index])
 
     legendText.exit().remove()
 
     /**
      * TOP Y-AXIS
      */
-    let yMaxTop = d3.max(dataTop, (d) => d[dataType.type])
+    // let yMaxTop = d3.max(dataTop, (d) => d[dataType.type])
+    let yMaxTop = d3.max(dataBottomOrg, (d) => d[dataTypeTop.type])
+
+    dataBottomOrg.forEach((d) => {
+      if (d.rki_data && d.rki_data[this.niveau_curve_names[0]] > yMaxTop) {
+        yMaxTop = d.rki_data[this.niveau_curve_names[0]]
+      }
+      if (d.rki_data && d.rki_data[this.niveau_curve_names[1]] > yMaxTop) {
+        yMaxTop = d.rki_data[this.niveau_curve_names[1]]
+      }
+    })
+
     yMaxTop = Math.round(yMaxTop + 1 + 0.1 * yMaxTop)
 
     let scaleYTop = d3
@@ -707,11 +764,11 @@ class Epikurve extends Component {
       .enter()
       .append("text")
       .attr("class", "label clickable")
-      .on("click", self.switchDataType)
+      // .on("click", self.switchDataType)
       .merge(yAxisLabelTop)
       .transition()
       .duration(self.transition_duration)
-      .text(() => dataType.name())
+      .text(() => dataTypeTop.name())
       .attr("x", -height / 4)
       .attr("transform", "rotate(-90)")
       .attr("y", -40)
@@ -727,7 +784,7 @@ class Epikurve extends Component {
     /**
      * BOTTOM Y-AXIS
      */
-    let yMaxBottomValue = d3.max(dataBottom, (d) => d[dataType.type])
+    let yMaxBottomValue = d3.max(dataBottom, (d) => d[dataTypeBottom.type])
     let avgName = "avg" + meanCurve
     if (self.dataType === 1) {
       avgName += "_cs"
@@ -759,11 +816,11 @@ class Epikurve extends Component {
       .enter()
       .append("text")
       .attr("class", "label clickable")
-      .on("click", self.switchDataType)
+      // .on("click", self.switchDataType)
       .merge(yAxisLabelBottom)
       .transition()
       .duration(self.transition_duration)
-      .text(() => dataType.name())
+      .text(() => dataTypeBottom.name())
       .attr("x", -height / 4)
       .attr("transform", "rotate(-90)")
       .attr("y", -40)
@@ -809,20 +866,20 @@ class Epikurve extends Component {
       .enter()
       .append("text")
       .attr("class", "label clickable")
-      .on("click", self.switchTimeSpan)
       // .text(() => "akkumulierte Anzahl Ersterkrankungen pro " + timeSpan + " Tage")
       .merge(xAxisLabelTop)
       .transition()
       .duration(self.transition_duration)
-      .text(
-        () =>
-          self.translate(xLabel_top_string) +
-          " " +
-          timeSpan +
-          " " +
-          self.translate("days") +
-          ")"
-      )
+      // .text(
+      //   () =>
+      //     self.translate(xLabel_top_string) +
+      //     " " +
+      //     timeSpan +
+      //     " " +
+      //     self.translate("days") +
+      //     ")"
+      // )
+      .text(self.translate("EpiTopTitle"))
       .attr("x", width / 2)
       .attr("y", -height / 2 - self.margin.top / 2 + 10)
       .attr("dy", "0.71em")
@@ -861,7 +918,7 @@ class Epikurve extends Component {
     xAxisLabelBottom
       .enter()
       .append("text")
-      .on("click", self.swtichMeanCurve)
+      // .on("click", self.swtichMeanCurve)
       // .text(() => timeSpan + " Tage")
       .merge(xAxisLabelBottom)
       .transition()
@@ -870,7 +927,8 @@ class Epikurve extends Component {
       .attr("y", -height / 2 - self.margin.top / 2 + 10)
       // .text("Anzahl täglicher Ersterkrankungen und " + meanCurve + "-Tage-Mean")
       // .text("Epidemiekurve Ersterkrankungen (pro Tag)")
-      .text(self.translate(xLabel_bottom_string))
+      // .text(self.translate(xLabel_bottom_string))
+      .text(self.translate("EpiBottomTitle"))
       .attr("class", "label clickable title")
       .attr("dy", "0.71em")
       .attr("font", "sans-serif")
@@ -1407,137 +1465,263 @@ class Epikurve extends Component {
 
     timeLenseInterpolateRight.exit().remove()
 
-    /**
-     * TOP Epidemikurve
-     */
-    let topEpidemikurve = self.gEpidemikurveTop
-      .selectAll("polygon")
-      .data([dataTop])
+    let rects_instead_of_polygons = true
 
-    topEpidemikurve
-      .enter()
-      .append("polygon")
-      .merge(topEpidemikurve)
-      .on("click", (d) => {
-        console.log(d)
-      })
-      .transition()
-      .duration(self.transition_duration)
-      .attr("class", (d) => "keimKurve")
-      // .attr("opacity", 0.2)
-      // .attr("fill", "#ff7f00")
-      .attr("fill", this.get_color("infectedCarrier"))
-      .attr("opacity", 0.5)
-      .attr("points", (d) => {
-        scaleYTop.domain([yMaxTop, 0])
-        let bottomPoints = width + ",0, 0,0"
-        let points = ""
-        /**
-         * wird nur einmal aufgerufen; die For-Schleife ist noch von der alten Epidemikurve
-         */
-        for (let i = 0; i < d.length; i++) {
-          /**
-           * Der Versuch bei 7 und 28 EpiKurve gleich viele Punkte zu verwenden
-           * aber leider kleiner Offset wegen dem Punkt auserhalb der Schleife
-           */
-          // points = points + (i * width / (dataBottomOrg.length / timeSpan)).toString() + ",-"
-          //     + (scaleYTop(d[i][dataType.type]).toString()) + ", "
-          // d[i].timeStamps.forEach(t => {
-          //     points = points +
-          //         ((i) * width / (dataBottomOrg.length / timeSpan) + width / (dataBottomOrg.length / timeSpan) * (d[i].timeStamps.length / timeSpan)).toString() + ",-"
-          //         + (scaleYTop(d[i][dataType.type])).toString() + ", "
-          // })
+    if (rects_instead_of_polygons) {
+      /**
+       * TOP Epidemikurve
+       */
+      let topEpidemikurve = self.gEpidemikurveTop
+        .selectAll(".keimkurve_rects")
+        // .data([dataTop])
+        .data(dataBottomOrg)
 
-          points =
-            points +
-            ((i * width) / (dataBottomOrg.length / timeSpan)).toString() +
-            ",-" +
-            scaleYTop(d[i][dataType.type]).toString() +
-            ", "
+      topEpidemikurve
+        .enter()
+        .append("rect")
+        .merge(topEpidemikurve)
+        .on("click", (d) => {
+          console.log(d)
+        })
+        .transition()
+        .duration(self.transition_duration)
+        .attr("class", (d) => "keimkurve_rects")
+        // .attr("fill", this.get_color("infectedCarrier"))
+        .attr("fill", (d) => {
+          let col = "#bbbbbb"
 
-          if (i === d.length - 1) {
-            /**
-             * sodass der letzte Balken nicht übersteht
-             * statt i + 1 mal die Balkenbreite, nur i mal PLUS den letzten kleineren Balken
-             */
+          if (d.rki_data) {
+            let val = d.rki_data.outbreak_prob
+            val = val / 0.5 + 0.5
+            col = d3.interpolateOranges(val)
+          }
+
+          return col
+        })
+        // .attr("opacity", 0.5)
+        .attr("x", (d, i) => {
+          return (i * width) / dataBottomOrg.length
+        })
+        .attr("y", (d) => {
+          return scaleYTop(d[dataTypeTop.type])
+        })
+        .attr("width", (d) => {
+          return width / dataBottomOrg.length
+        })
+        .attr("height", (d) => {
+          return scaleYTop(yMaxTop - d[dataTypeTop.type])
+        })
+      // .attr(
+      //   "transform",
+      //   (d) => "translate(" + 0 + "," + scaleYTop(yMaxTop) + ")"
+      // )
+
+      topEpidemikurve.exit().remove()
+
+      /**
+       * BOTTOM Epidemikurve
+       */
+      let bottomEpidemikurve = self.gEpidemikurveBottom
+        .selectAll(".keimkurve_rects")
+        .data(dataBottom)
+
+      bottomEpidemikurve
+        .enter()
+        .append("rect")
+        .merge(bottomEpidemikurve)
+        .on("click", (d) => {
+          console.log(d)
+        })
+        .transition()
+        .duration(self.transition_duration)
+        .attr("class", (d) => "keimkurve_rects")
+        // .attr("opacity", 0.2)
+        // .attr("fill", "#ff7f00")
+        // .attr("fill", this.get_color("infectedCarrier"))
+        .attr("fill", (d) => {
+          let col = "#bbbbbb"
+
+          if (d.rki_data) {
+            let val = d.rki_data.outbreak_prob
+            val = val / 0.5 + 0.5
+            col = d3.interpolateOranges(val)
+          }
+
+          return col
+        })
+        .attr("x", (d, i) => {
+          return (i * width) / dataBottom.length
+        })
+        .attr("y", (d) => {
+          return scaleYBottom(d[dataTypeBottom.type])
+        })
+        .attr("width", (d) => {
+          return width / dataBottom.length
+        })
+        .attr("height", (d) => {
+          return scaleYBottom(yMaxBottom - d[dataTypeBottom.type])
+        })
+      // .attr(
+      //   "transform",
+      //   (d) => "translate(" + 0 + "," + scaleYBottom(yMaxBottom) + ")"
+      // )
+
+      bottomEpidemikurve.exit().remove()
+    } else {
+      /**
+       * TOP Epidemikurve
+       */
+      let topEpidemikurve = self.gEpidemikurveTop
+        .selectAll("polygon")
+        // .data([dataTop])
+        .data([dataBottomOrg])
+
+      topEpidemikurve
+        .enter()
+        .append("polygon")
+        .merge(topEpidemikurve)
+        .on("click", (d) => {
+          console.log(d)
+        })
+        .transition()
+        .duration(self.transition_duration)
+        .attr("class", (d) => "keimKurve")
+        // .attr("opacity", 0.2)
+        // .attr("fill", "#ff7f00")
+        .attr("fill", this.get_color("infectedCarrier"))
+        .attr("opacity", 0.5)
+        // Adaption, dass oben eine andere Kurve angezeigt wird...
+        .attr("points", (d) => {
+          scaleYTop.domain([yMaxTop, 0])
+          let bottomPoints = width + ",0, 0,0"
+          let points = ""
+          for (let i = 0; i < d.length; i++) {
             points =
               points +
-              (
-                (i * width) / (dataBottomOrg.length / timeSpan) +
-                (width / (dataBottomOrg.length / timeSpan)) *
-                  (d[i].timestamps.length / timeSpan)
-              ).toString() +
+              ((i * width) / d.length).toString() +
               ",-" +
-              scaleYTop(d[i][dataType.type]).toString() +
+              scaleYTop(d[i][dataTypeTop.type]).toString() +
               ", "
-          } else {
             points =
               points +
-              (
-                ((i + 1) * width) /
-                (dataBottomOrg.length / timeSpan)
-              ).toString() +
+              (((i + 1) * width) / d.length).toString() +
               ",-" +
-              scaleYTop(d[i][dataType.type]).toString() +
+              scaleYTop(d[i][dataTypeTop.type]).toString() +
               ", "
           }
-        }
-        return points + bottomPoints
-      })
-      .attr(
-        "transform",
-        (d) => "translate(" + 0 + "," + scaleYTop(yMaxTop) + ")"
-      )
+          return points + bottomPoints
+        })
+        // .attr("points", (d) => {
+        //   scaleYTop.domain([yMaxTop, 0])
+        //   let bottomPoints = width + ",0, 0,0"
+        //   let points = ""
+        //   /**
+        //    * wird nur einmal aufgerufen; die For-Schleife ist noch von der alten Epidemikurve
+        //    */
+        //   for (let i = 0; i < d.length; i++) {
+        //     /**
+        //      * Der Versuch bei 7 und 28 EpiKurve gleich viele Punkte zu verwenden
+        //      * aber leider kleiner Offset wegen dem Punkt auserhalb der Schleife
+        //      */
+        //     // points = points + (i * width / (dataBottomOrg.length / timeSpan)).toString() + ",-"
+        //     //     + (scaleYTop(d[i][dataType.type]).toString()) + ", "
+        //     // d[i].timeStamps.forEach(t => {
+        //     //     points = points +
+        //     //         ((i) * width / (dataBottomOrg.length / timeSpan) + width / (dataBottomOrg.length / timeSpan) * (d[i].timeStamps.length / timeSpan)).toString() + ",-"
+        //     //         + (scaleYTop(d[i][dataType.type])).toString() + ", "
+        //     // })
 
-    topEpidemikurve.exit().remove()
+        //     points =
+        //       points +
+        //       ((i * width) / (dataBottomOrg.length / timeSpan)).toString() +
+        //       ",-" +
+        //       scaleYTop(d[i][dataType.type]).toString() +
+        //       ", "
 
-    /**
-     * BOTTOM Epidemikurve
-     */
-    let bottomEpidemikurve = self.gEpidemikurveBottom
-      .selectAll("polygon")
-      .data([dataBottom])
+        //     if (i === d.length - 1) {
+        //       /**
+        //        * sodass der letzte Balken nicht übersteht
+        //        * statt i + 1 mal die Balkenbreite, nur i mal PLUS den letzten kleineren Balken
+        //        */
+        //       points =
+        //         points +
+        //         (
+        //           (i * width) / (dataBottomOrg.length / timeSpan) +
+        //           (width / (dataBottomOrg.length / timeSpan)) *
+        //             (d[i].timestamps.length / timeSpan)
+        //         ).toString() +
+        //         ",-" +
+        //         scaleYTop(d[i][dataType.type]).toString() +
+        //         ", "
+        //     } else {
+        //       points =
+        //         points +
+        //         (
+        //           ((i + 1) * width) /
+        //           (dataBottomOrg.length / timeSpan)
+        //         ).toString() +
+        //         ",-" +
+        //         scaleYTop(d[i][dataType.type]).toString() +
+        //         ", "
+        //     }
+        //   }
+        //   return points + bottomPoints
+        // })
+        .attr(
+          "transform",
+          (d) => "translate(" + 0 + "," + scaleYTop(yMaxTop) + ")"
+        )
 
-    bottomEpidemikurve
-      .enter()
-      .append("polygon")
-      .merge(bottomEpidemikurve)
-      .on("click", (d) => {
-        console.log(d)
-      })
-      .transition()
-      .duration(self.transition_duration)
-      .attr("class", (d) => "keimKurve")
-      // .attr("opacity", 0.2)
-      // .attr("fill", "#ff7f00")
-      .attr("fill", this.get_color("infectedCarrier"))
-      .attr("opacity", 0.5)
-      .attr("points", (d) => {
-        scaleYBottom.domain([yMaxBottom, 0])
-        let bottomPoints = width + ",0, 0,0"
-        let points = ""
-        for (let i = 0; i < d.length; i++) {
-          points =
-            points +
-            ((i * width) / d.length).toString() +
-            ",-" +
-            scaleYBottom(d[i][dataType.type]).toString() +
-            ", "
-          points =
-            points +
-            (((i + 1) * width) / d.length).toString() +
-            ",-" +
-            scaleYBottom(d[i][dataType.type]).toString() +
-            ", "
-        }
-        return points + bottomPoints
-      })
-      .attr(
-        "transform",
-        (d) => "translate(" + 0 + "," + scaleYBottom(yMaxBottom) + ")"
-      )
+      topEpidemikurve.exit().remove()
 
-    bottomEpidemikurve.exit().remove()
+      /**
+       * BOTTOM Epidemikurve
+       */
+      let bottomEpidemikurve = self.gEpidemikurveBottom
+        .selectAll("polygon")
+        .data([dataBottom])
+
+      bottomEpidemikurve
+        .enter()
+        .append("polygon")
+        .merge(bottomEpidemikurve)
+        .on("click", (d) => {
+          console.log(d)
+        })
+        .transition()
+        .duration(self.transition_duration)
+        .attr("class", (d) => "keimKurve")
+        // .attr("opacity", 0.2)
+        // .attr("fill", "#ff7f00")
+        .attr("fill", this.get_color("infectedCarrier"))
+        .attr("opacity", 0.5)
+        .attr("points", (d) => {
+          scaleYBottom.domain([yMaxBottom, 0])
+          let bottomPoints = width + ",0, 0,0"
+          let points = ""
+          for (let i = 0; i < d.length; i++) {
+            points =
+              points +
+              ((i * width) / d.length).toString() +
+              ",-" +
+              scaleYBottom(d[i][dataTypeBottom.type]).toString() +
+              ", "
+            points =
+              points +
+              (((i + 1) * width) / d.length).toString() +
+              ",-" +
+              scaleYBottom(d[i][dataTypeBottom.type]).toString() +
+              ", "
+          }
+          return points + bottomPoints
+        })
+        .attr(
+          "transform",
+          (d) => "translate(" + 0 + "," + scaleYBottom(yMaxBottom) + ")"
+        )
+
+      bottomEpidemikurve.exit().remove()
+    }
 
     /**
      * BOTTOM MEAN7 bzw MEAN28
@@ -1547,7 +1731,8 @@ class Epikurve extends Component {
     //   avgName += "_cs"
     // }
 
-    let bottomMean = self.gMeanBottom.selectAll("polygon").data([dataBottom])
+    // let bottomMean = self.gMeanBottom.selectAll("polygon").data([dataBottom])
+    let bottomMean = self.gMeanTop.selectAll("polygon").data([dataBottomOrg])
 
     bottomMean
       .enter()
@@ -1555,35 +1740,47 @@ class Epikurve extends Component {
       .merge(bottomMean)
       .transition()
       .duration(self.transition_duration)
-      .attr("class", (d) => "meanKurve7 meanKurve")
+      // .attr("class", (d) => "meanKurve7 meanKurve")
       // .attr("opacity", 0.2)
-      .attr("stroke", "#ff7f00")
+      // .attr("stroke", "#ff7f00")
+      .attr("stroke", "black")
       .attr("stroke-width", 3)
       .attr("opacity", 1)
       .attr("fill", "none")
       .attr("points", (d) => {
-        scaleYBottom.domain([yMaxBottom, 0])
+        // scaleYBottom.domain([yMaxBottom, 0])
+        scaleYTop.domain([yMaxTop, 0])
         let bottomPoints = width + ",0, 0,0"
         let points = ""
         for (let i = 0; i < d.length; i++) {
+          let num = 0
+
+          if (d[i].rki_data !== undefined) {
+            num =
+              d[i].rki_data[this.niveau_curve_names[this.niveau_curve_index]]
+          }
+
           points =
             points +
             ((i * width) / d.length).toString() +
             ",-" +
-            scaleYBottom(d[i][avgName]).toString() +
+            // scaleYBottom(d[i][avgName]).toString() +
+            scaleYTop(num).toString() +
             ", "
           points =
             points +
             (((i + 1) * width) / d.length).toString() +
             ",-" +
-            scaleYBottom(d[i][avgName]).toString() +
+            // scaleYBottom(d[i][avgName]).toString() +
+            scaleYTop(num).toString() +
             ", "
         }
         return points + bottomPoints
       })
       .attr(
         "transform",
-        (d) => "translate(" + 0 + "," + scaleYBottom(yMaxBottom) + ")"
+        // (d) => "translate(" + 0 + "," + scaleYBottom(yMaxBottom) + ")"
+        (d) => "translate(" + 0 + "," + scaleYTop(yMaxTop) + ")"
       )
 
     bottomMean.exit().remove()
@@ -1620,6 +1817,24 @@ class Epikurve extends Component {
   }
 
   render() {
+    let self = this
+
+    let selections = []
+    this.state.stationIDs.forEach((s_id, i) => {
+      selections.push(
+        <option key={s_id} value={s_id}>
+          {s_id}
+        </option>
+      )
+    })
+    let selection = null
+    if (selections.length > 0) {
+      selection = (
+        <select onChange={this.switchStation} value={this.state.getStationID}>
+          {selections}
+        </select>
+      )
+    }
     return (
       <div style={{ width: "100%", height: "100%", background: "white" }}>
         <svg
@@ -1628,6 +1843,12 @@ class Epikurve extends Component {
           // TODO: SEHR WICHTIG --> MUSS IN JEDEM MODUL SEIN
           style={{ pointerEvents: "all" }}
         />
+        <div
+          className="testdiv2"
+          style={{ position: "absolute", top: "10px", left: "100px" }}
+        >
+          {selection}
+        </div>
       </div>
     )
   }

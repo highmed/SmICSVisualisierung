@@ -77,6 +77,10 @@ export abstract class AbstractDataSource {
         arguments: "args/Arguments_Ps",
         results: "data/Praktikum_CF_2020_Result",
       },
+      RKIalgo: {
+        arguments: "args/Arguments_RKIalgo",
+        results: "data/RKIalgo",
+      },
     })
   )
 

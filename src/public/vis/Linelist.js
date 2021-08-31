@@ -10,6 +10,11 @@ class Linelist extends Component {
     /**
      * TODO: hier für das Module feste Parameter/"globale" variablen
      */
+    this.state = {
+      stations: [],
+      selected_stations: [],
+    }
+    this.selected_stations = []
 
     this.data
     this.parameters
@@ -21,6 +26,8 @@ class Linelist extends Component {
     this.socket = props.socket
     this.translate = props.translate
     this.get_color = props.get_color
+
+    this.default_movement_color = "lightgray"
 
     this.margin = {
       top: 25,
@@ -102,9 +109,9 @@ class Linelist extends Component {
      * = margin bars außenrum
      */
     this.vis_margin = {
-      // top: 200,
+      top: 50,
       // top: this.title_height + this.timestamp_height * 2,
-      top: 0,
+      // top: 0,
       bottom: 50,
       left: 50,
       right: 0,
@@ -203,30 +210,53 @@ class Linelist extends Component {
       // tableObj.content.push(["link", "link", "link", "link"])
     } else if (i === "inspec") {
       let insDate = moment(d.timestamp)
+      let c = "white"
+      switch (d.result) {
+        case "negative":
+          c = this.get_color("negative")
+          break
+        case "infected":
+          c = this.get_color("infectedCarrier")
+          break
+        case "diseased":
+          c = this.get_color("infectedDiseased")
+          break
+      }
+
       tableObj = {
+        header_color: c,
         title:
           // "P" +
           d.patient_id +
-          " " +
+          " | " +
           insDate.format(this.translate("dateFormat")) +
           " Uhr | Result: " +
           d.result,
         header: [
-          this.translate("result"),
-          this.translate("pathogen"),
-          this.translate("antibiotika"),
+          //   this.translate("result"),
+          //   this.translate("pathogen"),
+          //   this.translate("antibiotika"),
+          //   this.translate("material"),
+          //   this.translate("id"),
+          this.translate("KeimID"),
+          this.translate("MREclass"),
           this.translate("material"),
-          this.translate("id"),
+          this.translate("ResultComment"),
         ],
         content: [],
       }
+
       d.data.forEach((o) => {
         tableObj.content.push([
-          o.Ergebnis_k,
-          o.Keim_k,
-          o.Antibiotikum_l,
+          // o.Ergebnis_k,
+          // o.Keim_k,
+          // o.Antibiotikum_l,
+          // o.Material_l,
+          // o.id,
+          o.KeimID,
+          o.MREKlasseID,
           o.Material_l,
-          o.id,
+          o.Befundkommentar,
         ])
       })
     } else {
@@ -274,7 +304,7 @@ class Linelist extends Component {
     this.width = parseInt(d3.select(self.svgRoot).style("width"))
     this.height = parseInt(d3.select(self.svgRoot).style("height"))
 
-    let mouseLine = () => {
+    let mouseLine = (this.mouseLine = () => {
       if (!self.data) {
         return
       }
@@ -341,7 +371,26 @@ class Linelist extends Component {
         .merge(patientLabel)
         .attr("class", "patientLabel")
         // .text((d) => "P" + d)
-        .text((d) => d)
+        // .text((d) => d)
+        .text((d, i) => {
+          let y_offset =
+            self.height -
+            self.vis_margin.bottom -
+            i * self.row_height -
+            // + self.rowHeight
+            inspecHeight -
+            // self.labelMargin +
+            2 +
+            self.currentPixelOffset
+          if (
+            y_offset < self.vis_margin.top ||
+            y_offset > self.height - self.vis_margin.bottom
+          ) {
+            return ""
+          } else {
+            return d
+          }
+        })
         // .attr("font-size", self.labelHeight)
         .attr("font-size", 12)
         // .attr(
@@ -379,7 +428,7 @@ class Linelist extends Component {
         .attr("text-anchor", false ? "end" : anchor)
 
       patientLabel.exit().remove()
-    }
+    })
 
     let zoom = d3.zoom().on("zoom", () => {
       let containerWidth = parseInt(d3.select(self.svgRoot).style("width"))
@@ -586,6 +635,7 @@ class Linelist extends Component {
   handle_data = (data) => {
     console.log("linelist vis data received")
     console.log(data)
+    let self = this
 
     this.data = data.data
     this.parameters = data.parameters
@@ -607,6 +657,46 @@ class Linelist extends Component {
         0 +
         ")"
     )
+
+    if (data.data.allStations) {
+      self.ward_color = d3
+        .scaleOrdinal()
+        .range([
+          // "#b831d4",
+          // "#bdd7e7",
+          "#bae4b3",
+          // "#f2f0f7",
+          "#cbc9e2",
+          "#9e9ac8",
+          // "#cc4c02",
+
+          // "#6a51a3",
+          // "#8da0cb",
+          "#66c2a5",
+          // "#a6cee3",
+          // "#1f78b4",
+          // "#33a02c",
+          "#ffffb3",
+          // "#fbb4ae",
+          "#fdcdac",
+          "#74c476",
+        ])
+        .domain(data.data.allStations)
+
+      let stations = []
+      this.selected_stations = []
+      data.data.allStations.forEach((s) => {
+        stations.push({
+          name: s,
+          color: self.ward_color(s),
+        })
+      })
+      this.setState((prevState) => {
+        prevState.stations = stations
+        prevState.selected_stations = []
+        return prevState
+      })
+    }
 
     this.draw_vis()
   }
@@ -746,23 +836,44 @@ class Linelist extends Component {
 
           if (start_drag === true) {
             let inspecHeight = 0
-            self.gUIContainer.selectAll(".patientLabel").attr(
-              "transform",
-              (d, i) =>
-                "translate(" +
-                ((self.offsetX || 0) + self.lastTransformedX) +
-                "," +
-                (self.height -
+            self.gUIContainer
+              .selectAll(".patientLabel")
+              .text((d, i) => {
+                let y_offset =
+                  self.height -
                   self.vis_margin.bottom -
                   i * self.row_height -
                   // + self.rowHeight
                   inspecHeight -
                   // self.labelMargin +
                   2 +
-                  self.currentPixelOffset +
-                  // 0 +
-                  ")")
-            )
+                  self.currentPixelOffset
+                if (
+                  y_offset < self.vis_margin.top ||
+                  y_offset > self.height - self.vis_margin.bottom
+                ) {
+                  return ""
+                } else {
+                  return d
+                }
+              })
+              .attr(
+                "transform",
+                (d, i) =>
+                  "translate(" +
+                  ((self.offsetX || 0) + self.lastTransformedX) +
+                  "," +
+                  (self.height -
+                    self.vis_margin.bottom -
+                    i * self.row_height -
+                    // + self.rowHeight
+                    inspecHeight -
+                    // self.labelMargin +
+                    2 +
+                    self.currentPixelOffset +
+                    // 0 +
+                    ")")
+              )
           }
 
           // self.draw_vis(true)
@@ -884,13 +995,13 @@ class Linelist extends Component {
     v_margin_bars.exit().remove()
 
     let h_margin_bars = this.gHorizontalMarginBars
-      .selectAll(".v_margin_bar")
+      .selectAll(".h_margin_bar")
       .data(this.h_margin_bars_data)
 
     h_margin_bars
       .enter()
       .append("rect")
-      .attr("class", "v_margin_bar")
+      .attr("class", "h_margin_bar")
       .merge(h_margin_bars)
       .transition()
       .duration(trans_duration)
@@ -973,6 +1084,7 @@ class Linelist extends Component {
       })
       .on("click", (d) => {
         console.log(d)
+        self.select_station(d.station_id)
       })
       .transition()
       .duration(trans_duration)
@@ -980,9 +1092,16 @@ class Linelist extends Component {
       .attr("width", (d) => rect_width(d))
       .attr("y", (d) => y_movement_offset(d))
       .attr("height", this.movement_rectangle_height)
-      .attr("fill", "lightgray")
+      .attr("fill", (d) => {
+        let col = self.default_movement_color
+        if (self.selected_stations.includes(d.station_id)) {
+          col = self.ward_color(d.station_id)
+        }
+        return col
+      })
       .attr("stroke", "black")
       .attr("stroke-width", 1)
+      .attr("cursor", "pointer")
 
     movement_rects.exit().remove()
 
@@ -1102,6 +1221,20 @@ class Linelist extends Component {
         d.pathogen_id === "94745-7"
     )
 
+    let patients_with_status_rects = []
+    filtered_investigation_rects.forEach((sr) => {
+      if (!patients_with_status_rects.includes(sr.patient_id)) {
+        patients_with_status_rects.push(sr.patient_id)
+      }
+    })
+    if (patients_with_status_rects.length < data.patientList.length) {
+      data.patientList.forEach((pID) => {
+        if (!patients_with_status_rects.includes(pID)) {
+          filtered_status_rects.push(data.unknown_rects[pID])
+        }
+      })
+    }
+
     let status_rects = this.gStatus_rects
       .selectAll(".status_rect")
       .data(filtered_status_rects)
@@ -1200,7 +1333,14 @@ class Linelist extends Component {
     let xAxis = d3
       .axisBottom(xAxisScale)
       .ticks(self.zoom * 5)
-      .tickSizeInner([-(this.height - this.margin.bottom)])
+      .tickSizeInner([
+        -(
+          this.height -
+          this.margin.bottom -
+          this.vis_margin.top +
+          3 * this.movement_rectangle_height
+        ),
+      ])
 
     this.gGridlines
       .attr(
@@ -1219,7 +1359,51 @@ class Linelist extends Component {
       .attr("stroke-width", 1)
   }
 
+  select_station = (d) => {
+    let self = this
+
+    if (self.selected_stations.includes(d)) {
+      self.selected_stations = self.selected_stations.filter((s) => s !== d)
+    } else {
+      self.selected_stations.push(d)
+    }
+    self.setState(
+      (prevState) => (prevState.selected_stations = self.selected_stations)
+    )
+
+    self.draw_vis()
+  }
+
   render() {
+    let self = this
+
+    let station_color_legend_names = []
+    // let station_color_legend_colors = []
+    self.state.stations.forEach((s, i) => {
+      let col = self.default_movement_color
+      if (self.state.selected_stations.includes(s.name)) {
+        col = s.color
+      }
+      station_color_legend_names.push(
+        <th
+          style={{
+            background: col,
+            border: "1px solid black",
+            cursor: "pointer",
+            padding: "0px 5px 0px 5px",
+          }}
+          onClick={() => {
+            self.select_station(s.name)
+          }}
+        >
+          {s.name}
+        </th>
+      )
+      // station_color_legend_colors.push(
+      //   <td style={{ background: s.color, height: "20px" }}></td>
+      // )
+    })
+
     return (
       <div style={{ width: "100%", height: "100%", background: "white" }}>
         <svg
@@ -1227,6 +1411,18 @@ class Linelist extends Component {
           className="svgRoot"
           ref={(element) => (this.svgRoot = element)}
         />
+        <div
+          className="testdiv2"
+          style={{ position: "absolute", top: "10px", left: "100px" }}
+        >
+          {
+            // <table style={{ border: "1px solid black" }}>
+            <table>
+              <tr>{station_color_legend_names}</tr>
+              {/* <tr>{station_color_legend_colors}</tr> */}
+            </table>
+          }
+        </div>
       </div>
     )
   }

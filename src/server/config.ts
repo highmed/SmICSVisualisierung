@@ -52,9 +52,14 @@ export default class CONFIG {
    */
   private static readonly rest_api_config = {
     protocol: "http",
-    hostname: "smics",
+    hostname: "localhost",
+    // hostname: "192.168.0.108", // EntwicklungsVM IP (SmICS)
+    // !DEV-REST-API (switch port)
     port: 9787,
+    // port: 9000, // fuer lokale Entwicklung (VS Code Extension)
+    // !DEV-REST-API (switch path)
     path: "/api/StoredProcedures/", // needs to end with a slash
+    // path: "/", // for development on vs code extension and local files
   }
 
   /**

@@ -652,7 +652,10 @@ export class WebsocketApi {
         console.log("OWN PROP NAMES 4")
 
         cached_hashes.forEach((propname) => {
-          if (propname === hashID) {
+          if (
+            propname === hashID &&
+            cache[dtn][dataname][hashID].error === undefined
+          ) {
             is_cached = true
           }
         })

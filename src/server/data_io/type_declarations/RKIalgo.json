@@ -1,0 +1,88 @@
+{
+  "$id": "data/RKIalgo",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "uniqueItems": true,
+  "properties": {
+    "Ausbruchswahrscheinlichkeit": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "p-value": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "Zeitstempel": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "moment": {
+          "validate": [
+            {
+              "test": "isSameOrAfter",
+              "value": "1980-01-01T00:00:00Z"
+            },
+            {
+              "test": "isSameOrBefore",
+              "value": "2100-01-01T00:00:00Z"
+            }
+          ]
+        }
+      }
+    },
+    "Erregeranzahl": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "Endemisches Niveau": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "Epidemisches Niveau": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "Obergrenze": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "Faelle unter der Obergrenze": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "Faelle ueber der Obergrenze": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "Klassifikation der Alarmfaelle": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

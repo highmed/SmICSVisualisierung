@@ -390,9 +390,14 @@ class App extends Component {
           ) {
             // Falls Titel, diesen hinzufuegen
             if (element.title) {
+              let col = element.header_color ? element.header_color : "#aaaaaa"
+
               tableDiv.push(
                 <tr key={"titletr" + i}>
-                  <td className="titleTD">
+                  <td
+                    className="titleTD"
+                    style={{ background: col, color: "white" }}
+                  >
                     <div>{String(element.title)}</div>
                   </td>
                 </tr>
