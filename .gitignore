@@ -126,4 +126,4 @@ dist
 .pnp.*
 
 
-src/server/data_io/type_declarations/generated/*
+# src/server/data_io/type_declarations/generated/*
