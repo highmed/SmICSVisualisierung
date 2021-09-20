@@ -11,7 +11,7 @@ class LineList extends Component {
   constructor(props) {
     super(props)
 
-    this.socket = props.socket
+    this.socket = props.socket.client
 
     this.id = globals.newComponentID()
 
@@ -851,48 +851,48 @@ class LineList extends Component {
     //   ])
     self.color2 = (d) => {
       switch (d) {
-        // Aufnahme
-        case 1:
-          return "#4daf4a"
+      // Aufnahme
+      case 1:
+        return "#4daf4a"
         // Entlassung
         // case 2: return "#e41a1c"
         // case 2: return "#ff84d3"
-        case 2:
-          return "#000000"
+      case 2:
+        return "#000000"
 
         // Wechseln
         // case 3: return "#ff7f00"
         // case 3: return "#7c6f44"
         // case 3: return "#d95f02"
-        case 3:
-          return "#d95f02"
+      case 3:
+        return "#d95f02"
         // Behandlung
         // case 4: return "#377eb8"
-        case 4:
-          return "#6a3d9a"
+      case 4:
+        return "#6a3d9a"
 
         // andere
-        case 6:
-          return "#a65628"
-        case 7:
-          return "#ffff33"
+      case 6:
+        return "#a65628"
+      case 7:
+        return "#ffff33"
         // case 7: return "#ff84d3"
         // case 7: return "#6a3d9a"
-        default:
-          return "black"
+      default:
+        return "black"
       }
     }
     // self.color3 = d3.scaleOrdinal(d3.schemeCategory10)
     self.color3 = (d) => {
       switch (d) {
-        case 1:
-          return "#1b9e77"
-        case 2:
-          return "#d95f02"
-        case 3:
-          return "#7570b3"
-        default:
-          return "black"
+      case 1:
+        return "#1b9e77"
+      case 2:
+        return "#d95f02"
+      case 3:
+        return "#7570b3"
+      default:
+        return "black"
       }
     }
 
@@ -1391,7 +1391,7 @@ class LineList extends Component {
     }
 
     if (self.data === undefined) {
-      console.error(`Self.data ist undefined.`)
+      console.error("Self.data ist undefined.")
       return
     }
     if (colorNr === undefined) colorNr = self.state.getColor
@@ -2149,7 +2149,7 @@ class LineList extends Component {
           })
         } else {
           // sollte nicht moeglich sein...
-          comsole.error(`No Infection combination for patient...`)
+          comsole.error("No Infection combination for patient...")
         }
       }
 
@@ -2522,7 +2522,7 @@ class LineList extends Component {
           d.MREKlasseID === undefined || d.MREKlasseID === null
             ? inspecHeight
             : // : inspecHeight / 2 + (inspecHeight / 10) * d.MREKlasseID
-              (inspecHeight / 5) * d.MREKlasseID
+            (inspecHeight / 5) * d.MREKlasseID
         return height
       })
 
@@ -2568,18 +2568,18 @@ class LineList extends Component {
         let c = "black"
 
         switch (d.status) {
-          case "_wird_krank":
-            c = "rgb(100, 100, 100)"
-            break
-          case "_unbekannt":
-            c = "rgb(55, 126, 184)"
-            break
-          case "_traeger":
-            c = "rgb(255, 127, 0)"
-            break
-          case "_krank":
-            c = "rgb(215, 25, 28)"
-            break
+        case "_wird_krank":
+          c = "rgb(100, 100, 100)"
+          break
+        case "_unbekannt":
+          c = "rgb(55, 126, 184)"
+          break
+        case "_traeger":
+          c = "rgb(255, 127, 0)"
+          break
+        case "_krank":
+          c = "rgb(215, 25, 28)"
+          break
         }
 
         return c
@@ -2671,7 +2671,7 @@ class LineList extends Component {
   calculateKeimInfections = (keimID) => {
     let self = this
     if (self.data === undefined) {
-      console.error(`Self.data ist undefined.`)
+      console.error("Self.data ist undefined.")
       return
     }
     let data = self.data
@@ -2824,7 +2824,7 @@ class LineList extends Component {
   sortPatients = (sortNr) => {
     let self = this
     if (self.data === undefined) {
-      console.error(`Self.data ist undefined.`)
+      console.error("Self.data ist undefined.")
       return
     }
     if (sortNr === 0) {

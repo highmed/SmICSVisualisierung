@@ -14,7 +14,7 @@ class Epikurve extends Component {
     this.width
     this.height
 
-    this.socket = props.socket
+    this.socket = props.socket.client
     this.translate = props.translate
     this.get_color = props.get_color
 
@@ -1631,12 +1631,12 @@ class Epikurve extends Component {
         //     //         + (scaleYTop(d[i][dataType.type])).toString() + ", "
         //     // })
 
-        //     points =
-        //       points +
-        //       ((i * width) / (dataBottomOrg.length / timeSpan)).toString() +
-        //       ",-" +
-        //       scaleYTop(d[i][dataType.type]).toString() +
-        //       ", "
+      //     points =
+      //       points +
+      //       ((i * width) / (dataBottomOrg.length / timeSpan)).toString() +
+      //       ",-" +
+      //       scaleYTop(d[i][dataType.type]).toString() +
+      //       ", "
 
         //     if (i === d.length - 1) {
         //       /**

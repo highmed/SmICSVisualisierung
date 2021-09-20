@@ -10,7 +10,7 @@ class Epikurve extends Component {
     this.width
     this.height
 
-    this.socket = props.socket
+    this.socket = props.socket.client
 
     this.margin = {
       top: 100,

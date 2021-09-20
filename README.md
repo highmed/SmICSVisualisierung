@@ -7,7 +7,7 @@ It consists of
   1. a web server built on Node.js ("backend"), which handles connections to the data sources and performs computations on it, and
   2. a website ("frontend") served by the same Node.js instance for the actual interaction with the data.
 
-See [Structure of the project](#Structure of the project) for details.
+See [Structure of the project](#structure-of-the-project) for details.
 
 (Planned) features of the system:
 
@@ -52,10 +52,10 @@ The actual installation of the main parts is quite straightforward, although the
 
 ```bash
 cd to/change/into/a/new/directory
-git clone git@github.com:highmed/SmICSVisualisierung.git
+git clone git@gitlab.gcc.informatik.tu-darmstadt.de:highmed/infectioncontrolsystem2.git
 
 # change into the project
-cd SmICSVisualisierung
+cd infectioncontrolsystem2
 npm install
 ```
 
@@ -66,13 +66,13 @@ Now everything should be ready to be built and run:
 npm run build
 ```
 
-To build all parts individually, please have a look at the definition of the `build` command that can be found in `package.json`. Alternatively, details are given in [the section on technical details](#Build process).
+To build all parts individually, please have a look at the definition of the `build` command that can be found in `package.json`. Alternatively, details are given in [the section on technical details](#build-process).
 
 **Important**: Afterwards, please follow the instructions in [the foreign libraries documentation](src/server/foreign_libraries/README.md#Installation) to set up the parts written in foreign languages.
 
 ## Usage
 
-Before you start the server, please check [the configuration](#Configuration) to set the desired ports. If not changed, sensible defaults will be set. In any way, the starting server will print instructions on how to visit the graphical user interface (GUI) via the browser in a colorful box to the terminal it is started from. You should be able to click the URL that is shown and should be directed to your standard browser.
+Before you start the server, please check [the configuration](#configuration) to set the desired ports. If not changed, sensible defaults will be set. In any way, the starting server will print instructions on how to visit the graphical user interface (GUI) via the browser in a colorful box to the terminal it is started from. You should be able to click the URL that is shown and should be directed to your standard browser.
 
 ### Starting the Server
 
@@ -124,8 +124,8 @@ These commands are defined in the [`package.json`](package.json) file. You can e
 
 | **command**      | **description** |
 |------------------|-----------------|
-| `start`          | This starts the webserver. See also [Starting the Server](#Starting the Server). |
-| `test`           | This runs all tests. See also [Starting the Server](#Starting the Server). |
+| `start`          | This starts the webserver. See also [Starting the Server](#starting-the-server). |
+| `test`           | This runs all tests. See also [Starting the Server](#starting-the-server).  |
 
 #### Miscellaneous
 

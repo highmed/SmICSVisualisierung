@@ -14,7 +14,7 @@ class Linelist extends Component {
     this.width
     this.height
 
-    this.socket = props.socket
+    this.socket = props.socket.client
 
     this.margin = {
       top: 100,
@@ -248,12 +248,12 @@ class Linelist extends Component {
       .attr("fill", (d) => {
         let c = "white"
         switch (d.result) {
-          case "infected":
-            c = "orange"
-            break
-          case "diseased":
-            c = "red"
-            break
+        case "infected":
+          c = "orange"
+          break
+        case "diseased":
+          c = "red"
+          break
         }
 
         return c

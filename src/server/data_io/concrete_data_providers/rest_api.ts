@@ -17,6 +17,8 @@ import {
 import { AbstractDataSource } from "../abstract_data_provider"
 import { default as fetch } from "node-fetch"
 
+import CONFIG from "../../config"
+
 /**
  * The data source accessing the HTTP(S) REST API of the MAH.
  *
@@ -201,22 +203,22 @@ export class RestAPI extends AbstractDataSource {
     resultDataSchema: string | null
   ): Promise<ValidationResult<T>> => {
     const body = JSON.stringify(parameters)
-    console.log(
-      `end point ${procedureName} has been called with: data: ${body}`
-    )
+    const authorization = `bearer ${this.authToken}`
 
-    const response = await fetch(this.url.concat(procedureName), {
-      // !DEV-REST-API (switch method)
-      method: "POST",
-      // method: "GET", // zum entwickeln auf vs code extension rest api
+    const request = {
+      method: CONFIG.use_auth ? "POST" : "GET",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        "Accept": "application/json",
+        ...(CONFIG.use_auth && { "Authorization": authorization })
       },
-      // !DEV-REST-API (comment body)
-      body: body,
-    })
-
+      ...(CONFIG.use_auth && { body })
+    }
+    console.log(
+      `end point ${procedureName} has been called with request data: ${JSON.stringify(request)}`
+    )
+    const response = await fetch(this.url.concat(procedureName), request)
+      
     // check for HTTP status codes outside of OK/2XX (that is the interval [200, 300[ ) and transform them into an error
     if (!response.ok)
       throw Error(
@@ -249,14 +251,14 @@ const compareOptTimestamps = (a: MaybeString, b: MaybeString): number => {
   // local function that translates from dates to numbers to make the comparison a simple subtraction
   function toNum(date: string | null | undefined) {
     switch (date) {
-      case undefined:
-        return Number.MAX_SAFE_INTEGER - 1
-      case null:
-        return Number.MAX_SAFE_INTEGER - 2
-      default:
-        // way less than `Number.MAX_SAFE_INTEGER`,
-        // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Description
-        return new Date(date).getTime()
+    case undefined:
+      return Number.MAX_SAFE_INTEGER - 1
+    case null:
+      return Number.MAX_SAFE_INTEGER - 2
+    default:
+      // way less than `Number.MAX_SAFE_INTEGER`,
+      // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Description
+      return new Date(date).getTime()
     }
   }
 

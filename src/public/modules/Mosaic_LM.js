@@ -3,7 +3,7 @@ import { Component } from "react"
 import { Mosaic, MosaicWindow } from "react-mosaic-component"
 import Histogram from "../vis/Histogram"
 import Histogram2 from "../vis/Histogram2"
-import Histogram3 from "../vis/Histogram3"
+// import Histogram3 from "../vis/Histogram3"
 import Clicker from "../vis/Clicker"
 import * as vis_configs from "./vis_configs.json"
 
@@ -17,6 +17,7 @@ import "react-mosaic-component/react-mosaic-component.css"
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
+import { withSocket } from "../hooks/socket"
 import "./scss/mosaic_lm.scss"
 
 /**
@@ -173,4 +174,4 @@ class Mosaic_LM extends Component {
   }
 }
 
-export default Mosaic_LM
+export default withSocket(Mosaic_LM)

@@ -85,18 +85,35 @@ export abstract class AbstractDataSource {
   )
 
   /**
+   * The token string used to authenticate requests of data provider.
+   *
+   * @protected
+   */
+   protected authToken: string
+
+   /**
+   * Constructor used to initialize default values of abstract data provider.
+   */
+   constructor() {
+     this.authToken = ""
+   }
+
+  /**
    * Call a procedure by its name with some given parameters. This is the dynamic alternative to calling the
    * respective procedure directly.
    *
    * @param name the name of the procedure
    * @param parameter the parameters to deliver to the procedure; may be empty `{}` of none shall be given
+   * @param authToken the optional token used to authenticate requests of data provider
    *
    * @return the resulting data or an error with a descriptive message
    */
   public readonly callByName = async (
     name: string,
-    parameter: object
+    parameter: object,
+    authToken?: string
   ): Promise<ValidationResult<unknown>> => {
+    this.authToken = authToken || ""
     const specification = AbstractDataSource.MAPPING.get(name)
     if (specification === undefined)
       throw new Error(

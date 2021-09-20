@@ -23,7 +23,7 @@ class Linelist extends Component {
     this.width
     this.height
 
-    this.socket = props.socket
+    this.socket = props.socket.client
     this.translate = props.translate
     this.get_color = props.get_color
 
@@ -1187,15 +1187,15 @@ class Linelist extends Component {
       .attr("fill", (d) => {
         let c = "white"
         switch (d.result) {
-          case "negative":
-            c = this.get_color("negative")
-            break
-          case "infected":
-            c = this.get_color("infectedCarrier")
-            break
-          case "diseased":
-            c = this.get_color("infectedDiseased")
-            break
+        case "negative":
+          c = this.get_color("negative")
+          break
+        case "infected":
+          c = this.get_color("infectedCarrier")
+          break
+        case "diseased":
+          c = this.get_color("infectedDiseased")
+          break
         }
 
         return c
@@ -1256,20 +1256,20 @@ class Linelist extends Component {
       .attr("fill", (d) => {
         let c = "yellow"
         switch (d.status) {
-          case "negative":
-            c = this.get_color("negative")
-            // TODO: SMICS-0.8
-            c = this.get_color("unknown")
-            break
-          case "unknown":
-            c = this.get_color("unknown")
-            break
-          case "infected":
-            c = this.get_color("infectedCarrier")
-            break
-          case "diseased":
-            c = this.get_color("infectedDiseased")
-            break
+        case "negative":
+          c = this.get_color("negative")
+          // TODO: SMICS-0.8
+          c = this.get_color("unknown")
+          break
+        case "unknown":
+          c = this.get_color("unknown")
+          break
+        case "infected":
+          c = this.get_color("infectedCarrier")
+          break
+        case "diseased":
+          c = this.get_color("infectedDiseased")
+          break
         }
         return c
       })
@@ -1418,8 +1418,10 @@ class Linelist extends Component {
           {
             // <table style={{ border: "1px solid black" }}>
             <table>
-              <tr>{station_color_legend_names}</tr>
-              {/* <tr>{station_color_legend_colors}</tr> */}
+              <tbody>
+                <tr>{station_color_legend_names}</tr>
+                {/* <tr>{station_color_legend_colors}</tr> */}
+              </tbody>
             </table>
           }
         </div>

@@ -15,7 +15,7 @@ class Kontaktnetzwerk extends Component {
       selected_location_index: undefined,
     }
 
-    this.socket = props.socket
+    this.socket = props.socket.client
     this.translate = props.translate
     this.get_color = props.get_color
 
@@ -441,15 +441,15 @@ class Kontaktnetzwerk extends Component {
           c = "lightgray"
         } else {
           switch (path_status_obj.status) {
-            case "unknown":
-              c = this.get_color("unknown")
-              break
-            case "infected":
-              c = this.get_color("infectedCarrier")
-              break
-            case "diseased":
-              c = this.get_color("infectedDiseased")
-              break
+          case "unknown":
+            c = this.get_color("unknown")
+            break
+          case "infected":
+            c = this.get_color("infectedCarrier")
+            break
+          case "diseased":
+            c = this.get_color("infectedDiseased")
+            break
           }
         }
 

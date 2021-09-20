@@ -1,0 +1,138 @@
+#main {
+  display: grid;
+
+  grid-template-areas: "header" "content" "footer";
+  grid-template-rows: 125px auto 25px;
+  grid-template-columns: 100%;
+
+  height: 100%;
+  width: 100%;
+}
+
+.testdiv {
+  background: rgb(230, 150, 180);
+}
+
+.header {
+  grid-area: header;
+
+  height: 125px;
+  // height: 110px;
+  width: 100%;
+  background-color: rgb(41, 35, 92);
+  background: linear-gradient(
+    to bottom,
+    rgb(41, 35, 92) 90%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  // display: flex;
+  // flex-direction: row;
+  // flex-wrap: nowrap;
+  margin-top: 0px;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 5px;
+  padding-bottom: 15px;
+  padding-top: 10px;
+
+  display: grid;
+  // TODO: SMICS-0.8
+  // grid-template-areas: "highmed-logo header-menu tu-logo";
+  grid-template-areas: "header-menu header-menu header-menu";
+  grid-template-columns: 250px auto 180px;
+  grid-gap: 0px;
+}
+
+.content {
+  grid-area: content;
+  background: white;
+}
+
+.footer {
+  grid-area: footer;
+
+  background-color: rgb(41, 35, 92);
+  background: linear-gradient(
+    to top,
+    rgb(41, 35, 92) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+#HiGhmed_Logo {
+  grid-area: highmed-logo;
+
+  padding: 15px;
+  min-width: 250px;
+  max-width: 250px;
+  // min-width: 280px;
+  // max-width: 280px;
+  cursor: pointer;
+  background-color: white;
+  box-shadow: inset 0 0 5px 5px rgb(41, 35, 92);
+  // display: flex;
+
+  // width: 100px;
+  // height: 100px;
+}
+
+#TU_Darmstadt_Logo {
+  grid-area: tu-logo;
+
+  padding: 15px;
+  min-width: 180px;
+  max-width: 180px;
+  // min-width: 210px;
+  // max-width: 210px;
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: inset 0 0 5px 5px rgb(41, 35, 92);
+}
+
+#header_menu {
+  grid-area: header-menu;
+  // background: white;
+}
+
+.tooltip {
+  font-size: 0.9em;
+
+  position: fixed;
+  display: none;
+  /* min-width: 80px; */
+  height: auto;
+  background: #ffffff;
+  /* border: 1px solid #6F257F; */
+  border: 1px solid #000000;
+  /* padding: 14px; */
+  text-align: center;
+  /* opacity: 0.8; */
+  z-index: 802;
+}
+
+.tooltipTable,
+.tooltipTable th,
+.tooltipTable td {
+  border: 1px solid black;
+}
+
+.tooltipTable {
+  border-collapse: collapse;
+}
+
+.titleTD {
+  // background: #aaaaaa;
+  // font-weight: bold;
+  font-size: 1.2em;
+}
+
+#app {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}

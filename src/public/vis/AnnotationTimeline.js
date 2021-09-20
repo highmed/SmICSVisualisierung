@@ -18,7 +18,7 @@ class AnnotationTimeline extends Component {
     this.width
     this.height
 
-    this.socket = props.socket
+    this.socket = props.socket.client
 
     this.margin = {
       global_top: 50,
@@ -347,18 +347,18 @@ class AnnotationTimeline extends Component {
     let symptomOffset_y = (rasterIndex, symptom, symptomarten) => {
       let offset = 0
       switch (symptom) {
-        case "Systemisch":
-          offset = 2
-          break
-        case "Gastroenterologisch":
-          offset = 1
-          break
-        case "Respiratorisch":
-          offset = 0
-          break
-        default:
-          offset = -1
-          break
+      case "Systemisch":
+        offset = 2
+        break
+      case "Gastroenterologisch":
+        offset = 1
+        break
+      case "Respiratorisch":
+        offset = 0
+        break
+      default:
+        offset = -1
+        break
       }
       if (symptomarten !== undefined) {
         offset = symptomarten.indexOf(symptom)
@@ -671,15 +671,15 @@ class AnnotationTimeline extends Component {
     // Den Grauton je nach Station zurückgeben
     let stationenColorDefiner = (d) => {
       switch (d.stationsArt) {
-        case "CovidStation":
-          return this.color_covidstation
-        case "ICR":
-          return this.color_iCR
-        case "Intensivstation":
-          return this.color_intensivstation
-        case "NormalStation":
-        default:
-          return this.color_normalstation
+      case "CovidStation":
+        return this.color_covidstation
+      case "ICR":
+        return this.color_iCR
+      case "Intensivstation":
+        return this.color_intensivstation
+      case "NormalStation":
+      default:
+        return this.color_normalstation
       }
     }
 

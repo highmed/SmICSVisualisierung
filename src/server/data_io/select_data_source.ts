@@ -24,13 +24,13 @@ export const resolveDataSource = async (
   identifier: string
 ): Promise<AbstractDataSource> => {
   switch (identifier) {
-    case "hmhdnov18_sql":
-      return IgdSqlDatabaseSource.getInstance() // retrieve the singleton instance
-    case "rest":
-      return restDataSource
-    default:
-      throw new Error(
-        `Unknown data source selected: "${identifier}". Available are: [${ALL_DATA_SOURCES}]`
-      )
+  case "hmhdnov18_sql":
+    return IgdSqlDatabaseSource.getInstance() // retrieve the singleton instance
+  case "rest":
+    return restDataSource
+  default:
+    throw new Error(
+      `Unknown data source selected: "${identifier}". Available are: [${ALL_DATA_SOURCES}]`
+    )
   }
 }

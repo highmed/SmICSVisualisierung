@@ -1,25 +1,23 @@
 import * as cli_color from "cli-color"
+import * as hash from "object-hash"
+
+import { Socket } from "socket.io"
 import { printArrayInColor } from "./utilities/cli_printing"
 import {
   ALL_DATA_SOURCES,
   resolveDataSource,
 } from "./data_io/select_data_source"
-import { Socket } from "socket.io"
-import CONFIG from "./config"
 import {
   Arguments_Empty,
   ensureIsValid,
   ValidationResult,
 } from "./data_io/types"
 
-import module_parser from "./module_parser"
-import data_parser from "./data_parser"
+import CONFIG from "./config"
 import cache from "./cache"
-
+import data_parser from "./data_parser"
+import module_parser from "./module_parser"
 import procedure_arguments from "./procedure_arguments"
-
-// import hash from "object-hash"
-var hash = require("object-hash")
 
 /**
  * This class receives a websocket "port" and then listens for connections. To these connections, it offers access to
@@ -54,20 +52,13 @@ export class WebsocketApi {
     }
 
     client.on("disconnect", this.onDisconnected)
-    client.on("getData", (data) => this.onGetData(client, data))
     client.on("error", this.onError)
-
+    
     // client.on("getParsedData", data => this.onGetParsedData(client, data))
+    client.on("getData", (data) => this.onGetData(client, data))
     client.on("getVisData", (data) => this.onGetVisData(client, data))
     client.on("getCacheData", (data) => this.onGetCacheData(client, data))
-
-    client.on("clearCache", (data) => this.clearCache(data))
-  }
-
-  private onGetCacheData = (client: Socket, data: Object) => {
-    console.log("ON GET CACHE DATA -> BUTTON PRESSED")
-    let cacheData = cache
-    client.emit("cacheData", cacheData)
+    client.on("clearCache", (data) => this.onClearCache(data))
   }
 
   /**
@@ -84,7 +75,13 @@ export class WebsocketApi {
     }
   }
 
-  private clearCache = (payload: { readonly [key: string]: any }) => {
+  private onGetCacheData = (client: Socket, data: Object) => {
+    console.log("ON GET CACHE DATA -> BUTTON PRESSED")
+    let cacheData = cache
+    client.emit("cacheData", cacheData)
+  }
+
+  private onClearCache = (payload: { readonly [key: string]: any }) => {
     // cache = {
     //   raw_data: {},
     //   parsed_data: {},
@@ -199,12 +196,13 @@ export class WebsocketApi {
         return
       }
       let dataSourceIdentifier: string = payload["dataSourceIdentifier"]
+      const authToken = client.request.session.passport?.user.access_token
 
       // first, find the right data source for the given identifier
       response = resolveDataSource(dataSourceIdentifier)
         // then call the actual data-providing function
         .then((dataSource) =>
-          dataSource.callByName(procedureName, procedureParameters)
+          dataSource.callByName(procedureName, procedureParameters, authToken)
         )
     }
 
@@ -334,12 +332,13 @@ export class WebsocketApi {
             return
           }
           let dataSourceIdentifier: string = payload.dataSourceIdentifier
+          const authToken = client.request.session.passport?.user.access_token
 
           // first, find the right data source for the given identifier
           response = resolveDataSource(dataSourceIdentifier)
             // then call the actual data-providing function
             .then((dataSource) =>
-              dataSource.callByName(procedureName, parameters)
+              dataSource.callByName(procedureName, parameters, authToken)
             )
         }
 
@@ -641,7 +640,7 @@ export class WebsocketApi {
     console.log("OWN PROP NAMES 1")
     let data_type_names: string[] = Object.getOwnPropertyNames(cache)
     console.log("OWN PROP NAMES 2")
-    let is_cached: boolean = false
+    let is_cached = false
 
     data_type_names.forEach((dtn: string) => {
       if (cache[dtn][dataname] !== undefined) {
@@ -742,12 +741,13 @@ export class WebsocketApi {
         return
       }
       let dataSourceIdentifier: string = payload["dataSourceIdentifier"]
+      const authToken = client.request.session.passport?.user.access_token
 
       // first, find the right data source for the given identifier
       response = resolveDataSource(dataSourceIdentifier)
         // then call the actual data-providing function
         .then((dataSource) =>
-          dataSource.callByName(procedureName, procedureParameters)
+          dataSource.callByName(procedureName, procedureParameters, authToken)
         )
     }
 
@@ -853,7 +853,7 @@ export class WebsocketApi {
       }
     })
 
-    // TODO: AUfruf onGetModuleData_into_cache
+    // TODO: Aufruf onGetModuleData_into_cache
     this.onGetModuleData_into_cache(client, payload, dataObject, open_modules)
   }
 
@@ -996,5 +996,5 @@ export class WebsocketApi {
 
   // TODO: setInterval 5min oder so -> delete all data from cache that is 1h or older
 
-  // TODO: generische Algo-AUfruf Funktion schreiben, die bei Error der benötigten Daten nur { error: XXX, data: [] } zurückgibt!
+  // TODO: generische Algo-Aufruf Funktion schreiben, die bei Error der benötigten Daten nur { error: XXX, data: [] } zurückgibt!
 }

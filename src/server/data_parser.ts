@@ -358,7 +358,7 @@ const data_parser: { [key: string]: any } = {
                 "negative"
               ),
             })
-            console.log(`index < 0`)
+            console.log("index < 0")
           } else {
             investigations[index].data.push(investigation_data_copy)
             investigations[index].result = get_carrier_status(
@@ -366,7 +366,7 @@ const data_parser: { [key: string]: any } = {
               investigation_data.Screening,
               investigations[index].result
             )
-            console.log(`index > 0`)
+            console.log("index > 0")
           }
         })
       }

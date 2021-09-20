@@ -8,6 +8,7 @@ module.exports = merge(common, {
   devtool: "inline-source-map",
   devServer: {
     contentBase: "./src/public",
+    historyApiFallback: true,
     hot: true,
     overlay: {
       errors: true,
@@ -18,6 +19,7 @@ module.exports = merge(common, {
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "public"),
+    publicPath: "/",
   },
   plugins: [
     new HtmlWebpackPlugin({

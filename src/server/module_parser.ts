@@ -510,10 +510,10 @@ const module_parser: { [key: string]: any } = {
 
       let { starttime, endtime, station, pathogenList } = parameters
 
-      let initial_timelense_timestamps: Number[] = []
+      let initial_timelense_timestamps: number[] = []
       let newData: any[] = []
-      let stationIDs: String[] = []
-      let pathogenIDs: String[] = []
+      let stationIDs: string[] = []
+      let pathogenIDs: string[] = []
       let dayDataSets: any = {}
 
       if (Labor_ErregerProTag_TTEsKSs.error === undefined) {
@@ -569,7 +569,7 @@ const module_parser: { [key: string]: any } = {
           }
         })
 
-        pathogenIDs.forEach((pathogen: String) => {
+        pathogenIDs.forEach((pathogen: string) => {
           // })
 
           let data = JSON.parse(JSON.stringify(raw_data)).filter(
@@ -613,7 +613,7 @@ const module_parser: { [key: string]: any } = {
             let copy_day
             dayDataSets["K" + pathogen][
               stationID
-            ].forEach((d: any, i: Number) => {})
+            ].forEach((d: any, i: number) => {})
           })
         })
         /**
@@ -937,7 +937,7 @@ const module_parser: { [key: string]: any } = {
            * find last movement for every patient (save index)
            */
           let last_movement_index: any = {}
-          movements.forEach((movement: any, i: Number) => {
+          movements.forEach((movement: any, i: number) => {
             last_movement_index[movement.PatientID] = i
           })
 
@@ -958,7 +958,7 @@ const module_parser: { [key: string]: any } = {
            * Wenn ja, dann ausführen, ansonsten skip
            *
            */
-          movements.forEach((movement: any, i: Number) => {
+          movements.forEach((movement: any, i: number) => {
             let { BewegungstypID, PatientID, timestamp, StationID } = movement
 
             StationID = movement[loc_prop.propname]
@@ -1586,7 +1586,7 @@ const module_parser: { [key: string]: any } = {
 
               // Status von vor der Aufnahme ermitteln
               status_changes[pID][pathID].forEach(
-                (stat_change: any, i: Number) => {
+                (stat_change: any, i: number) => {
                   console.table(stat_change)
                   if (stat_change.timestamp <= first_movement) {
                     console.log(`before first_ts ${stat_change}`)
@@ -1609,7 +1609,7 @@ const module_parser: { [key: string]: any } = {
               console.log(`Status VOR der Aufnahme: ${current_status}`)
 
               status_changes[pID][pathID].forEach(
-                (stat_change: any, i: Number) => {
+                (stat_change: any, i: number) => {
                   let stat_change_ts = stat_change.timestamp
                   console.table(stat_change)
 
