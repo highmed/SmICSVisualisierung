@@ -9,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton"
 import AutorenewIcon from "@material-ui/icons/Autorenew"
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever"
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload"
+import Config from "../../server/config"
 
 class Header_Menu extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Header_Menu extends Component {
     this.state = {}
     this.hostname = window.location.hostname
     this.protocol = window.location.protocol
-    this.port = 9787
+    this.port = Config.smics_port
 
     this.translate = props.translate
   }
