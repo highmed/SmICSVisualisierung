@@ -69,10 +69,10 @@ class App extends Component {
       production: {
         starttime: "2021-01-01",
         endtime: "2021-01-10",
-        patientList_string: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+        patientList_string: "Patient17",
         pathogenList_string: "sars-cov-2",
         station_string: "Coronastation",
-        patientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+        patientID: "Patient17",
       },
       usecase: {
         // starttime: "2011-05-01T20:20:00+00:00",
