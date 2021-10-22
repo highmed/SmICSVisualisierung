@@ -82,7 +82,7 @@ export default class CONFIG {
    * @private
    */
   private static readonly rest_api_config = {
-    protocol: "http",
+    protocol: "https",
     hostname: CONFIG.dev_mode ? CONFIG.smics_hostname : CONFIG.smics_hostname,
     // hostname: "192.168.0.108", // EntwicklungsVM IP (SmICS)
     port: CONFIG.dev_mode ? CONFIG.smics_port : CONFIG.smics_port,
