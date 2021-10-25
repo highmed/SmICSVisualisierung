@@ -20,4 +20,7 @@ RUN npm run build
 
 EXPOSE 3231
 
+ENV DEV_MODE=true
+ENV USE_AUTH=true
+ENV SMICS_PORT=443
 CMD [ "npm", "run", "server" ]
