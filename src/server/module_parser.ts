@@ -23,7 +23,7 @@ const module_parser: { [key: string]: any } = {
       "Patient_Labordaten_Ps",
       "Patient_Vaccination",
       "Patient_Symptom",
-      "Metadaten",
+      //"Metadaten",
     ],
 
     needed_parsed_data: [
@@ -38,11 +38,11 @@ const module_parser: { [key: string]: any } = {
         Patient_Vaccination,
         Patient_Bewegung_Ps,
         Patient_Labordaten_Ps,
-        Metadaten,
+        //Metadaten,
         generate_mibi_investigations,
         generate_movement_rects,
       } = input_data
-
+      let Metadaten:any={}
       let patientList: any[] = []
       let globalStartTS = new Date().getTime()
       let globalEndTS = new Date().getTime() - Number.MAX_VALUE
