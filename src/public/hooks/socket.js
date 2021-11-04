@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 
 import io from "socket.io-client"
 
-const port = 3231
+const port = 8443
 const hostname = window.location.hostname
 const protocol = window.location.protocol
 const socketUrl = protocol + "//" + hostname + ":" + port
