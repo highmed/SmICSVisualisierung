@@ -25,6 +25,7 @@ export const app = express()
 if (!CONFIG.dev_mode) {
   app.set("trust proxy", 1) // trust first proxy
   sessionConf.cookie.secure = true // serve secure cookies
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 } else {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0" // disable tls rejects
 }
