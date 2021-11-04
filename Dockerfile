@@ -13,6 +13,6 @@ RUN npm run build
 EXPOSE 3231
 
 ENV DEV_MODE=false
-ENV USE_AUTH=false
+ENV USE_AUTH=true
 
 CMD [ "npm", "run", "server" ]
