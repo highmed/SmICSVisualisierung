@@ -30,7 +30,7 @@ class HeaderMenu extends Component {
     this.state = {}
     this.hostname = window.location.hostname
     this.protocol = window.location.protocol
-    this.port = 9787
+    this.port = 80
 
     this.translate = props.translate
   }
