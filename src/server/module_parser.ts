@@ -42,7 +42,7 @@ const module_parser: { [key: string]: any } = {
         generate_mibi_investigations,
         generate_movement_rects,
       } = input_data
-      let Metadaten:any={}
+      let Metadaten:any={ error: true }
       let patientList: any[] = []
       let globalStartTS = new Date().getTime()
       let globalEndTS = new Date().getTime() - Number.MAX_VALUE
