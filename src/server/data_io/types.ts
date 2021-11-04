@@ -7,7 +7,12 @@ import * as Arguments_Ps_JSON from "./type_declarations/Arguments_Ps.json"
 import * as Arguments_TTEsKSs_JSON from "./type_declarations/Arguments_TTEsKSs.json"
 import * as Arguments_TTKP_Degree_JSON from "./type_declarations/Arguments_TTKP_Degree.json"
 import * as Arguments_TTPK_JSON from "./type_declarations/Arguments_TTPK.json"
+import * as Arguments_OutbreakDetectionConfigurations_JSON from "./type_declarations/Arguments_OutbreakDetectionConfigurations.json"
+import * as Arguments_OutbreakDetectionResultSet_JSON from "./type_declarations/Arguments_OutbreakDetectionResultSet.json"
 import * as Arguments_RKIalgo_JSON from "./type_declarations/Arguments_RKIalgo.json"
+import * as Arguments_Patient_Symptom_JSON from "./type_declarations/Arguments_Patient_Symptom.json"
+import * as Arguments_Patient_Vaccination_JSON from "./type_declarations/Arguments_Patient_Vaccination.json"
+import * as Arguments_Metadaten_JSON from "./type_declarations/Arguments_Metadaten.json"
 import * as Bewegungen_JSON from "./type_declarations/Bewegungen.json"
 import * as ErregerProTag_JSON from "./type_declarations/ErregerProTag.json"
 import * as Hospitals_JSON from "./type_declarations/Hospitals.json"
@@ -16,13 +21,23 @@ import * as Labordaten_JSON from "./type_declarations/Labordaten.json"
 import * as DiagnosticResults_JSON from "./type_declarations/DiagnosticResults.json"
 import * as PathogenFlag_JSON from "./type_declarations/PathogenFlag.json"
 import * as Praktikum_CF_2020_Result_JSON from "./type_declarations/Praktikum_CF_2020_Result.json"
+import * as OutbreakDetectionConfigurations_JSON from "./type_declarations/OutbreakDetectionConfigurations.json"
+import * as OutbreakDetectionResultSet_JSON from "./type_declarations/OutbreakDetectionResultSet.json"
 import * as RKIalgo_JSON from "./type_declarations/RKIalgo.json"
+import * as Patient_Symptom_JSON from "./type_declarations/Patient_Symptom.json"
+import * as Patient_Vaccination_JSON from "./type_declarations/Patient_Vaccination.json"
+import * as Metadaten_JSON from "./type_declarations/Metadaten.json"
 import { Arguments_Empty } from "./type_declarations/generated/Arguments_Empty"
 import { Arguments_Ps } from "./type_declarations/generated/Arguments_Ps"
 import { Arguments_TTEsKSs } from "./type_declarations/generated/Arguments_TTEsKSs"
 import { Arguments_TTKP_Degree } from "./type_declarations/generated/Arguments_TTKP_Degree"
 import { Arguments_TTPK } from "./type_declarations/generated/Arguments_TTPK"
+import { Arguments_OutbreakDetectionConfigurations } from "./type_declarations/generated/Arguments_OutbreakDetectionConfigurations"
+import { Arguments_OutbreakDetectionResultSet } from "./type_declarations/generated/Arguments_OutbreakDetectionResultSet"
 import { Arguments_RKIalgo } from "./type_declarations/generated/Arguments_RKIalgo"
+import { Arguments_Patient_Symptom } from "./type_declarations/generated/Arguments_Patient_Symptom"
+import { Arguments_Patient_Vaccination } from "./type_declarations/generated/Arguments_Patient_Vaccination"
+import { Arguments_Metadaten } from "./type_declarations/generated/Arguments_Metadaten"
 import { Bewegungen } from "./type_declarations/generated/Bewegungen"
 import { ErregerProTag } from "./type_declarations/generated/ErregerProTag"
 import { Hospitals } from "./type_declarations/generated/Hospitals"
@@ -30,7 +45,12 @@ import { Kontakte } from "./type_declarations/generated/Kontakte"
 import { Labordaten } from "./type_declarations/generated/Labordaten"
 import { DiagnosticResults } from "./type_declarations/generated/DiagnosticResults"
 import { PathogenFlag } from "./type_declarations/generated/PathogenFlag"
+import { OutbreakDetectionConfigurations } from "./type_declarations/generated/OutbreakDetectionConfigurations"
+import { OutbreakDetectionResultSet } from "./type_declarations/generated/OutbreakDetectionResultSet"
 import { RKIalgo } from "./type_declarations/generated/RKIalgo"
+import { Patient_Symptom } from "./type_declarations/generated/Patient_Symptom"
+import { Patient_Vaccination } from "./type_declarations/generated/Patient_Vaccination"
+import { Metadaten } from "./type_declarations/generated/Metadaten"
 import { Praktikum_CF_2020_Result } from "./type_declarations/generated/Praktikum_CF_2020_Result"
 
 /*
@@ -46,7 +66,12 @@ export {
   Arguments_TTEsKSs,
   Arguments_TTKP_Degree,
   Arguments_TTPK,
+  Arguments_OutbreakDetectionConfigurations,
+  Arguments_OutbreakDetectionResultSet,
   Arguments_RKIalgo,
+  Arguments_Patient_Symptom,
+  Arguments_Patient_Vaccination,
+  Arguments_Metadaten,
 }
 const ARGUMENT_SCHEMAS: ReadonlyArray<object> = [
   Arguments_Empty_JSON,
@@ -54,7 +79,12 @@ const ARGUMENT_SCHEMAS: ReadonlyArray<object> = [
   Arguments_TTEsKSs_JSON,
   Arguments_TTKP_Degree_JSON,
   Arguments_TTPK_JSON,
+  Arguments_OutbreakDetectionConfigurations_JSON,
+  Arguments_OutbreakDetectionResultSet_JSON,
   Arguments_RKIalgo_JSON,
+  Arguments_Patient_Symptom_JSON,
+  Arguments_Patient_Vaccination_JSON,
+  Arguments_Metadaten_JSON,
 ]
 
 export {
@@ -66,7 +96,12 @@ export {
   DiagnosticResults,
   PathogenFlag,
   Praktikum_CF_2020_Result,
+  OutbreakDetectionConfigurations,
+  OutbreakDetectionResultSet,
   RKIalgo,
+  Patient_Symptom,
+  Patient_Vaccination,
+  Metadaten,
 }
 const DATA_SCHEMAS: ReadonlyArray<object> = [
   Bewegungen_JSON,
@@ -77,7 +112,12 @@ const DATA_SCHEMAS: ReadonlyArray<object> = [
   DiagnosticResults_JSON,
   PathogenFlag_JSON,
   Praktikum_CF_2020_Result_JSON,
+  OutbreakDetectionConfigurations_JSON,
+  OutbreakDetectionResultSet_JSON,
   RKIalgo_JSON,
+  Patient_Symptom_JSON,
+  Patient_Vaccination_JSON,
+  Metadaten_JSON,
 ]
 
 // see: https://github.com/ajv-validator/ajv#options for available options

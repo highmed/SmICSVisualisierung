@@ -1,0 +1,48 @@
+{
+  "$id": "data/Patient_Vaccination",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "uniqueItems": true,
+  "items": {
+    "type": "object",
+    "properties": {
+      "PatientenID": {
+        "type": "string"
+      },
+      "DokumentationsID": {
+        "type": "string",
+        "moment": {
+          "validate": [
+            {
+              "test": "isSameOrAfter",
+              "value": "1980-01-01T00:00:00Z"
+            },
+            {
+              "test": "isSameOrBefore",
+              "value": "2100-01-01T00:00:00Z"
+            }
+          ]
+        }
+      },
+      "Impfstoff": {
+        "type": "string"
+      },
+      "Dosierungsreihenfolge": {
+        "type": "number"
+      },
+      "Dosiermenge": {
+        "type": "number"
+      },
+      "ImpfungGegen": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "PatientenID",
+      "Impfstoff",
+      "Dosiermenge",
+      "ImpfungGegen",
+      "Dosierungsreihenfolge"
+    ]
+  }
+}

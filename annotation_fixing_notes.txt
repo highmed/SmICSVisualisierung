@@ -1,0 +1,56 @@
+Objekte, die in module_parser.ts > annotationTimeline > call_function()
+aktuell zufällig generiert werden und aus den Daten ausgelesen werden müssen:
+
+annotationTriangles - sollen Kommentare / Bemerkungen vom Nutzer erfassen , im Frontend noch nicht vollst. implementiert
+ - annotationsArt
+ - patientID
+ - timeLocation
+ - timeStamp
+
+ereignisCircle - wird bei Ereignis gesetzt, das kein klares Datum enthält , entspr. Ereignisse noch nicht in Testdaten vorhanden
+ - ereignisTimeStamp 
+ - patientID
+
+ereignisTriangles - wird bei Ereignis gesetzt, das klares Datum enthält (aktuell Symptombeginn, Verlegung auf Intensivstation / CovidStation)
+ - patientID
+ - ereignisTimeStamp
+
+globalEndTS - Letztes Datum aus allen eingelesenen Daten - FERTIG
+ 
+globalStartTS - Frühstes Datum aus allen eingelesenen Daten - FERTIG
+
+impfDaten - Impfstatus wird bislang selbst ermittelt , muss geliefert werden !
+ - impfStatus       <--> erstellen wir kurzfristig selber. Langfristig muss das geliefert werden
+ - medikament       <--> Impfstoff , Testdaten unterscheiden nur in mRNA / Vektorimpfstoff
+ - patientID        <--> PatientenID
+
+metaTextInfos - im Frontend noch nicht pro angezeigten Patienten implementiert - Spritze nur für ersten Patienten 
+ - patientID        <--> PatientenID
+ - firstDate        <--> Aufnahme_Datum 
+ - lastDate         <--> Entlastung_Datum
+ - infektionsSituation <--> Infektion - für nosokomiale Patienten vorhanden, keine Testdaten für non-nosokomial 
+ - impfStatus       <--> siehe impfDaten
+ - aufnahmeArt (?)  <--> nicht in den Daten vorhanden oder fehlt ? 
+ - klinikStatus (?) <--> nicht in den Daten vorhanden oder fehlt ?
+
+stationenRects - Patient_Bewegung_Ps - Filter für StationsArt noch fragwürdig --> liegt an den Testdaten , keine stationsNr
+ - aufenthaltsBegin <--> Beginn
+ - aufenthaltsEnde  <--> Ende
+ - patientID        <--> PatientID
+ - stationsArt      <--> kann nur bedingt aus den Daten ausgelesen werden , ICR / Normalstation fehlt in den Testdaten
+ - stationsNr       <--> StationID  --> ist ein String in den Daten und keine Nr , wird im Frontend aktuell nicht verwendet
+
+symptomDaten - FERTIG - wird im Frontend mit default Offset angezeigt da symptomArt nicht in Daten vorhanden
+ - negation         <--> AusschlussAussage
+ - patientID        <--> PatientenID
+ - symptomArt ,     <--> NameDesSymptoms , soll gastroenterol. / respirat. / system. sein --> keine Daten vorhanden
+ - symptomBeginn    <--> Beginn
+ - symptomEnde      <--> Rueckgang
+
+virusLastRects -  
+ - nextTestDate     <--> auf Basis von Befunddatum selbst erstellt
+ - patientID        <--> PatientID
+ - resultTimeStamp  <--> Befunddatum
+ - testArt          <--> KeimID , 94500-6/94745-7 entspricht 'pcr' , 94558-4 entspricht 'antigen'
+ - testTimeStamp    <--> ZeitpunktProbeneingang 
+ - virusLast        <--> in neuen Labordaten vorhanden, diese unterscheiden sich in anderen Punkten von den alten Daten

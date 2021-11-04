@@ -53,7 +53,7 @@ export class WebsocketApi {
 
     client.on("disconnect", this.onDisconnected)
     client.on("error", this.onError)
-    
+
     // client.on("getParsedData", data => this.onGetParsedData(client, data))
     client.on("getData", (data) => this.onGetData(client, data))
     client.on("getVisData", (data) => this.onGetVisData(client, data))
@@ -293,7 +293,9 @@ export class WebsocketApi {
         // Wenn daten schon cached sind...
         raw_data_counter++
         console.log(
-          `raw data counter: ${raw_data_counter} von ${dataObject[raw_data_name].length}`
+          cli_color.blueBright(
+            `raw data counter: ${raw_data_counter} von ${dataObject[raw_data_name].length}`
+          )
         )
         if (raw_data_counter === dataObject[raw_data_name].length) {
           // client.emit("dataResult", JSON.stringify(value))
@@ -347,9 +349,12 @@ export class WebsocketApi {
           // success, return data on channel "dataResult"
           // .then((value) => client.emit("dataResult", JSON.stringify(value)))
           .then((value) => {
-            console.log("@@@@@@@@@@")
-            console.log(procedureName)
-            // console.log(value)
+            console.log("Procedure name Response: ", procedureName)
+            // if (procedureName === "Contact_NthDegree_TTKP_Degree") {
+            //   console.log(value)
+            // }
+            // let test: any = JSON.parse(JSON.stringify(value))
+            // console.log(test.data[0])
             this.saveToCache(
               value,
               payload,
@@ -360,7 +365,9 @@ export class WebsocketApi {
             // console.log(value)
             raw_data_counter++
             console.log(
-              `raw data counter: ${raw_data_counter} von ${dataObject[raw_data_name].length}`
+              cli_color.green(
+                `raw data counter: ${raw_data_counter} von ${dataObject[raw_data_name].length}`
+              )
             )
             if (raw_data_counter === dataObject[raw_data_name].length) {
               // client.emit("dataResult", JSON.stringify(value))
@@ -384,6 +391,7 @@ export class WebsocketApi {
             )
             this.saveToCache(
               undefined,
+              // { data: undefined },
               payload,
               "raw_data",
               procedureName,
@@ -396,7 +404,9 @@ export class WebsocketApi {
 
             raw_data_counter++
             console.log(
-              `raw data counter: ${raw_data_counter} von ${dataObject[raw_data_name].length}`
+              cli_color.red(
+                `raw data counter: ${raw_data_counter} von ${dataObject[raw_data_name].length}`
+              )
             )
             if (raw_data_counter === dataObject[raw_data_name].length) {
               // client.emit("dataResult", JSON.stringify(value))
@@ -881,7 +891,7 @@ export class WebsocketApi {
     let hash_ID = hash(all_parameters)
 
     dataObject[module_data_name].forEach((module_name: string) => {
-      console.log(module_name)
+      console.log("Module name: " + module_name)
 
       let input_data: any = {}
 
@@ -895,11 +905,15 @@ export class WebsocketApi {
 
           if (
             cache.raw_data[raw_data_name] === undefined ||
-            cache.raw_data[raw_data_name][hash_ID] === undefined
+            cache.raw_data[raw_data_name][hash_ID] === undefined ||
+            cache.raw_data[raw_data_name][hash_ID].error !== undefined
+            // cache.raw_data[raw_data_name][hash_ID].data === undefined
           ) {
             tmp_data.error =
               "daten fuer " + raw_data_name + " " + hash_ID + " nicht im cache"
           } else {
+            // console.log("kommt hier der fehler?")
+            // console.log(cache.raw_data[raw_data_name][hash_ID])
             tmp_data.data = cache.raw_data[raw_data_name][hash_ID].data.data
           }
 

@@ -11,7 +11,8 @@ import LineList from "../vis/Linelist"
 // import LineList from "../vis/old_ports/Linelist"
 import Epikurve from "../vis/old_ports/Epikurve"
 import Kontaktnetzwerk from "../vis/Kontaktnetzwerk"
-import AnnotationTimeline from "../vis/AnnotationTimeline"
+import AnnotationTimeline_old from "../vis/AnnotationTimeline"
+import AnnotationTimeline from "../vis/AnnotationTimeline_new"
 
 import "react-mosaic-component/react-mosaic-component.css"
 import "@blueprintjs/core/lib/css/blueprint.css"
@@ -83,6 +84,13 @@ class Mosaic_LM extends Component {
           // socket={props.socket}
         />
       ),
+      e: (
+        <AnnotationTimeline_old
+          {...props}
+          get_color={this.get_color}
+          // socket={props.socket}
+        />
+      ),
     }
 
     this.viewId = "a" | "b" | "c" | "new"
@@ -96,6 +104,7 @@ class Mosaic_LM extends Component {
       b: this.translate("AnnotationTimeline"),
       c: this.translate("Kontaktnetzwerk"),
       d: this.translate("Linelist"),
+      e: this.translate("AnnotationTimeline old"),
       new: "New Window",
     }
   }
@@ -149,14 +158,22 @@ class Mosaic_LM extends Component {
           initialValue={{
             direction: "row",
             // first: "a",
-            second: "c",
+            // second: "b",
+            second: {
+              direction: "column",
+              first: "b",
+              second: "c",
+              splitPercentage: 50,
+            },
+            // second: "c",
             first: {
               direction: "column",
               first: "a",
               second: "d",
               splitPercentage: 50,
             },
-            splitPercentage: 60,
+            // splitPercentage: 60,
+            splitPercentage: 50,
           }}
           // initialValue={<Epikurve translate={this.translate} socket={this.props.socket} />}
           // initialValue={

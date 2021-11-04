@@ -46,7 +46,10 @@ class Epikurve extends Component {
       getWithCopyStrain: true,
       dataWithCopyStrain: false,
       getStationID: undefined,
+      getConfigName: undefined,
       stationIDs: [],
+      configNames: [],
+      configuration_names: [],
     }
 
     this.selected_station = undefined
@@ -244,6 +247,24 @@ class Epikurve extends Component {
       self.dataType = 0
     }
     self.draw_vis()
+  }
+
+  switchConfig = (e) => {
+    let self = this
+
+    console.warn("Switching Config!")
+
+    let newConfigName = e.target.value
+    this.setState((prevState) => {
+      prevState.getConfigName = newConfigName
+      return prevState
+    })
+
+    self.props.change_rki_config_name(e)
+
+    setTimeout(self.props.requestVisData, 100)
+    // self.props.requestVisData()
+    // !temporaer ? neue Daten reqesten UND parameters in Main.js setzen
   }
 
   switchStation = (e) => {
@@ -530,9 +551,22 @@ class Epikurve extends Component {
       }
     })
 
+    let confs = []
+    this.selected_config = undefined
+    data.data.rki_configs.forEach((conf, i) => {
+      confs.push(conf.name)
+    })
+
+    // !select the station and config based on config_name of parameters
+    if (data.data.config_stationid !== undefined)
+      this.selected_station = data.data.config_stationid
+    this.selected_config = data.data.configName
+
     this.setState((prevState) => {
       prevState.stationIDs = stations
+      prevState.configNames = confs
       prevState.getStationID = this.selected_station
+      prevState.getConfigName = this.selected_config
       return prevState
     })
 
@@ -1491,7 +1525,7 @@ class Epikurve extends Component {
           let col = "#bbbbbb"
 
           if (d.rki_data) {
-            let val = d.rki_data.outbreak_prob
+            let val = d.rki_data.Ausbruchswahrscheinlichkeit
             val = val / 0.5 + 0.5
             col = d3.interpolateOranges(val)
           }
@@ -1542,9 +1576,10 @@ class Epikurve extends Component {
           let col = "#bbbbbb"
 
           if (d.rki_data) {
-            let val = d.rki_data.outbreak_prob
+            let val = d.rki_data.Ausbruchswahrscheinlichkeit
             val = val / 0.5 + 0.5
             col = d3.interpolateOranges(val)
+            console.log(val)
           }
 
           return col
@@ -1631,12 +1666,12 @@ class Epikurve extends Component {
         //     //         + (scaleYTop(d[i][dataType.type])).toString() + ", "
         //     // })
 
-      //     points =
-      //       points +
-      //       ((i * width) / (dataBottomOrg.length / timeSpan)).toString() +
-      //       ",-" +
-      //       scaleYTop(d[i][dataType.type]).toString() +
-      //       ", "
+        //     points =
+        //       points +
+        //       ((i * width) / (dataBottomOrg.length / timeSpan)).toString() +
+        //       ",-" +
+        //       scaleYTop(d[i][dataType.type]).toString() +
+        //       ", "
 
         //     if (i === d.length - 1) {
         //       /**
@@ -1835,6 +1870,29 @@ class Epikurve extends Component {
         </select>
       )
     }
+
+    let selections2 = [
+      <option key={""} value={""}>
+        {" - "}
+      </option>,
+    ]
+    this.state.configNames.forEach((configName) => {
+      selections2.push(
+        <option key={configName} value={configName}>
+          {configName}
+        </option>
+      )
+    })
+
+    let selection2 = null
+    if (selections2.length > 0) {
+      selection2 = (
+        <select onChange={this.switchConfig} value={this.state.getConfigName}>
+          {selections2}
+        </select>
+      )
+    }
+
     return (
       <div style={{ width: "100%", height: "100%", background: "white" }}>
         <svg
@@ -1847,7 +1905,8 @@ class Epikurve extends Component {
           className="testdiv2"
           style={{ position: "absolute", top: "10px", left: "100px" }}
         >
-          {selection}
+          {[selection, selection2]}
+          {/* {selection2} */}
         </div>
       </div>
     )

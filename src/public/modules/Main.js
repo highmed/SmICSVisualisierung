@@ -1,4 +1,3 @@
-
 import * as d3 from "d3"
 import React, { Component } from "react"
 import { hot } from "react-hot-loader"
@@ -20,12 +19,11 @@ import { withSocket } from "../hooks/socket"
 import "./scss/main.scss"
 
 class Main extends Component {
-
   constructor(props) {
     super(props)
     this.socket = props.socket.client
 
-    this.defaults = "production"
+    this.defaults = "pascal"
 
     // TODO: das ist irgendwie hingehackt...
     this.lm = (
@@ -37,6 +35,8 @@ class Main extends Component {
         hide_tooltip={this.hide_tooltip}
         show_tooltip={this.show_tooltip}
         translate={this.translate}
+        requestVisData={this.requestVisData}
+        change_rki_config_name={this.change_rki_config_name}
       />
     )
 
@@ -68,6 +68,7 @@ class Main extends Component {
         // station_string: "295,434",
         hospital: "1",
         degree: 1,
+        configName: "",
       },
     }
 
@@ -93,10 +94,10 @@ class Main extends Component {
       pascal: {
         starttime: "2021-01-01",
         endtime: "2021-01-10",
-        patientList_string: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+        patientList_string: "Patient17",
         pathogenList_string: "sars-cov-2",
         station_string: "Coronastation",
-        patientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+        patientID: "Patient17",
       },
       christoph: {
         starttime: "2020-01-16",
@@ -156,6 +157,14 @@ class Main extends Component {
     let new_value = e.target.value
     this.setState((prevState) => {
       prevState.parameters.endtime = new_value
+      return prevState
+    })
+  }
+
+  change_rki_config_name = (e) => {
+    let new_value = e.target.value
+    this.setState((prevState) => {
+      prevState.parameters.configName = new_value
       return prevState
     })
   }
@@ -286,13 +295,13 @@ class Main extends Component {
       // dataSourceIdentifier: "hmhdnov18_sql",
       dataSourceIdentifier: "rest",
       openModuleNames: [
-        // "annotationTimeline",
+        "annotationTimeline",
         "linelist",
         "epikurve",
         "kontaktnetzwerk",
       ],
       allModuleNames: [
-        // "annotationTimeline",
+        "annotationTimeline",
         "linelist",
         // "storyline",
         "epikurve",
@@ -617,7 +626,7 @@ class Main extends Component {
 }
 
 Main.propTypes = {
-  socket: PropTypes.object.isRequired
+  socket: PropTypes.object.isRequired,
 }
 
 export default hot(module)(withSocket(Main))

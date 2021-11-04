@@ -82,11 +82,11 @@ export default class CONFIG {
    * @private
    */
   private static readonly rest_api_config = {
-    protocol: "https",
-    hostname: CONFIG.dev_mode ? CONFIG.smics_hostname : CONFIG.smics_hostname,
+    protocol: "http",
+    hostname: CONFIG.dev_mode ? "localhost" : CONFIG.smics_hostname,
     // hostname: "192.168.0.108", // EntwicklungsVM IP (SmICS)
-    port: CONFIG.dev_mode ? CONFIG.smics_port : CONFIG.smics_port,
-    path: CONFIG.dev_mode ? "/api/StoredProcedures/" : "/api/StoredProcedures/",
+    port: CONFIG.dev_mode ? 9000 : CONFIG.smics_port,
+    path: CONFIG.dev_mode ? "/" : "/api/StoredProcedures/",
   }
 
   /**
@@ -99,7 +99,7 @@ export default class CONFIG {
    */
   public static readonly auth_provider_config = {
     provider_url: process.env.AUTH_PROVIDER_URL || "http://localhost:8080", // Base URL of auth provider to handle login/logout
-    redirect_url: "http://" + CONFIG.smics_hostname + ":8443" || "http://localhost:3231", // Base URL of app to return to after login/logout
+    redirect_url: process.env.AUTH_REDIRECT_URL || "http://localhost:3231", // Base URL of app to return to after login/logout
     realm: process.env.AUTH_REALM || "sample-realm", // Auth provider realm name
     client_id: process.env.AUTH_CLIENT_ID || "sample-client", // Auth provider client name
     client_secret: process.env.AUTH_CLIENT_SECRET || "no-secret", // Auth provider client secret (No empty string!)

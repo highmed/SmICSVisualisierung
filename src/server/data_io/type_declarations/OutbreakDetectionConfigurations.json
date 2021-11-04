@@ -1,0 +1,32 @@
+{
+  "$id": "data/OutbreakDetectionConfigurations",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "uniqueItems": true,
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "StationID": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": []
+  }
+}

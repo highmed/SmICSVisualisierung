@@ -37,8 +37,16 @@ const procedure_arguments: { readonly [key: string]: string[] } = {
     "degree",
     "hospital",
   ],
+  OutbreakDetectionConfigurations: [],
+  OutbreakDetectionResultSet: ["starttime", "endtime", "configName"],
   RKIalgo: ["starttime", "endtime"],
   // Arguments_RKIalgo: ["starttime", "endtime"],
+
+  Patient_Symptom: ["patientList"],
+
+  Patient_Vaccination: ["patientList"],
+
+  Metadaten: ["patientList"],
 }
 
 export default procedure_arguments

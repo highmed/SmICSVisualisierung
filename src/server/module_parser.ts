@@ -8,6 +8,7 @@
  * ein leeres Array ([]) zurueck geben
  */
 
+import * as cli_color from "cli-color"
 import { raw } from "mysql"
 import * as d3 from "d3"
 import * as d3_sankey from "d3-sankey"
@@ -17,100 +18,486 @@ import parse_sl_data from "./utilities/storylineParser"
 // TODO: ERROR-Message(s) mit zurueck geben...
 const module_parser: { [key: string]: any } = {
   annotationTimeline: {
-    // AnnotatonTimeline
-    needed_raw_data: [],
-    needed_parsed_data: [],
+    needed_raw_data: [
+      "Patient_Bewegung_Ps",
+      "Patient_Labordaten_Ps",
+      "Patient_Vaccination",
+      "Patient_Symptom",
+      "Metadaten",
+    ],
+
+    needed_parsed_data: [
+      "generate_mibi_investigations",
+      "generate_movement_rects",
+    ],
     call_function: (input_data: any, parameters: any, callback: Function) => {
-      // hier custom data einfuegen
+      // console.log("--- Start of module_parser[annotation_timeline] ---\n")
 
-      /**
-       * Beginn des Strukturvorschlags für Kristina
-       *
-       */
-      let Metadaten = [
-        {
-          firstDate: "2021-02-15T12:35:14.90Z",
-          lastDate: "2021-02-15T12:35:14.90Z",
-          patientID: "string",
-          infektionsSituation: "string",
-          aufnahmeArt: "string",
-          klinikStatus: "string",
-        },
-      ]
-      let Tests = [
-        {
-          patientID: "string",
-          testArt: "string",
-          testTimeStamp: "2021-02-15T12:35:14.90Z",
-          resultTimeStamp: "2021-02-15T12:35:14.90Z",
-          virusLast: "string",
-          gueltigkeit: "string",
-          labordatenID: "string",
-          fallID: "string",
-          probeID: "string",
-          zeitpunktProbeneingang: "2021-02-15T12:35:14.90Z",
-          materialID: "string",
-          material_1: "string",
-          befund: true,
-          befundkommentar: "string",
-          keimID: "string",
-        },
-      ]
+      let {
+        Patient_Symptom,
+        Patient_Vaccination,
+        Patient_Bewegung_Ps,
+        Patient_Labordaten_Ps,
+        Metadaten,
+        generate_mibi_investigations,
+        generate_movement_rects,
+      } = input_data
 
-      let Stationen = [
-        {
-          patientID: "string",
-          stationsNr: "string",
-          stationsArt: "string",
-          aufenthaltsBegin: "2021-02-15T12:35:14.90Z",
-          aufenthaltsEnde: "2021-02-15T12:35:14.90Z",
-          raum: "string",
-          bewegungstyp: "string",
-          bewegungstypID: 0,
-          fallID: "string",
-          bewegungsart_1: "string",
-          isoliert: "string",
-        },
-      ]
-
-      let Symptome = [
-        {
-          patientID: "string",
-          symptomBeginn: "2021-02-15T12:35:14.90Z",
-          symptomKategorie: "string",
-          negation: "string",
-          befundID: "string",
-          symptomName: "string",
-          lokalisation: "string",
-          schweregrad: "string",
-          symptomEnde: "2021-02-15T12:35:14.90Z",
-          diagnose: "string",
-          unbekanntesSymptom: "string",
-          aussageFehlendeInfo: "string",
-        },
-      ]
-
-      let Impfstatus = [
-        {
-          patientID: "string",
-          medikament: "string",
-          impfStatus: "string",
-          Dosierungsreihenfolge: "string",
-          Dosiermenge: "string",
-          "Impfung gegen": "string",
-          Abwesenheit: "string",
-        },
-      ]
+      let patientList: any[] = []
+      let globalStartTS = new Date().getTime()
+      let globalEndTS = new Date().getTime() - Number.MAX_VALUE
 
       let check_min_max_dates = (datum: any) => {
         globalStartTS = datum < globalStartTS ? datum : globalStartTS
         globalEndTS = datum > globalEndTS ? datum : globalEndTS
       }
 
+      // TODO: Wie muss ereignisTriangles und ereignisCircles generiert werden ?
+      let ereignisTriangles: object[] = []
+      let ereignisCircles: object[] = []
+
+      // #region globalTimeStamps , patientList & nosokomiale Patienten
+      if (generate_mibi_investigations.error === undefined) {
+        if (generate_mibi_investigations.data.first_timestamp < globalStartTS) {
+          globalStartTS = new Date(
+            generate_mibi_investigations.data.first_timestamp
+          ).getTime()
+        }
+
+        if (generate_mibi_investigations.data.last_timestamp > globalEndTS) {
+          globalEndTS = new Date(
+            generate_mibi_investigations.data.last_timestamp
+          ).getTime()
+        }
+      }
+
+      if (Patient_Bewegung_Ps.error === undefined) {
+        Patient_Bewegung_Ps.data.forEach((element: any) => {
+          let pID = element.PatientID
+          let beginn = new Date(element.Beginn).getTime()
+          let ende = new Date(element.Ende).getTime()
+
+          if (!patientList.includes(pID)) {
+            patientList.push(pID)
+          }
+
+          if (beginn < globalStartTS) {
+            globalStartTS = beginn
+          }
+
+          if (ende > globalEndTS) {
+            globalEndTS = ende
+          }
+        })
+      }
+
+      if (Patient_Labordaten_Ps.error === undefined) {
+        Patient_Labordaten_Ps.data.forEach((element: any) => {
+          let pID = element.PatientID
+          if (!patientList.includes(pID)) {
+            patientList.push(pID)
+          }
+        })
+      }
+
+      console.log("patientList length", patientList.length)
+
+      let counter = 0
+      if (Patient_Vaccination.error === undefined) {
+        Patient_Vaccination.data.forEach((element: any) => {
+          let pID = element.PatientenID
+          let impfDatum = new Date(element.DokumentationsID).getTime()
+
+          console.log(cli_color.blueBright(pID))
+          if (!patientList.includes(pID)) {
+            counter++
+            console.log(cli_color.blueBright(counter))
+            patientList.push(pID)
+          }
+
+          if (impfDatum < globalStartTS) {
+            globalStartTS = impfDatum
+          }
+
+          if (impfDatum > globalEndTS) {
+            globalEndTS = impfDatum
+          }
+        })
+      }
+
+      if (Patient_Symptom.error === undefined) {
+        Patient_Symptom.data.forEach((element: any) => {
+          let pID = element.PatientenID
+          let first_date = new Date(element.Beginn).getTime()
+          let last_date = new Date(element.Rueckgang).getTime()
+
+          if (!patientList.includes(pID)) {
+            patientList.push(pID)
+          }
+
+          if (first_date < globalStartTS) {
+            globalStartTS = first_date
+          }
+
+          if (last_date > globalEndTS) {
+            globalEndTS = last_date
+          }
+        })
+      }
+
+      if (Metadaten.error === undefined) {
+        Metadaten.data.forEach((element: any) => {
+          let pID = element.PatientID
+          let proben_date = new Date(
+            element.Zeitpunkt_der_Probenentnahme
+          ).getTime()
+          let aufnahme_date = new Date(element.Aufnahme_Datum).getTime()
+          let entlastung_date = new Date(element.Entlastung_Datum).getTime()
+
+          if (!patientList.includes(pID)) {
+            patientList.push(pID)
+          }
+
+          if (proben_date < globalStartTS) {
+            globalStartTS = proben_date
+          }
+
+          if (proben_date > globalEndTS) {
+            globalEndTS = proben_date
+          }
+
+          if (aufnahme_date < globalStartTS) {
+            globalStartTS = aufnahme_date
+          }
+
+          if (aufnahme_date > globalEndTS) {
+            globalEndTS = aufnahme_date
+          }
+
+          if (entlastung_date < globalStartTS) {
+            globalStartTS = entlastung_date
+          }
+
+          if (entlastung_date > globalEndTS) {
+            globalEndTS = entlastung_date
+          }
+        })
+      }
+      //#endregion
+
+      // #region virusLastRects
+      let virusLastRects: object[] = []
+
+      if (Patient_Labordaten_Ps.error === undefined) {
+        let patient_and_test: object[] = []
+
+        // Patient_Labordaten_Ps.data.forEach((labor_data: any) => {
+        //   let patID_test = {
+        //     patID: labor_data.PatientID,
+        //     testDate: new Date(labor_data.Befunddatum).getTime(),
+        //   }
+        //   patient_and_test.push(patID_test)
+        // })
+
+        // Patient_Labordaten_Ps.data.forEach((d: any) => {
+
+        // })
+
+        patientList.forEach((pid: any) => {
+          // let virusLastRect: any = {
+          //   patientID: pid,
+
+          // }
+          let virus_data = Patient_Labordaten_Ps.data.filter(
+            (d: any) => d.PatientID === pid
+          )
+          virus_data.sort(
+            (a: any, b: any) =>
+              new Date(a.Befunddatum).getTime() -
+              new Date(b.Befunddatum).getTime()
+          )
+
+          virus_data.forEach((vd: any, i: any) => {
+            check_min_max_dates(new Date(vd.Befunddatum).getTime())
+
+            let begin = vd.Befunddatum
+            let end =
+              i < virus_data.length - 1
+                ? virus_data[i + 1].Befunddatum
+                : undefined
+
+            let testArt = undefined
+
+            if (vd.KeimID === "94558-4") {
+              testArt = "antiGen"
+            }
+
+            virusLastRects.push({
+              begin: new Date(begin).getTime(),
+              end: end ? new Date(end).getTime() : undefined,
+              testArt,
+              ...vd,
+              Viruslast: Number(vd.Viruslast),
+            })
+          })
+        })
+
+        // Patient_Labordaten_Ps.data.forEach((labor_data: any) => {
+        //   let laborStruct: any = {
+        //     patientID: labor_data.PatientID,
+        //     resultTimeStamp: new Date(labor_data.Befunddatum).getTime(),
+        //     testTimeStamp: new Date(
+        //       labor_data.ZeitpunktProbeneingang
+        //     ).getTime(),
+        //     virusLast: labor_data.Viruslast,
+        //     // ! Bislang wird testArt nur in PCR & Antigen unterschieden
+        //     testArt: "pcr",
+        //     nextTestDate: Date,
+        //   }
+
+        //   /**
+        //    * right now there is only one ID for antigen-test.
+        //    * so we're asking only for that one ID, in any other case we got pcr-tests
+        //    */
+        //   if (labor_data.KeimID === "94558-4") {
+        //     laborStruct.testArt = "antiGen"
+        //   }
+
+        //   /**
+        //    * get the 'nextTestDate' based on 'Befunddatum'
+        //    * if there isn't a nextTestDate we return the current date & time
+        //    */
+        //   let test_dummy = new Date().getTime()
+        //   let befunddatum = new Date(labor_data.Befunddatum).getTime()
+
+        //   // patient_and_test.forEach((id: any) => {
+        //   //   if (labor_data.PatientID === id.patID) {
+        //   //     if (id.testDate > befunddatum) {
+        //   //       if (id.testDate < test_dummy) {
+        //   //         test_dummy = new Date(id.testDate).getTime()
+        //   //       }
+        //   //     }
+        //   //   }
+        //   // }),
+        //   //   (laborStruct.nextTestDate = new Date(test_dummy).getTime())
+
+        //   check_min_max_dates(laborStruct.resultTimeStamp)
+        //   check_min_max_dates(laborStruct.testTimeStamp)
+        //   check_min_max_dates(laborStruct.nextTestDate)
+
+        //   virusLastRects.push(laborStruct)
+        // })
+      }
+      // #endregion
+
+      // #region stationenRects
+      let stationenRects: object[] = []
+      let stationsArten: any = [
+        "CovidStation",
+        "NormalStation",
+        "ICR",
+        "Intensivstation",
+      ]
+
+      if (Patient_Bewegung_Ps.error === undefined) {
+        Patient_Bewegung_Ps.data.forEach((mov: any) => {
+          let stationsStruct: any = {
+            aufenthaltsBegin: new Date(mov.Beginn).getTime(),
+            aufenthaltsEnde: new Date(mov.Ende).getTime(),
+            patient_id: mov.PatientID,
+            station_id: mov.StationID,
+            /* wann soll "ICR" gesetzt werden?
+             * ist es sinnvoll alles was nicht Covid / Intensiv / ICR ist als NormalStation zu deklarieren?
+             * default für stationsArt: NormalStation
+             */
+            stationsArt: stationsArten[1],
+          }
+
+          // ! Bei Verlegung auf Covid- od. Intensivstation wird erreignisTriangle gesetzt
+          if (mov.StationID === "Coronastation") {
+            stationsStruct.stationsArt = stationsArten[0]
+
+            let triangleStruct: any = {
+              patientID: mov.PatientID,
+              ereignisTimeStamp: new Date(mov.Beginn).getTime(),
+            }
+            ereignisTriangles.push(triangleStruct)
+          }
+
+          if (mov.Fachabteilung === "Intensivstation") {
+            stationsStruct.stationsArt = stationsArten[3]
+
+            let triangleStruct: any = {
+              patientID: mov.PatientID,
+              ereignisTimeStamp: new Date(mov.Beginn).getTime(),
+            }
+
+            ereignisTriangles.push(triangleStruct)
+          }
+          check_min_max_dates(stationsStruct.aufenthaltsBegin)
+          check_min_max_dates(stationsStruct.aufenthaltsEnde)
+
+          stationenRects.push(stationsStruct)
+        })
+      }
+      // #endregion
+
+      // #region Impfdaten
+      let impfDaten: object[] = []
+      let vacc_injection_data: any[] = []
+      let vacc_list: string[] = []
+      if (Patient_Vaccination.error === undefined) {
+        Patient_Vaccination.data.forEach((vacc_data: any) => {
+          let vacc_inj_data = vacc_data
+          vacc_inj_data.doc_ts = new Date(
+            vacc_inj_data.DokumentationsID
+          ).getTime()
+          vacc_injection_data.push(vacc_data)
+          if (!vacc_list.includes(vacc_data.PatientenID)) {
+            vacc_list.push(vacc_data.PatientenID)
+
+            let impfdatenStruct = {
+              patientID: vacc_data.PatientenID,
+              medikament: new String(),
+              anzahl_impfungen: vacc_data.Dosierungsreihenfolge,
+            }
+
+            if (
+              vacc_data.Impfstoff ===
+              "Vaccine product containing only Severe acute respiratory syndrome coronavirus 2 messenger ribonucleic acid (medicinal product)"
+            ) {
+              impfdatenStruct.medikament =
+                "Comirnaty / COVID-19 Vaccine Moderna"
+            }
+            if (
+              vacc_data.Impfstoff ===
+              "Vaccine product containing only Severe acute respiratory syndrome coronavirus 2 antigen (medicinal product)"
+            ) {
+              impfdatenStruct.medikament = "Vaxzevria / Janssen"
+            }
+            impfDaten.push(impfdatenStruct)
+          } else {
+            impfDaten.forEach((data: any) => {
+              if (data.patientID === vacc_data.PatientenID) {
+                if (data.anzahl_impfungen < vacc_data.Dosierungsreihenfolge) {
+                  data.anzahl_impfungen = vacc_data.Dosierungsreihenfolge
+                }
+              }
+            })
+          }
+          /**
+           * @Tom aktuell wird nur ein Objekt pro Patient übergeben. Vllt. ist es sinnvoller pro stattgefundener
+           *      Impfung ein Objekt zu übergeben. (z. Bsp.: Um Kreuzimpfungen darzustellen? )
+           *
+           * TODO: ja sollte in überarbeiteter Version definitiv gemacht werden; für v0.9 erstmal so
+           */
+        })
+        patientList.forEach((pid) => {
+          if (!vacc_list.includes(pid)) {
+            vacc_list.push(pid)
+
+            let impfdatenStruct = {
+              patientID: pid,
+              medikament: "No vaccine",
+              anzahl_impfungen: 0,
+            }
+
+            impfDaten.push(impfdatenStruct)
+          }
+        })
+        vacc_injection_data.sort(
+          (a, b) => a.Dosierungsreihenfolge - b.Dosierungsreihenfolge
+        )
+      }
+      // #endregion
+
+      // #region Metadaten
+      let metaTextInfos: object[] = []
+
+      if (Metadaten.error === undefined) {
+        Metadaten.data.forEach((meta_data: any) => {
+          let metaInfoStruct = {
+            patientID: meta_data.PatientID,
+            infektionsSituation: meta_data.Infektion,
+            aufnahme_datum: new Date(meta_data.Aufnahme_Datum).getTime(),
+            entlass_datum: new Date(meta_data.Entlastung_Datum).getTime(),
+            impfstoff: new String(),
+            anzahl_impfungen: Number,
+          }
+
+          impfDaten.forEach((data: any) => {
+            if (meta_data.PatientID === data.patientID) {
+              metaInfoStruct.impfstoff = data.medikament
+              metaInfoStruct.anzahl_impfungen = data.anzahl_impfungen
+            }
+          })
+
+          metaTextInfos.push(metaInfoStruct)
+        })
+      }
+      // #endregion
+
+      // #region Symptomdaten
+      let symptomDaten: object[] = []
+
+      if (Patient_Symptom.error === undefined) {
+        Patient_Symptom.data.forEach((symptom_data: any) => {
+          let symptomStruct = {
+            patientID: symptom_data.PatientenID,
+            // ! symptomArt soll gastroenterol. / respirat. / system. sein --> keine Daten vorhanden
+            symptomArt: symptom_data.NameDesSymptoms,
+            symptomBeginn: new Date(symptom_data.Beginn).getTime(),
+            symptomEnde: new Date(symptom_data.Rueckgang).getTime(),
+            negation: symptom_data.AusschlussAussage,
+          }
+
+          check_min_max_dates(symptomStruct.symptomBeginn)
+          check_min_max_dates(symptomStruct.symptomEnde)
+
+          symptomDaten.push(symptomStruct)
+
+          // ! bei Symptombeginn wird aktuell ereignisTriangle gesetzt ( bei Rueckgang ereignisCircle ) !
+          let triangleStruct: any = {
+            patientID: symptom_data.PatientenID,
+            ereignisTimeStamp: new Date(symptom_data.Beginn).getTime(),
+          }
+          ereignisTriangles.push(triangleStruct)
+
+          /*
+          let circleStruct: any = {
+            patientID: symptom_data.PatientenID,
+            ereignisTimeStamp: new Date(symptom_data.Rueckgang).getTime()
+          }
+          ereignisCircles.push(circleStruct)
+          */
+        })
+      }
+      //#endregion Symptomdaten
+
+      // console.log("--- End of module_parser[annotation_timeline] ---\n")
+      console.log(cli_color.green(patientList.length))
+      callback({
+        virusLastRects,
+        stationenRects,
+        ereignisTriangles,
+        ereignisCircles,
+        //annotationsTriangles,
+        globalStartTS,
+        globalEndTS,
+        metaTextInfos,
+        impfDaten,
+        vacc_injection_data,
+        symptomDaten,
+        ...generate_movement_rects.data,
+        patientList,
+      })
+    },
+    //#region Testdaten Christoph
+    /*
+
       const TAGZEIT = 1000 * 60 * 60 * 24
       let covidDaten: object[] = []
-      let globalStartTS = Number.MAX_VALUE
-      let globalEndTS = Number.MIN_VALUE
+
       let patientIDs = [0, 1, 2]
 
       // Metadaten
@@ -121,20 +508,24 @@ const module_parser: { [key: string]: any } = {
       let aufnahmeArt = "Notaufnahme" // Notaufnahme, von anderer Klinik, Ankunft vor Infektion
       let klinikStatus = "entlassen" // anwesend, entlassen, verstorben
 
-      // Für die Textausgabe auf dem Bildschirm, die MEtadaten in eine Strktur schreiben
+      // Für die Textausgabe auf dem Bildschirm, die Metadaten in eine Struktur schreiben
       let metaInfos = [
-        "PatientID: 0",
+        //"PatientID: 0",
+        "PatientID: db7be72a-db86-4dc6-b55b-dcf510b0f23e",
         "Impfstatus: none",
         "Infektionssituation: nosokomial",
         "Aufnahmeart: Notaufnahme",
         "Aufnahmedatum: 01.12.2020",
         "f",
-        "g",
-      ]
+        "g", 
+      ] 
       let metaTextInfos: object[] = []
       for (let i = 0; i < 5; i++) {
         let metaInfoStruct: any = {
+          
+          // ! bislang wird nur die metaInfo als String im Frontend ausgegeben. 
           metaInfo: metaInfos[i], // numerisch vierstellig
+          patientID: "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
           index: i,
           //   patientAlter: patientAlter, // in Jahren
           //   patientGeschlecht: patientGeschlecht, // m = männlich, w = weibich, d = divers, u = unbekannt
@@ -144,12 +535,6 @@ const module_parser: { [key: string]: any } = {
         }
         metaTextInfos.push(metaInfoStruct)
       }
-
-      // Testdaten in einer Struktur mit allen Tests ablegen
-      let covidTestData: object[] = []
-      let virusLastRects: object[] = []
-      let ereignisTriangles: object[] = []
-      let ereignisCircles: object[] = []
 
       let testArten: any = ["pcr", "antiGen"] // Art des Test -> pcr oder antiGen
       for (let i = 0; i < 10; i++) {
@@ -167,7 +552,7 @@ const module_parser: { [key: string]: any } = {
         }
         testStruct.resultTimeStamp =
           testStruct.testTimeStamp + TAGZEIT * Math.random() * 3 // Das Resultat des Tests ist innerhalb von 3 Tagen da
-        covidTestData.push(testStruct)
+      
         check_min_max_dates(testStruct.testTimeStamp)
         check_min_max_dates(testStruct.resultTimeStamp)
         virusLastRects.push(testStruct)
@@ -208,7 +593,7 @@ const module_parser: { [key: string]: any } = {
         }
         testStruct.resultTimeStamp =
           testStruct.testTimeStamp + TAGZEIT * Math.random() * 3 // Das Resultat des Tests ist innerhalb von 3 Tagen da
-        covidTestData.push(testStruct)
+       
         check_min_max_dates(testStruct.testTimeStamp)
         check_min_max_dates(testStruct.resultTimeStamp)
 
@@ -218,7 +603,6 @@ const module_parser: { [key: string]: any } = {
           ereignisTimeStamp: testStruct.testTimeStamp,
         })
       }
-
       // Stationen
       let stationenRects: object[] = []
       let stationsArten: any = [
@@ -256,7 +640,7 @@ const module_parser: { [key: string]: any } = {
         "ICR",
         "NormalStation",
       ]
-      tage = [100, 80, 75, 50, 30, 0]
+      let tage = [100, 80, 75, 50, 30, 0]
       for (let i = 0; i < 5; i++) {
         let stationsStruct: any = {
           patientID: patientIDs[1],
@@ -270,7 +654,6 @@ const module_parser: { [key: string]: any } = {
         check_min_max_dates(stationsStruct.aufenthaltsEnde)
       }
 
-      // Isolierzeitraeume
       let isolierZeitraeume: object[] = []
       for (let i = 0; i < 2; i++) {
         let isolierStruct: any = {
@@ -298,7 +681,6 @@ const module_parser: { [key: string]: any } = {
         check_min_max_dates(isolierStruct.isolierEnde)
       }
 
-      // Impfdaten
       let impfDaten: object[] = []
       let medikamente: any = ["none", "cureVac", "AstraZeneca", "BionTec"]
       let impfStatus: any = [
@@ -324,7 +706,6 @@ const module_parser: { [key: string]: any } = {
       }
       impfDaten.push(impfDatenStruct)
 
-      // Symptome
       let symptomDaten: object[] = []
       let symptomArten: any = [
         "Respiratorisch",
@@ -346,12 +727,15 @@ const module_parser: { [key: string]: any } = {
         symptomStruct.symptomEnde =
           symptomStruct.symptomBeginn + TAGZEIT * Math.random() * 10
         symptomDaten.push(symptomStruct)
+        
+        // Kriterium nachdem in ereignisTriangles od. ereignisCircles gepushed wird ?
         if (Math.random() > 0.5) {
           ereignisTriangles.push({
             patientID: patientIDs[0],
             ereignisTimeStamp: symptomStruct.symptomBeginn,
           })
         } else {
+         
           ereignisCircles.push({
             patientID: patientIDs[0],
             ereignisTimeStamp: symptomStruct.symptomBeginn,
@@ -359,7 +743,7 @@ const module_parser: { [key: string]: any } = {
         }
         check_min_max_dates(symptomStruct.symptomBeginn)
         check_min_max_dates(symptomStruct.symptomEnde)
-      }
+      } 
 
       // Symptome Standardpatient
       let standardSymptombeginn: any = [95, 70, 55, 30]
@@ -398,9 +782,6 @@ const module_parser: { [key: string]: any } = {
         check_min_max_dates(symptomStruct.symptomEnde)
       }
 
-      // Annotationsdreiecke
-
-      // Annotationsdaten in einer Annotationsstruktur ablegen
       let annotationsTriangles: object[] = []
 
       let annotationsArten: any = [
@@ -433,7 +814,7 @@ const module_parser: { [key: string]: any } = {
         "Nutzerinformationen",
         "Ergebnisinformationen",
       ]
-      tage = [47, 35, 20]
+      let tage = [47, 35, 20]
       for (let i = 0; i < 3; i++) {
         // 3 Annotationen
         let annoStruct: any = {
@@ -446,8 +827,8 @@ const module_parser: { [key: string]: any } = {
         check_min_max_dates(annoStruct.timeLocation)
       }
 
-      // Gesamtkonstrukt
-      covidDaten.push({
+      /* Gesamtkonstrukt
+       covidDaten.push({
         // Metadaten
         //metaTextInfos: metaTextInfos,
         patientId: patientIDs[0], // numerischer Wert
@@ -458,57 +839,42 @@ const module_parser: { [key: string]: any } = {
         klinikStatus: klinikStatus, // anwesend, entlassen, verstorben
 
         // Testdaten
-        covidTestDaten: covidTestData, // Testdatenstruktur
+        // covidTestDaten: covidTestData, // Testdatenstruktur
         // Aufenthaltsorte
-        stationenRects: stationenRects, // Stationsstruktur (Beginn und Ende des Aufenthalts Nr & Kategorie --> normalstation, covidstation, intensiv, icr oder mischstation)
+        //stationenRects: stationenRects, // Stationsstruktur (Beginn und Ende des Aufenthalts Nr & Kategorie --> normalstation, covidstation, intensiv, icr oder mischstation)
         // Isolierung
         isolierZeitraeume: isolierZeitraeume, // Alle Zeiten, in den die Person isoliert war
         // Impfstatus
         //impfDaten: impfDaten, // Daten zur Impfung, Impfstatus, Impfdaten, Medikament
         // Symptome
-        symptomDaten: symptomDaten, // Listen zu festgestellten Symptomen, Obergruppe, untergruppe, Datum
-      })
-      console.log(covidDaten)
+        //symptomDaten: symptomDaten, // Listen zu festgestellten Symptomen, Obergruppe, untergruppe, Datum
+      }) 
+      
       // Ende der Covid Daten
-
-      callback({
-        covidDaten,
-        covidTestData,
-        virusLastRects,
-        stationenRects,
-        ereignisTriangles,
-        ereignisCircles,
-        annotationsTriangles,
-        globalStartTS,
-        globalEndTS,
-        metaTextInfos,
-        impfDaten,
-        symptomDaten,
-      })
-      // return {
-      //   covidDaten,
-      //   covidTestData,
-      //   virusLastRects,
-      //   stationenRects,
-      //   ereignisTriangles,
-      //   ereignisCircles,
-      //   annotationsTriangles,
-      //   globalStartTS,
-      //   globalEndTS,
-      //   metaTextInfos,
-      // }
-    },
+    */
+    //#endregion
   },
   epikurve: {
-    needed_raw_data: ["Labor_ErregerProTag_TTEsKSs"],
+    needed_raw_data: [
+      "Labor_ErregerProTag_TTEsKSs",
+      "OutbreakDetectionResultSet",
+      "OutbreakDetectionConfigurations",
+    ],
     // needed_raw_data: ["Labor_ErregerProTag_TTEsKSs"],
-    needed_parsed_data: ["rki_data_by_day"],
+    // needed_parsed_data: ["rki_data_by_day"],
+    needed_parsed_data: [],
     // TODO: PRO ERREGER!!! aktuell alle Erreger in Reihe geschalten
     // TODO: die initial timestamps for timelense sind null...
     call_function: (input_data: any, parameters: any, callback: Function) => {
-      let { Labor_ErregerProTag_TTEsKSs, rki_data_by_day } = input_data
+      let {
+        Labor_ErregerProTag_TTEsKSs,
+        OutbreakDetectionResultSet,
+        OutbreakDetectionConfigurations,
+      } = input_data
 
-      let { starttime, endtime, station, pathogenList } = parameters
+      // console.log(cli_color.yellow(JSON.stringify(OutbreakDetectionResultSet)))
+
+      let { starttime, endtime, station, pathogenList, configName } = parameters
 
       let initial_timelense_timestamps: number[] = []
       let newData: any[] = []
@@ -516,13 +882,31 @@ const module_parser: { [key: string]: any } = {
       let pathogenIDs: string[] = []
       let dayDataSets: any = {}
 
+      let config_stationid: any = undefined
+      if (
+        configName !== "" &&
+        OutbreakDetectionConfigurations.error === undefined
+      ) {
+        // get the stationid for the selected config
+        OutbreakDetectionConfigurations.data.forEach((conf: any) => {
+          if (conf.name === configName) {
+            config_stationid = conf.StationID
+          }
+        })
+      }
+
+      if (OutbreakDetectionResultSet.error === undefined) {
+        OutbreakDetectionResultSet.data.forEach((d: any) => {
+          d.StationID = config_stationid
+        })
+      }
+
       if (Labor_ErregerProTag_TTEsKSs.error === undefined) {
         // Fuer jede Station und jeden Pathogen eine Kurve erzeugen
         // + Endemische Kurven jeweils
         // + für 7 Tage / 28 Tage akkumuliert
 
         let raw_data = Labor_ErregerProTag_TTEsKSs.data
-        // console.log(Labor_ErregerProTag_TTEsKSs)
         // ! FUER ENDE-MAERZ DAZU GEMACHT
         raw_data.forEach((d: any) => {
           if (d.anzahl_gesamt !== undefined) {
@@ -579,23 +963,28 @@ const module_parser: { [key: string]: any } = {
           data.forEach((d: any) => {
             // fuer jeden Tag die Ausbruchswahrscheinlichkeit
             // und die anderen Daten asu RKIalgo rauslesen
-            if (rki_data_by_day.error === undefined) {
-              let index = rki_data_by_day.data.findIndex(
+            if (OutbreakDetectionResultSet.error === undefined) {
+              // !TODO nur temporaer zum testen lokal...
+              if (configName === "") {
+                OutbreakDetectionResultSet.data = []
+              }
+
+              let index = OutbreakDetectionResultSet.data.findIndex(
                 (rki_d: any) =>
-                  rki_d.timestamp ===
+                  new Date(rki_d.Zeitstempel.split("T")[0]).getTime() ===
                     new Date(d.Datum.split("T")[0]).getTime() &&
                   rki_d.StationID === d.StationID
                 // && rki_d.pathogen === d.ErregerID
               )
-              console.log(index)
+              // console.log(index)
               if (index >= 0) {
-                console.log("geht rein")
+                // console.log("geht rein")
                 // d = {
                 //   ...d,
                 //   ...rki_data_by_day.data[index],
                 // }
-                d.rki_data = rki_data_by_day.data[index]
-                console.log(d)
+                d.rki_data = OutbreakDetectionResultSet.data[index]
+                // console.log(d)
               }
             }
           })
@@ -636,7 +1025,10 @@ const module_parser: { [key: string]: any } = {
         initial_timelense_timestamps,
         stationIDs,
         pathogenIDs,
-        rki_data_by_day,
+        rki_data_by_day: OutbreakDetectionResultSet,
+        rki_configs: OutbreakDetectionConfigurations.data,
+        config_stationid,
+        configName,
       })
       // return {
       //   timestamp: new Date().getTime(),
@@ -839,8 +1231,8 @@ const module_parser: { [key: string]: any } = {
           // nodes erzeugen; jeder node speichert zu jedem Keim den letzten/schlimmsten Infektionsstatus
           patientList.forEach((patient_id: any) => {
             let all_pathogen_status: any = {}
-            console.log("GET OWN PROPERTY NAMES")
-            console.log(status_changes, patient_id)
+            // console.log("GET OWN PROPERTY NAMES")
+            // console.log(status_changes, patient_id)
             let all_tested_pathogens = Object.getOwnPropertyNames(
               status_changes[patient_id]
             )
@@ -1117,7 +1509,7 @@ const module_parser: { [key: string]: any } = {
           setTimeout(() => {
             simulation.stop()
             // sim_done = true
-            console.log("SIMULATION DONE")
+            // console.log("SIMULATION DONE")
 
             let min_x = Number.MAX_VALUE
             let max_x = Number.MIN_VALUE
@@ -1177,327 +1569,43 @@ const module_parser: { [key: string]: any } = {
   },
   linelist: {
     needed_raw_data: ["Patient_Bewegung_Ps"],
-    needed_parsed_data: ["generate_mibi_investigations"],
+    needed_parsed_data: [
+      "generate_mibi_investigations",
+      "generate_movement_rects",
+    ],
     call_function: (input_data: any, parameters: any, callback: Function) => {
-      let { Patient_Bewegung_Ps, generate_mibi_investigations } = input_data
+      let {
+        Patient_Bewegung_Ps,
+        generate_mibi_investigations,
+        generate_movement_rects,
+      } = input_data
 
-      // Patient_Bewegung_Ps.data = [
-      //   {
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     Beginn: "2021-01-01T09:00:00+01:00",
-      //     Ende: "2021-01-01T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000001",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     Beginn: "2021-01-01T09:00:00+01:00",
-      //     Ende: "2021-01-05T15:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000001",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     Beginn: "2021-01-05T15:00:00+01:00",
-      //     Ende: "2021-01-05T15:00:00+01:00",
-      //     Bewegungstyp: "Entlassung",
-      //     BewegungstypID: 2,
-      //     FallID: "00000001",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-02T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000002",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-07T15:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000002",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     Beginn: "2021-01-07T15:00:00+01:00",
-      //     Ende: "2021-01-07T15:00:00+01:00",
-      //     Bewegungstyp: "Entlassung",
-      //     BewegungstypID: 2,
-      //     FallID: "00000002",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     Beginn: "2021-01-03T09:00:00+01:00",
-      //     Ende: "2021-01-03T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000004",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     Beginn: "2021-01-03T09:00:00+01:00",
-      //     Ende: "2021-01-09T15:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000004",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     Beginn: "2021-01-09T15:00:00+01:00",
-      //     Ende: "2021-01-09T15:00:00+01:00",
-      //     Bewegungstyp: "Entlassung",
-      //     BewegungstypID: 2,
-      //     FallID: "00000004",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-02T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000003",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung X",
-      //   },
-      //   {
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-03T11:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000003",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung X",
-      //   },
-      //   {
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     Beginn: "2021-01-03T11:00:00+01:00",
-      //     Ende: "2021-01-09T15:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000003",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     Beginn: "2021-01-09T15:00:00+01:00",
-      //     Ende: "2021-01-09T15:00:00+01:00",
-      //     Bewegungstyp: "Entlassung",
-      //     BewegungstypID: 2,
-      //     FallID: "00000003",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
-      //     Beginn: "2021-01-04T09:00:00+01:00",
-      //     Ende: "2021-01-04T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000006",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
-      //     Beginn: "2021-01-04T09:00:00+01:00",
-      //     Ende: "2021-03-26T16:54:34.5259828+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000006",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-02T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung X",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-02T09:00:00+01:00",
-      //     Ende: "2021-01-04T15:30:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung X",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-06T16:00:00+01:00",
-      //     Ende: "2021-01-08T14:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Stationskennung Y",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-08T14:00:00+01:00",
-      //     Ende: "2021-03-26T16:54:34.5726622+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     Beginn: "2021-01-04T15:30:00+01:00",
-      //     Ende: "2021-01-06T16:00:00+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000005",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
-      //     Beginn: "2021-01-05T09:00:00+01:00",
-      //     Ende: "2021-01-05T09:00:00+01:00",
-      //     Bewegungstyp: "Aufnahme",
-      //     BewegungstypID: 1,
-      //     FallID: "00000007",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      //   {
-      //     PatientID: "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
-      //     Beginn: "2021-01-05T09:00:00+01:00",
-      //     Ende: "2021-03-26T16:54:34.6222734+01:00",
-      //     Bewegungstyp: "Wechsel",
-      //     BewegungstypID: 3,
-      //     FallID: "00000007",
-      //     Raum: "Zimmerkennung 101",
-      //     Bewegungsart_l: "Diagn./Therap.",
-      //     StationID: "Coronastation",
-      //   },
-      // ]
-
-      let { patientList } = parameters
-
-      // TODO: SMICS-0.8
-      // Patientenliste wegen Nth-Degree rauslesen
-      let new_patient_list: any[] = []
-      Patient_Bewegung_Ps.data.forEach((mov: any) => {
-        if (!new_patient_list.includes(mov.PatientID)) {
-          new_patient_list.push(mov.PatientID)
-        }
-      })
-      patientList = new_patient_list
+      let {
+        first_movement,
+        last_movement,
+        patientList,
+        movement_rects,
+        movement_dots,
+        allStations,
+        unknown_rects,
+      } = generate_movement_rects.data
 
       let ts_start = Number.MAX_VALUE
       let ts_end = 0
 
-      let first_movement = Number.MAX_VALUE
-      let last_movement = 0
-
-      let movement_rects: object[] = []
-      let movement_dots: object[] = []
       let investigation_rects: object[] = []
       let status_rects: any[] = []
-      let unknown_rects: any = {}
-      let allStations: any[] = []
 
-      // generate visualization for movement data (horizontal rectangles)
-      // only if there is no error in the data
-      if (Patient_Bewegung_Ps.error === undefined) {
-        let movement_rect_top_position: any = {}
-
-        Patient_Bewegung_Ps.data.forEach((movement: any) => {
-          if (!allStations.includes(movement.StationID)) {
-            allStations.push(movement.StationID)
-          }
-
-          let begin = new Date(movement.Beginn).getTime()
-          let end = new Date(movement.Ende).getTime()
-          if (begin < ts_start) {
-            ts_start = begin
-            first_movement = begin
-          }
-          if (end > ts_end) {
-            ts_end = end
-            last_movement = end
-          }
-          let vis_struct: any = {
-            begin: begin,
-            end: end,
-            patient_id: movement.PatientID,
-            station_id: movement.StationID,
-            station_name: movement.Station,
-            movement_type: movement.BewegungstypID,
-          }
-
-          if (movement.BewegungstypID === 4) {
-            movement_dots.push(vis_struct)
-          } else {
-            if (movement_rect_top_position[movement.PatientID]) {
-              vis_struct.top = true
-              movement_rect_top_position[movement.PatientID] = false
-            } else {
-              vis_struct.top = false
-              movement_rect_top_position[movement.PatientID] = true
-            }
-            movement_rects.push(vis_struct)
-          }
-        })
+      if (ts_start > first_movement) {
+        ts_start = first_movement
+      }
+      if (ts_end < last_movement) {
+        ts_end = last_movement
       }
 
-      // generate visualization for investigation data (vertical rectangles)
-      // only if there is no error in the data
       if (generate_mibi_investigations.error === undefined) {
+        // generate visualization for investigation data (vertical rectangles)
+        // only if there is no error in the data
         let {
           first_timestamp,
           last_timestamp,
@@ -1559,10 +1667,10 @@ const module_parser: { [key: string]: any } = {
             // unknown_rects.push(unknown_rect)
             unknown_rects[pID] = unknown_rect
 
-            console.log(`.........................Status Rects for ${pID}`)
+            // console.log(`.........................Status Rects for ${pID}`)
 
-            console.log("pID", pID)
-            console.table(status_changes[pID])
+            // console.log("pID", pID)
+            // console.table(status_changes[pID])
             // !wenn jemand NIE getestet wurde, gibt es keine
             // !Labordaten fuer ihn, also kann er nicht in der
             // !mibiInvestigations-PatientListe auftauchen...
@@ -1575,10 +1683,10 @@ const module_parser: { [key: string]: any } = {
             //   status_changes[pID]
             // )
 
-            console.log(
-              `Tested Pathogens for this Patient... ${tested_pathogens}`
-            )
-            console.table(status_changes[pID])
+            // console.log(
+            //   `Tested Pathogens for this Patient... ${tested_pathogens}`
+            // )
+            // console.table(status_changes[pID])
 
             tested_pathogens.forEach((pathID: any) => {
               let current_last_ts = first_ts
@@ -1587,9 +1695,9 @@ const module_parser: { [key: string]: any } = {
               // Status von vor der Aufnahme ermitteln
               status_changes[pID][pathID].forEach(
                 (stat_change: any, i: number) => {
-                  console.table(stat_change)
+                  // console.table(stat_change)
                   if (stat_change.timestamp <= first_movement) {
-                    console.log(`before first_ts ${stat_change}`)
+                    // console.log(`before first_ts ${stat_change}`)
                     current_status = get_worse_carrier_status(
                       current_status,
                       stat_change.new_status
@@ -1606,12 +1714,12 @@ const module_parser: { [key: string]: any } = {
                 end: last_ts,
                 status: current_status,
               })
-              console.log(`Status VOR der Aufnahme: ${current_status}`)
+              // console.log(`Status VOR der Aufnahme: ${current_status}`)
 
               status_changes[pID][pathID].forEach(
                 (stat_change: any, i: number) => {
                   let stat_change_ts = stat_change.timestamp
-                  console.table(stat_change)
+                  // console.table(stat_change)
 
                   // Nur wenn status_change innerhalb des Aufenthaltszeitraums liegt
                   if (
@@ -1622,7 +1730,7 @@ const module_parser: { [key: string]: any } = {
                       current_status,
                       stat_change.new_status
                     )
-                    console.log(`NEUER STATUS des Patienten: ${new_status}`)
+                    // console.log(`NEUER STATUS des Patienten: ${new_status}`)
                     // TODO: statt nur bei Verschlimmerung kann auch jedes mal neues Rectangle erzeugt werden
                     // new_status = stat_change.new_status
 
@@ -1636,7 +1744,7 @@ const module_parser: { [key: string]: any } = {
                         status: new_status,
                       })
                       current_status = new_status
-                      console.log(`GEPSCHTER Status Recht: ${new_status}`)
+                      // console.log(`GEPSCHTER Status Recht: ${new_status}`)
                     }
                   }
                 }
@@ -1665,7 +1773,7 @@ const module_parser: { [key: string]: any } = {
       //   timestamp: new Date().getTime(),
       //   ts_start,
       //   ts_end,
-      //   patientList,
+      //   P,
       //   movement_rects,
       //   movement_dots,
       //   investigation_rects,
@@ -1704,6 +1812,11 @@ const module_parser: { [key: string]: any } = {
     needed_raw_data: ["Labor_ErregerProTag_TTEsKSs"],
     needed_parsed_data: [],
     call_function: (input_data: any, parameters: any, callback: Function) => {
+      console.log(
+        cli_color.red(
+          "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+        )
+      )
       callback({
         data: ["epicurve data"],
       })

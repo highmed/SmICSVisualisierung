@@ -43,9 +43,9 @@ export const get_worse_carrier_status = (
   }
 
   // console.log("* * * * *")
-  console.log("GET WORSE CARRIER STATUS")
-  console.log("old - new", `${oldStatus} - ${newStatus}`)
-  console.log(`Result: ${status}`)
+  // console.log("GET WORSE CARRIER STATUS")
+  // console.log("old - new", `${oldStatus} - ${newStatus}`)
+  // console.log(`Result: ${status}`)
   // console.log(" - - - - -")
 
   return status

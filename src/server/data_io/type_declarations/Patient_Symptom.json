@@ -1,0 +1,95 @@
+{
+  "$id": "data/Patient_Symptom",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "uniqueItems": true,
+  "items": {
+    "type": "object",
+    "properties": {
+      "PatientenID": {
+        "type": "string"
+      },
+      "BefundID": {
+        "type": "null"
+      },
+      "BefundDatum": {
+        "type": "string",
+        "moment": {
+          "validate": [
+            {
+              "test": "isSameOrAfter",
+              "value": "1980-01-01T00:00:00Z"
+            },
+            {
+              "test": "isSameOrBefore",
+              "value": "2100-01-01T00:00:00Z"
+            }
+          ]
+        }
+      },
+      "NameDesSymptoms": {
+        "type": "string"
+      },
+      "Anzahl_Patienten": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "Lokalisation": {
+        "type": "string"
+      },
+      "Beginn": {
+        "type": "string",
+        "moment": {
+          "validate": [
+            {
+              "test": "isSameOrAfter",
+              "value": "1980-01-01T00:00:00Z"
+            },
+            {
+              "test": "isSameOrBefore",
+              "value": "2100-01-01T00:00:00Z"
+            }
+          ]
+        }
+      },
+      "Schweregrad": {
+        "type": "string"
+      },
+      "Rueckgang": {
+        "type": "string",
+        "moment": {
+          "validate": [
+            {
+              "test": "isSameOrAfter",
+              "value": "1980-01-01T00:00:00Z"
+            },
+            {
+              "test": "isSameOrBefore",
+              "value": "2100-01-01T00:00:00Z"
+            }
+          ]
+        }
+      },
+      "AusschlussAussage": {
+        "type": "null"
+      },
+      "Diagnose": {
+        "type": "null"
+      },
+      "UnbekanntesSymptom": {
+        "type": "null"
+      },
+      "AussageFehlendeInfo": {
+        "type": "null"
+      }
+    },
+    "required": [
+      "PatientenID",
+      "NameDesSymptoms",
+      "AusschlussAussage",
+      "Beginn",
+      "Rueckgang"
+    ]
+  }
+}
+

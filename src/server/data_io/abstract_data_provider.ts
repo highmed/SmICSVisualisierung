@@ -77,9 +77,29 @@ export abstract class AbstractDataSource {
         arguments: "args/Arguments_Ps",
         results: "data/Praktikum_CF_2020_Result",
       },
+      OutbreakDetectionResultSet: {
+        arguments: "args/Arguments_OutbreakDetectionResultSet",
+        results: "data/OutbreakDetectionResultSet",
+      },
+      OutbreakDetectionConfigurations: {
+        arguments: "args/Arguments_OutbreakDetectionConfigurations",
+        results: "data/OutbreakDetectionConfigurations",
+      },
       RKIalgo: {
         arguments: "args/Arguments_RKIalgo",
         results: "data/RKIalgo",
+      },
+      Patient_Symptom: {
+        arguments: "args/Arguments_Patient_Symptom",
+        results: "data/Patient_Symptom",
+      },
+      Patient_Vaccination: {
+        arguments: "args/Arguments_Patient_Vaccination",
+        results: "data/Patient_Vaccination",
+      },
+      Metadaten: {
+        arguments: "args/Arguments_Metadaten",
+        results: "data/Metadaten",
       },
     })
   )
@@ -89,14 +109,14 @@ export abstract class AbstractDataSource {
    *
    * @protected
    */
-   protected authToken: string
+  protected authToken: string
 
-   /**
+  /**
    * Constructor used to initialize default values of abstract data provider.
    */
-   constructor() {
-     this.authToken = ""
-   }
+  constructor() {
+    this.authToken = ""
+  }
 
   /**
    * Call a procedure by its name with some given parameters. This is the dynamic alternative to calling the

@@ -3,7 +3,15 @@ import {
   Arguments_Ps,
   Arguments_TTEsKSs,
   Arguments_TTKP_Degree,
+  Arguments_OutbreakDetectionConfigurations,
+  Arguments_OutbreakDetectionResultSet,
   Arguments_RKIalgo,
+  Arguments_Patient_Symptom,
+  Arguments_Patient_Vaccination,
+  Arguments_Metadaten,
+  Patient_Symptom,
+  Patient_Vaccination,
+  Metadaten,
   Bewegungen,
   DiagnosticResults,
   ErregerProTag,
@@ -165,6 +173,52 @@ export class RestAPI extends AbstractDataSource {
     return this._low_level_call("RKIalgo", parameters, "data/RKIalgo")
   }
 
+  public OutbreakDetectionConfigurations = async (
+    parameters: Arguments_OutbreakDetectionConfigurations
+  ): Promise<ValidationResult<Arguments_OutbreakDetectionConfigurations>> => {
+    return this._low_level_call(
+      "OutbreakDetectionConfigurations",
+      parameters,
+      "data/OutbreakDetectionConfigurations"
+    )
+  }
+
+  public OutbreakDetectionResultSet = async (
+    parameters: Arguments_OutbreakDetectionResultSet
+  ): Promise<ValidationResult<Arguments_OutbreakDetectionResultSet>> => {
+    return this._low_level_call(
+      "OutbreakDetectionResultSet",
+      parameters,
+      "data/OutbreakDetectionResultSet"
+    )
+  }
+
+  public Patient_Symptom = async (
+    parameters: Arguments_Patient_Symptom
+  ): Promise<ValidationResult<Patient_Symptom>> => {
+    return this._low_level_call(
+      "Patient_Symptom",
+      parameters,
+      "data/Patient_Symptom"
+    )
+  }
+
+  public Patient_Vaccination = async (
+    parameters: Arguments_Patient_Vaccination
+  ): Promise<ValidationResult<Patient_Vaccination>> => {
+    return this._low_level_call(
+      "Patient_Vaccination",
+      parameters,
+      "data/Patient_Vaccination"
+    )
+  }
+
+  public Metadaten = async (
+    parameters: Arguments_Metadaten
+  ): Promise<ValidationResult<Metadaten>> => {
+    return this._low_level_call("Metadaten", parameters, "data/Metadaten")
+  }
+
   public Patient_DiagnosticResults_Ps = async (
     parameters: Arguments_Ps
   ): Promise<ValidationResult<DiagnosticResults>> => {
@@ -206,19 +260,21 @@ export class RestAPI extends AbstractDataSource {
     const authorization = `bearer ${this.authToken}`
 
     const request = {
-      method: CONFIG.use_auth ? "POST" : "GET",
+      method: CONFIG.dev_mode ? "GET" : "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
-        ...(CONFIG.use_auth && { "Authorization": authorization })
+        Accept: "application/json",
+        ...(CONFIG.use_auth && { Authorization: authorization }),
       },
-      ...(CONFIG.use_auth && { body })
+      ...(!CONFIG.dev_mode && { body }),
     }
     console.log(
-      `end point ${procedureName} has been called with request data: ${JSON.stringify(request)}`
+      `end point ${procedureName} has been called with request data: ${JSON.stringify(
+        request
+      )}`
     )
     const response = await fetch(this.url.concat(procedureName), request)
-      
+
     // check for HTTP status codes outside of OK/2XX (that is the interval [200, 300[ ) and transform them into an error
     if (!response.ok)
       throw Error(
@@ -251,14 +307,14 @@ const compareOptTimestamps = (a: MaybeString, b: MaybeString): number => {
   // local function that translates from dates to numbers to make the comparison a simple subtraction
   function toNum(date: string | null | undefined) {
     switch (date) {
-    case undefined:
-      return Number.MAX_SAFE_INTEGER - 1
-    case null:
-      return Number.MAX_SAFE_INTEGER - 2
-    default:
-      // way less than `Number.MAX_SAFE_INTEGER`,
-      // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Description
-      return new Date(date).getTime()
+      case undefined:
+        return Number.MAX_SAFE_INTEGER - 1
+      case null:
+        return Number.MAX_SAFE_INTEGER - 2
+      default:
+        // way less than `Number.MAX_SAFE_INTEGER`,
+        // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Description
+        return new Date(date).getTime()
     }
   }
 

@@ -17,6 +17,7 @@ class AnnotationTimeline extends Component {
     this.data
     this.width
     this.height
+    this.patientList = []
 
     this.socket = props.socket.client
 
@@ -90,7 +91,7 @@ class AnnotationTimeline extends Component {
     this.color_intensivstation = "rgb(60,60,60)" // grey
     this.color_covidstation = "rgb(180,180,180)" // grey
 
-    this.color_ereignisTriangle = "rgb(255,255,255)" // white
+    this.color_ereignisTriangle = "rgb(200,200,200)" // white
 
     this.color_annotationsTriangle = "rgb(255,100,100)" // red
 
@@ -191,11 +192,11 @@ class AnnotationTimeline extends Component {
     // Stationenrechteck
     this.gStationenRects = svg.append("g").attr("class", "gStationenRects")
     // Ereignisdreiecke
+    // Ereigniskreise
+    this.gEreignisCircles = svg.append("g").attr("class", "gEreignisCircles")
     this.gEreignisTriangles = svg
       .append("g")
       .attr("class", "gEreignisTriangles")
-    // Ereigniskreise
-    this.gEreignisCircles = svg.append("g").attr("class", "gEreignisCircles")
     // Annotationsdreiecke in der Patientenvisualisierung
     this.gAnnotationsTriangles = svg
       .append("g")
@@ -241,9 +242,36 @@ class AnnotationTimeline extends Component {
   }
 
   // wird von der Funktion "didmount" aufgerufen
-  handle_data = (data) => {
+  handle_data = (new_data) => {
+    let data = JSON.parse(JSON.stringify(new_data))
     console.log("annotationTimeline vis data received")
     console.log(data)
+
+    this.patientList = data.data.patientList.filter(
+      (d) =>
+        d === "db7be72a-db86-4dc6-b55b-dcf510b0f23e" ||
+        d === "11fcaa10-d510-4eb7-a4a4-c96add98bae2"
+    )
+
+    // !alle Daten an diese PatientListe anpassen (temporär nur?)
+    data.data.ereignisTriangles = data.data.ereignisTriangles.filter((d) =>
+      this.patientList.includes(d.patientID)
+    )
+    data.data.impfDaten = data.data.impfDaten.filter((d) =>
+      this.patientList.includes(d.patientID)
+    )
+    data.data.metaTextInfos = data.data.metaTextInfos.filter((d) =>
+      this.patientList.includes(d.patientID)
+    )
+    data.data.stationenRects = data.data.stationenRects.filter((d) =>
+      this.patientList.includes(d.patientID)
+    )
+    data.data.symptomDaten = data.data.symptomDaten.filter((d) =>
+      this.patientList.includes(d.patientID)
+    )
+    data.data.virusLastRects = data.data.virusLastRects.filter((d) =>
+      this.patientList.includes(d.patientID)
+    )
 
     this.data = data
     this.draw_vis()
@@ -347,18 +375,18 @@ class AnnotationTimeline extends Component {
     let symptomOffset_y = (rasterIndex, symptom, symptomarten) => {
       let offset = 0
       switch (symptom) {
-      case "Systemisch":
-        offset = 2
-        break
-      case "Gastroenterologisch":
-        offset = 1
-        break
-      case "Respiratorisch":
-        offset = 0
-        break
-      default:
-        offset = -1
-        break
+        case "Systemisch":
+          offset = 2
+          break
+        case "Gastroenterologisch":
+          offset = 1
+          break
+        case "Respiratorisch":
+          offset = 0
+          break
+        default:
+          offset = -1
+          break
       }
       if (symptomarten !== undefined) {
         offset = symptomarten.indexOf(symptom)
@@ -368,20 +396,23 @@ class AnnotationTimeline extends Component {
     }
     // Rahmen setzen
     let metaInfoRects = this.gMetaInfoRects
-      .selectAll(".metaInfoRect")
-      .data(this.rahmen)
+      //.selectAll(".metaInfoRect")
+      //.data(this.rahmen)
+      .selectAll(".metaTextInfo")
+      .data(data.data.metaTextInfos)
 
     metaInfoRects
       .enter()
       .append("rect")
       .attr("class", "metaInfoRect")
+      .on("click", (d) => console.log(d))
       .merge(metaInfoRects)
       .transition()
       .duration(this.transition_duration)
       .attr("x", setRasterPosition_x(1))
-      .attr("width", setRasterPosition_x(40))
-      .attr("y", setRasterPosition_y(1))
-      .attr("height", setRasterPosition_y(20)) //this.margin.meta_bottom), 150)
+      .attr("width", setRasterPosition_x(42.5)) // default von Christoph: 40
+      .attr("y", (d, i) => setRasterPosition_y(i * 10.5 + 3))
+      .attr("height", setRasterPosition_y(10)) //this.margin.meta_bottom), 150)
       .attr("fill", "white")
       .attr("stroke", this.defaultStrokeColor)
       .attr("stroke-width", this.defaultStrokeWidth)
@@ -421,13 +452,14 @@ class AnnotationTimeline extends Component {
       .enter()
       .append("text")
       .attr("class", "metaTextInfo")
+      .on("click", (d) => console.log(d))
       .merge(metaTextInfos)
       .transition()
       .duration(self.transition_duration)
-      .text((d) => d.metaInfo) //(d) => d.patientID)
+      .text((d) => d.patientID)
       .attr("font-size", fontSizeCalculator())
       .attr("x", setRasterPosition_x(8)) // x - auf rasterwert 1 setzen (im ersten Rasterfeld)
-      .attr("y", (d, i) => setRasterPosition_y(i * 3 + 5))
+      .attr("y", (d, i) => setRasterPosition_y(i * 10.5 + 5))
       .attr("text-anchor", "left")
 
     metaTextInfos.exit().remove()
@@ -474,6 +506,7 @@ class AnnotationTimeline extends Component {
     imfpStatus_
       .enter()
       .append("path")
+      .on("click", (d) => console.log(d))
       .attr("d", injectionPath)
       .attr("class", "imfpStatus")
       .merge(imfpStatus_)
@@ -512,7 +545,11 @@ class AnnotationTimeline extends Component {
     // Y-Position des VirusLastRects
     let lineVis_y_position = (d, offset) => {
       offset = offset === undefined ? this.lineVisOffset_y : offset
-      let patientIDOffset = d.patientID * this.lineVis_row_height + 2 // TODO: Umschreiben auf Index des Patienten in der Liste
+      // let patientIDOffset = d.patientID * this.lineVis_row_height + 2 // TODO: Umschreiben auf Index des Patienten in der Liste
+      let patientIDOffset =
+        this.patientList.findIndex((h) => h === d.patientID) *
+          this.lineVis_row_height +
+        2
       return setRasterPosition_y(offset + patientIDOffset)
     }
 
@@ -545,6 +582,7 @@ class AnnotationTimeline extends Component {
       .enter()
       .append("rect")
       .attr("class", "virusLastRect")
+      .on("click", (d) => console.log(d))
       .merge(virusLastRects)
       .transition()
       .duration(this.transition_duration)
@@ -571,6 +609,7 @@ class AnnotationTimeline extends Component {
       .enter()
       .append("rect")
       .attr("class", "symptomObject")
+      .on("click", (d) => console.log(d))
       .merge(symptomObjects)
       .transition()
       .duration(this.transition_duration)
@@ -604,6 +643,7 @@ class AnnotationTimeline extends Component {
       .enter()
       .append("rect")
       .attr("class", "symptomDetailRahmen_")
+      .on("click", (d) => console.log(d))
       .merge(symptomDetailRahmen)
       .transition()
       .duration(this.transition_duration)
@@ -635,6 +675,7 @@ class AnnotationTimeline extends Component {
       .enter()
       .append("circle")
       .attr("class", "symptomDetailObject")
+      .on("click", (d) => console.log(d))
       .merge(symptomDetailObjects)
       .transition()
       .duration(this.transition_duration)
@@ -671,15 +712,15 @@ class AnnotationTimeline extends Component {
     // Den Grauton je nach Station zurückgeben
     let stationenColorDefiner = (d) => {
       switch (d.stationsArt) {
-      case "CovidStation":
-        return this.color_covidstation
-      case "ICR":
-        return this.color_iCR
-      case "Intensivstation":
-        return this.color_intensivstation
-      case "NormalStation":
-      default:
-        return this.color_normalstation
+        case "CovidStation":
+          return this.color_covidstation
+        case "ICR":
+          return this.color_iCR
+        case "Intensivstation":
+          return this.color_intensivstation
+        case "NormalStation":
+        default:
+          return this.color_normalstation
       }
     }
 
@@ -691,6 +732,7 @@ class AnnotationTimeline extends Component {
       .enter()
       .append("rect")
       .attr("class", "stationenRect")
+      .on("click", (d) => console.log(d))
       .merge(stationenRects)
       .transition()
       .duration(this.transition_duration)
@@ -741,12 +783,14 @@ class AnnotationTimeline extends Component {
     ereignisTriangles
       .enter()
       .append("path")
+      .on("click", (d) => console.log(d))
       .merge(ereignisTriangles)
       .attr("d", customTriangle)
       .attr("class", "ereignisTriangle")
       .transition()
       .duration(this.transition_duration)
       .attr("fill", this.color_ereignisTriangle)
+      .attr("opacity", 0.9)
       .attr("stroke", this.defaultStrokeColor)
       .attr("stroke-width", this.defaultStrokeWidth)
       .attr(
@@ -776,6 +820,7 @@ class AnnotationTimeline extends Component {
       .enter()
       .append("circle")
       .attr("class", "ereignisCircle")
+      .on("click", (d) => console.log(d))
       .merge(ereignisCircles)
       .transition()
       .duration(this.transition_duration)
@@ -793,6 +838,7 @@ class AnnotationTimeline extends Component {
           2
       )
       .attr("fill", this.color_ereignisTriangle)
+      .attr("opacity", 0.5)
       .attr("stroke", this.defaultStrokeColor)
       .attr("stroke-width", this.defaultStrokeWidth)
     ereignisCircles.exit().remove()
@@ -821,35 +867,36 @@ class AnnotationTimeline extends Component {
       .type(customAnnoSymbolTriangle)
       .size(this.ereignisTriangleSize)
 
-    let annotationsTriangles = this.gAnnotationsTriangles // Initialisieren
-      .selectAll(".annotationsTriangle") // für alle Dreicke durchführen
-      .data(data.data.annotationsTriangles) // Die Datengrundlage festlegen
+    // let annotationsTriangles = this.gAnnotationsTriangles // Initialisieren
+    //   .selectAll(".annotationsTriangle") // für alle Dreicke durchführen
+    //   .data(data.data.annotationsTriangles) // Die Datengrundlage festlegen
 
-    annotationsTriangles
-      .enter()
-      .append("path")
-      .merge(annotationsTriangles)
-      .attr("d", customAnnoTriangle)
-      .attr("class", "annotationsTriangle")
-      .transition()
-      .duration(this.transition_duration)
-      .attr("fill", this.color_annotationsTriangle)
-      .attr("stroke", this.defaultStrokeColor)
-      .attr("stroke-width", this.defaultStrokeWidth)
-      .attr(
-        "transform",
-        (d) =>
-          "translate(" +
-          scale_lineVis_x(d.timeLocation) +
-          "," +
-          lineVis_y_position(
-            d,
-            this.lineVisOffset_y + this.annoTriangleOffset_y
-          ) +
-          ")"
-      )
+    // annotationsTriangles
+    //   .enter()
+    //   .append("path")
+    //   .on("click", (d) => console.log(d))
+    //   .merge(annotationsTriangles)
+    //   .attr("d", customAnnoTriangle)
+    //   .attr("class", "annotationsTriangle")
+    //   .transition()
+    //   .duration(this.transition_duration)
+    //   .attr("fill", this.color_annotationsTriangle)
+    //   .attr("stroke", this.defaultStrokeColor)
+    //   .attr("stroke-width", this.defaultStrokeWidth)
+    //   .attr(
+    //     "transform",
+    //     (d) =>
+    //       "translate(" +
+    //       scale_lineVis_x(d.timeLocation) +
+    //       "," +
+    //       lineVis_y_position(
+    //         d,
+    //         this.lineVisOffset_y + this.annoTriangleOffset_y
+    //       ) +
+    //       ")"
+    //   )
 
-    annotationsTriangles.exit().remove()
+    // annotationsTriangles.exit().remove()
 
     /**
      *  Dritter Bock Annotationen
@@ -1002,6 +1049,7 @@ class AnnotationTimeline extends Component {
       .on("mouseout", circleMouseOut)
     d3.select(this.svgRoot)
       .selectAll("path")
+      .on("click", (d) => console.log(d))
       .on("mouseover", pathMouseOver)
       .on("mouseout", pathMouseOut)
   }
@@ -1013,7 +1061,8 @@ class AnnotationTimeline extends Component {
     return (
       <div style={{ width: "100%", height: "100%", background: "white" }}>
         <div
-          style={{ width: "100%", height: "calc(100% - 280px)" }}
+          // style={{ width: "100%", height: "calc(100% - 280px)" }}
+          style={{ width: "100%", height: "100%" }}
           className="svgContainer"
         >
           <svg
@@ -1021,7 +1070,7 @@ class AnnotationTimeline extends Component {
             ref={(element) => (this.svgRoot = element)}
           />
         </div>
-        <div
+        {/* <div
           style={{
             height: "30px",
             width: "100%",
@@ -1040,7 +1089,7 @@ class AnnotationTimeline extends Component {
           }}
         >
           <span style={{ background: "rgb(240,240,240)" }}>Kommentartext</span>
-        </div>
+        </div> */}
       </div>
     )
   }

@@ -341,7 +341,7 @@ const data_parser: { [key: string]: any } = {
             JSON.stringify(investigation_data)
           )
 
-          console.log(`PatientID: ${investigation_data.PatientID}`)
+          // console.log(`PatientID: ${investigation_data.PatientID}`)
           if (index < 0) {
             investigations.push({
               investigation_hash,
@@ -358,7 +358,7 @@ const data_parser: { [key: string]: any } = {
                 "negative"
               ),
             })
-            console.log("index < 0")
+            // console.log("index < 0")
           } else {
             investigations[index].data.push(investigation_data_copy)
             investigations[index].result = get_carrier_status(
@@ -366,7 +366,7 @@ const data_parser: { [key: string]: any } = {
               investigation_data.Screening,
               investigations[index].result
             )
-            console.log("index > 0")
+            // console.log("index > 0")
           }
         })
       }
@@ -434,6 +434,7 @@ const data_parser: { [key: string]: any } = {
     call_function: (input_data: any, parameters: any) => {
       let { Contact_NthDegree_TTKP_Degree } = input_data
       let { Labordaten } = Contact_NthDegree_TTKP_Degree.data
+
       let Patient_Labordaten_Ps = {
         error: undefined,
         data: Labordaten,
@@ -566,6 +567,85 @@ const data_parser: { [key: string]: any } = {
         patientList,
         investigations,
         status_changes,
+      }
+    },
+  },
+  generate_movement_rects: {
+    needed_raw_data: ["Patient_Bewegung_Ps"],
+    call_function: (input_data: any, parameters: any) => {
+      let { Patient_Bewegung_Ps } = input_data
+
+      let { patientList } = parameters
+
+      let first_movement = Number.MAX_VALUE
+      let last_movement = 0
+
+      let new_patient_list: any[] = []
+
+      let movement_rects: object[] = []
+      let movement_dots: object[] = []
+
+      let allStations: any[] = []
+
+      let unknown_rects: any = {}
+
+      if (Patient_Bewegung_Ps.error === undefined) {
+        Patient_Bewegung_Ps.data.forEach((mov: any) => {
+          if (!new_patient_list.includes(mov.PatientID)) {
+            new_patient_list.push(mov.PatientID)
+          }
+        })
+
+        let movement_rect_top_position: any = {}
+
+        // generate visualization for movement data (horizontal rectangles)
+        // only if there is no error in the data
+        Patient_Bewegung_Ps.data.forEach((movement: any) => {
+          if (!allStations.includes(movement.StationID)) {
+            allStations.push(movement.StationID)
+          }
+
+          let begin = new Date(movement.Beginn).getTime()
+          let end = new Date(movement.Ende).getTime()
+          if (begin < first_movement) {
+            first_movement = begin
+          }
+          if (end > last_movement) {
+            last_movement = end
+          }
+          let vis_struct: any = {
+            begin: begin,
+            end: end,
+            patient_id: movement.PatientID,
+            station_id: movement.StationID,
+            station_name: movement.Station,
+            movement_type: movement.BewegungstypID,
+          }
+
+          if (movement.BewegungstypID === 4) {
+            movement_dots.push(vis_struct)
+          } else {
+            if (movement_rect_top_position[movement.PatientID]) {
+              vis_struct.top = true
+              movement_rect_top_position[movement.PatientID] = false
+            } else {
+              vis_struct.top = false
+              movement_rect_top_position[movement.PatientID] = true
+            }
+            movement_rects.push(vis_struct)
+          }
+        })
+      }
+
+      return {
+        timestamp: new Date().getTime(),
+        first_movement,
+        last_movement,
+        patientList: new_patient_list,
+        movement_rects,
+        movement_dots,
+        allStations,
+        unknown_rects,
       }
     },
   },

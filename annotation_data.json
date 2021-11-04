@@ -1,0 +1,1435 @@
+{
+  "virusLastRects": [
+    {
+      "patientID": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "resultTimeStamp": 1581160380000,
+      "testTimeStamp": 1581156780000,
+      "virusLast": "24",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "resultTimeStamp": 1581371265000,
+      "testTimeStamp": 1581371265000,
+      "virusLast": "24",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+      "resultTimeStamp": 1581694665000,
+      "testTimeStamp": 1581673665000,
+      "virusLast": "9",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "resultTimeStamp": 1581349065000,
+      "testTimeStamp": 1581695265000,
+      "virusLast": "2",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "d01e837e-d221-4b17-a486-819a4a143500",
+      "resultTimeStamp": 1581371265000,
+      "testTimeStamp": 1581713265000,
+      "virusLast": "25",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "eae9b822-6015-430c-a694-123249e977eb",
+      "resultTimeStamp": 1581867465000,
+      "testTimeStamp": 1581846465000,
+      "virusLast": "20",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "resultTimeStamp": 1584200265000,
+      "testTimeStamp": 1584179265000,
+      "virusLast": "26",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "resultTimeStamp": 1584459465000,
+      "testTimeStamp": 1584438465000,
+      "virusLast": "20",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "resultTimeStamp": 1584632265000,
+      "testTimeStamp": 1584611265000,
+      "virusLast": "14",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "resultTimeStamp": 1606475580000,
+      "testTimeStamp": 1606479180000,
+      "virusLast": "10",
+      "testArt": "pcr",
+      "nextTestDate": 1606806780000
+    },
+    {
+      "patientID": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "resultTimeStamp": 1606561980000,
+      "testTimeStamp": 1606565580000,
+      "virusLast": "11",
+      "testArt": "pcr",
+      "nextTestDate": 1606900953000
+    },
+    {
+      "patientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "resultTimeStamp": 1606561980000,
+      "testTimeStamp": 1606565580000,
+      "virusLast": "19",
+      "testArt": "pcr",
+      "nextTestDate": 1606900413000
+    },
+    {
+      "patientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "resultTimeStamp": 1606806780000,
+      "testTimeStamp": 1606810389000,
+      "virusLast": "17",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "resultTimeStamp": 1606900413000,
+      "testTimeStamp": 1606907613000,
+      "virusLast": "17",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "resultTimeStamp": 1606900953000,
+      "testTimeStamp": 1606909233000,
+      "virusLast": "7",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "resultTimeStamp": 1609493400000,
+      "testTimeStamp": 1609495200000,
+      "virusLast": "21",
+      "testArt": "pcr",
+      "nextTestDate": 1609666200000
+    },
+    {
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "resultTimeStamp": 1609579800000,
+      "testTimeStamp": 1609581600000,
+      "virusLast": "2",
+      "testArt": "pcr",
+      "nextTestDate": 1609752600000
+    },
+    {
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "resultTimeStamp": 1609666200000,
+      "testTimeStamp": 1609668000000,
+      "virusLast": "3",
+      "testArt": "pcr",
+      "nextTestDate": 1610011800000
+    },
+    {
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "resultTimeStamp": 1609666200000,
+      "testTimeStamp": 1609668000000,
+      "virusLast": "19",
+      "testArt": "pcr",
+      "nextTestDate": 1609925400000
+    },
+    {
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "resultTimeStamp": 1609666200000,
+      "testTimeStamp": 1609668000000,
+      "virusLast": "10",
+      "testArt": "pcr",
+      "nextTestDate": 1609839000000
+    },
+    {
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "resultTimeStamp": 1609752600000,
+      "testTimeStamp": 1609754400000,
+      "virusLast": "10",
+      "testArt": "pcr",
+      "nextTestDate": 1610098200000
+    },
+    {
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "resultTimeStamp": 1609752600000,
+      "testTimeStamp": 1609754400000,
+      "virusLast": "22",
+      "testArt": "pcr",
+      "nextTestDate": 1610011800000
+    },
+    {
+      "patientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "resultTimeStamp": 1609752600000,
+      "testTimeStamp": 1609754400000,
+      "virusLast": "20",
+      "testArt": "pcr",
+      "nextTestDate": 1610184600000
+    },
+    {
+      "patientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "resultTimeStamp": 1609839000000,
+      "testTimeStamp": 1609840800000,
+      "virusLast": "6",
+      "testArt": "pcr",
+      "nextTestDate": 1610184600000
+    },
+    {
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "resultTimeStamp": 1609839000000,
+      "testTimeStamp": 1609840800000,
+      "virusLast": "3",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "41952d73-2421-469c-91a2-03ed02bac668",
+      "resultTimeStamp": 1609925400000,
+      "testTimeStamp": 1609927200000,
+      "virusLast": "22",
+      "testArt": "pcr",
+      "nextTestDate": 1610098200000
+    },
+    {
+      "patientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "resultTimeStamp": 1609925400000,
+      "testTimeStamp": 1609927200000,
+      "virusLast": "6",
+      "testArt": "pcr",
+      "nextTestDate": 1610271000000
+    },
+    {
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "resultTimeStamp": 1609925400000,
+      "testTimeStamp": 1609927200000,
+      "virusLast": "17",
+      "testArt": "pcr",
+      "nextTestDate": 1610184600000
+    },
+    {
+      "patientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "resultTimeStamp": 1609925400000,
+      "testTimeStamp": 1609927200000,
+      "virusLast": "14",
+      "testArt": "pcr",
+      "nextTestDate": 1610184600000
+    },
+    {
+      "patientID": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "resultTimeStamp": 1610011800000,
+      "testTimeStamp": 1610013600000,
+      "virusLast": "18",
+      "testArt": "pcr",
+      "nextTestDate": 1610271000000
+    },
+    {
+      "patientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "resultTimeStamp": 1610011800000,
+      "testTimeStamp": 1610013600000,
+      "virusLast": "10",
+      "testArt": "pcr",
+      "nextTestDate": 1610443800000
+    },
+    {
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "resultTimeStamp": 1610011800000,
+      "testTimeStamp": 1610013600000,
+      "virusLast": "19",
+      "testArt": "pcr",
+      "nextTestDate": 1610184600000
+    },
+    {
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "resultTimeStamp": 1610011800000,
+      "testTimeStamp": 1610013600000,
+      "virusLast": "26",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "resultTimeStamp": 1610011800000,
+      "testTimeStamp": 1610013600000,
+      "virusLast": "6",
+      "testArt": "pcr",
+      "nextTestDate": 1610357400000
+    },
+    {
+      "patientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "resultTimeStamp": 1610011800000,
+      "testTimeStamp": 1610013600000,
+      "virusLast": "27",
+      "testArt": "pcr",
+      "nextTestDate": 1610357400000
+    },
+    {
+      "patientID": "41952d73-2421-469c-91a2-03ed02bac668",
+      "resultTimeStamp": 1610098200000,
+      "testTimeStamp": 1610100000000,
+      "virusLast": "9",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "62982966-d62d-429b-86d8-d7f0784de086",
+      "resultTimeStamp": 1610098200000,
+      "testTimeStamp": 1610100000000,
+      "virusLast": "14",
+      "testArt": "pcr",
+      "nextTestDate": 1610271000000
+    },
+    {
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "resultTimeStamp": 1610098200000,
+      "testTimeStamp": 1610100000000,
+      "virusLast": "11",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "resultTimeStamp": 1610184600000,
+      "testTimeStamp": 1610186400000,
+      "virusLast": "19",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "resultTimeStamp": 1610184600000,
+      "testTimeStamp": 1610186400000,
+      "virusLast": "20",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "resultTimeStamp": 1610184600000,
+      "testTimeStamp": 1610186400000,
+      "virusLast": "25",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "resultTimeStamp": 1610184600000,
+      "testTimeStamp": 1610186400000,
+      "virusLast": "22",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "resultTimeStamp": 1610184600000,
+      "testTimeStamp": 1610186400000,
+      "virusLast": "12",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "resultTimeStamp": 1610184600000,
+      "testTimeStamp": 1610186400000,
+      "virusLast": "25",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "resultTimeStamp": 1610184600000,
+      "testTimeStamp": 1610186400000,
+      "virusLast": "11",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "resultTimeStamp": 1610271000000,
+      "testTimeStamp": 1610272800000,
+      "virusLast": "21",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "resultTimeStamp": 1610271000000,
+      "testTimeStamp": 1610272800000,
+      "virusLast": "10",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "62982966-d62d-429b-86d8-d7f0784de086",
+      "resultTimeStamp": 1610271000000,
+      "testTimeStamp": 1610272800000,
+      "virusLast": "13",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "resultTimeStamp": 1610271000000,
+      "testTimeStamp": 1610272800000,
+      "virusLast": "14",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "resultTimeStamp": 1610357400000,
+      "testTimeStamp": 1610359200000,
+      "virusLast": "17",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "resultTimeStamp": 1610357400000,
+      "testTimeStamp": 1610359200000,
+      "virusLast": "6",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    },
+    {
+      "patientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "resultTimeStamp": 1610443800000,
+      "testTimeStamp": 1610445600000,
+      "virusLast": "11",
+      "testArt": "pcr",
+      "nextTestDate": 1634285248148
+    }
+  ],
+  "stationenRects": [
+    {
+      "aufenthaltsBegin": 1580901180000,
+      "aufenthaltsEnde": 1580901180000,
+      "patientID": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1580901180000,
+      "aufenthaltsEnde": 1581419580000,
+      "patientID": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581160380000,
+      "aufenthaltsEnde": 1581160380000,
+      "patientID": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581160380000,
+      "aufenthaltsEnde": 1582197180000,
+      "patientID": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581246780000,
+      "aufenthaltsEnde": 1581246780000,
+      "patientID": "d01e837e-d221-4b17-a486-819a4a143500",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581246780000,
+      "aufenthaltsEnde": 1582197180000,
+      "patientID": "d01e837e-d221-4b17-a486-819a4a143500",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581246780000,
+      "aufenthaltsEnde": 1581246780000,
+      "patientID": "eae9b822-6015-430c-a694-123249e977eb",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581246780000,
+      "aufenthaltsEnde": 1583320380000,
+      "patientID": "eae9b822-6015-430c-a694-123249e977eb",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581333180000,
+      "aufenthaltsEnde": 1581333180000,
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581333180000,
+      "aufenthaltsEnde": 1583233980000,
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581333180000,
+      "aufenthaltsEnde": 1581937980000,
+      "patientID": "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1581419580000,
+      "aufenthaltsEnde": 1582456380000,
+      "patientID": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1582197180000,
+      "aufenthaltsEnde": 1582197180000,
+      "patientID": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1582197180000,
+      "aufenthaltsEnde": 1582197180000,
+      "patientID": "d01e837e-d221-4b17-a486-819a4a143500",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1582456380000,
+      "aufenthaltsEnde": 1582456380000,
+      "patientID": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583233980000,
+      "aufenthaltsEnde": 1583233980000,
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "stationsArt": "Intensivstation"
+    },
+    {
+      "aufenthaltsBegin": 1583320380000,
+      "aufenthaltsEnde": 1583320380000,
+      "patientID": "eae9b822-6015-430c-a694-123249e977eb",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583406780000,
+      "aufenthaltsEnde": 1583406780000,
+      "patientID": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583406780000,
+      "aufenthaltsEnde": 1584184380000,
+      "patientID": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583665980000,
+      "aufenthaltsEnde": 1583665980000,
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583665980000,
+      "aufenthaltsEnde": 1584443580000,
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583752380000,
+      "aufenthaltsEnde": 1583752380000,
+      "patientID": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583752380000,
+      "aufenthaltsEnde": 1584789180000,
+      "patientID": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583838780000,
+      "aufenthaltsEnde": 1583838780000,
+      "patientID": "9b666a0c-2b8a-43de-8d7d-85a134945045",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1583838780000,
+      "aufenthaltsEnde": 1585134780000,
+      "patientID": "9b666a0c-2b8a-43de-8d7d-85a134945045",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584184380000,
+      "aufenthaltsEnde": 1584702780000,
+      "patientID": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584443580000,
+      "aufenthaltsEnde": 1584443580000,
+      "patientID": "372e5194-42f7-4958-97de-220c223bf957",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584443580000,
+      "aufenthaltsEnde": 1584529980000,
+      "patientID": "372e5194-42f7-4958-97de-220c223bf957",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584443580000,
+      "aufenthaltsEnde": 1585307580000,
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584443580000,
+      "aufenthaltsEnde": 1584443580000,
+      "patientID": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584443580000,
+      "aufenthaltsEnde": 1585134780000,
+      "patientID": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584529980000,
+      "aufenthaltsEnde": 1585476780000,
+      "patientID": "372e5194-42f7-4958-97de-220c223bf957",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584702780000,
+      "aufenthaltsEnde": 1584702780000,
+      "patientID": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1584789180000,
+      "aufenthaltsEnde": 1584789180000,
+      "patientID": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1585134780000,
+      "aufenthaltsEnde": 1585134780000,
+      "patientID": "9b666a0c-2b8a-43de-8d7d-85a134945045",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1585134780000,
+      "aufenthaltsEnde": 1585134780000,
+      "patientID": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1585307580000,
+      "aufenthaltsEnde": 1585307580000,
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1585476780000,
+      "aufenthaltsEnde": 1585476780000,
+      "patientID": "372e5194-42f7-4958-97de-220c223bf957",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1606389180000,
+      "aufenthaltsEnde": 1607771580000,
+      "patientID": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1606475580000,
+      "aufenthaltsEnde": 1606475580000,
+      "patientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1606475580000,
+      "aufenthaltsEnde": 1607771580000,
+      "patientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1606561980000,
+      "aufenthaltsEnde": 1606561980000,
+      "patientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1606561980000,
+      "aufenthaltsEnde": 1607771580000,
+      "patientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1606821180000,
+      "aufenthaltsEnde": 1606821180000,
+      "patientID": "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1606821180000,
+      "aufenthaltsEnde": 1607771580000,
+      "patientID": "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1607771580000,
+      "aufenthaltsEnde": 1607771580000,
+      "patientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1607771580000,
+      "aufenthaltsEnde": 1607771580000,
+      "patientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1607771580000,
+      "aufenthaltsEnde": 1607771580000,
+      "patientID": "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1607771580000,
+      "aufenthaltsEnde": 1607771580000,
+      "patientID": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609488000000,
+      "aufenthaltsEnde": 1609488000000,
+      "patientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609488000000,
+      "aufenthaltsEnde": 1610024400000,
+      "patientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609488000000,
+      "aufenthaltsEnde": 1609488000000,
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609488000000,
+      "aufenthaltsEnde": 1609855200000,
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609488000000,
+      "aufenthaltsEnde": 1609488000000,
+      "patientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609488000000,
+      "aufenthaltsEnde": 1609671600000,
+      "patientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609574400000,
+      "aufenthaltsEnde": 1609574400000,
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609574400000,
+      "aufenthaltsEnde": 1609668000000,
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609574400000,
+      "aufenthaltsEnde": 1609574400000,
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609574400000,
+      "aufenthaltsEnde": 1609770600000,
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609574400000,
+      "aufenthaltsEnde": 1609574400000,
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609574400000,
+      "aufenthaltsEnde": 1610028000000,
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609660800000,
+      "aufenthaltsEnde": 1609660800000,
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609660800000,
+      "aufenthaltsEnde": 1610200800000,
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609668000000,
+      "aufenthaltsEnde": 1610200800000,
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609671600000,
+      "aufenthaltsEnde": 1610193600000,
+      "patientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609747200000,
+      "aufenthaltsEnde": 1609747200000,
+      "patientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609747200000,
+      "aufenthaltsEnde": 1621954976782,
+      "patientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609747200000,
+      "aufenthaltsEnde": 1609747200000,
+      "patientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609747200000,
+      "aufenthaltsEnde": 1609916400000,
+      "patientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609770600000,
+      "aufenthaltsEnde": 1609945200000,
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609833600000,
+      "aufenthaltsEnde": 1609833600000,
+      "patientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609833600000,
+      "aufenthaltsEnde": 1621954976859,
+      "patientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609855200000,
+      "aufenthaltsEnde": 1609855200000,
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609916400000,
+      "aufenthaltsEnde": 1610031600000,
+      "patientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1609920000000,
+      "aufenthaltsEnde": 1609920000000,
+      "patientID": "41952d73-2421-469c-91a2-03ed02bac668",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609920000000,
+      "aufenthaltsEnde": 1621954976600,
+      "patientID": "41952d73-2421-469c-91a2-03ed02bac668",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609920000000,
+      "aufenthaltsEnde": 1609920000000,
+      "patientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609920000000,
+      "aufenthaltsEnde": 1621954977151,
+      "patientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609920000000,
+      "aufenthaltsEnde": 1609920000000,
+      "patientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609920000000,
+      "aufenthaltsEnde": 1621954977438,
+      "patientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609945200000,
+      "aufenthaltsEnde": 1610110800000,
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "stationsArt": "Intensivstation"
+    },
+    {
+      "aufenthaltsBegin": 1609945200000,
+      "aufenthaltsEnde": 1609945200000,
+      "patientID": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1609945200000,
+      "aufenthaltsEnde": 1621954976712,
+      "patientID": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610006400000,
+      "aufenthaltsEnde": 1610006400000,
+      "patientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610006400000,
+      "aufenthaltsEnde": 1621954976377,
+      "patientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610006400000,
+      "aufenthaltsEnde": 1610006400000,
+      "patientID": "62982966-d62d-429b-86d8-d7f0784de086",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1610006400000,
+      "aufenthaltsEnde": 1610107200000,
+      "patientID": "62982966-d62d-429b-86d8-d7f0784de086",
+      "stationsArt": "NormalStation"
+    },
+    {
+      "aufenthaltsBegin": 1610024400000,
+      "aufenthaltsEnde": 1621954976637,
+      "patientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610028000000,
+      "aufenthaltsEnde": 1610028000000,
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610031600000,
+      "aufenthaltsEnde": 1621954976821,
+      "patientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610107200000,
+      "aufenthaltsEnde": 1621954976746,
+      "patientID": "62982966-d62d-429b-86d8-d7f0784de086",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610110800000,
+      "aufenthaltsEnde": 1621954976419,
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610179200000,
+      "aufenthaltsEnde": 1610179200000,
+      "patientID": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610179200000,
+      "aufenthaltsEnde": 1621954976461,
+      "patientID": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610193600000,
+      "aufenthaltsEnde": 1610305200000,
+      "patientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610200800000,
+      "aufenthaltsEnde": 1610200800000,
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610200800000,
+      "aufenthaltsEnde": 1610200800000,
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610265600000,
+      "aufenthaltsEnde": 1610265600000,
+      "patientID": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610265600000,
+      "aufenthaltsEnde": 1610298000000,
+      "patientID": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "stationsArt": "CovidStation"
+    },
+    {
+      "aufenthaltsBegin": 1610298000000,
+      "aufenthaltsEnde": 1621954976259,
+      "patientID": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "stationsArt": "Intensivstation"
+    },
+    {
+      "aufenthaltsBegin": 1610305200000,
+      "aufenthaltsEnde": 1621954977248,
+      "patientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "stationsArt": "Intensivstation"
+    }
+  ],
+  "ereignisTriangles": [
+    {
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "ereignisTimeStamp": 1583233980000
+    },
+    {
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "ereignisTimeStamp": 1609488000000
+    },
+    {
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "ereignisTimeStamp": 1609488000000
+    },
+    {
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "ereignisTimeStamp": 1609574400000
+    },
+    {
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "ereignisTimeStamp": 1609574400000
+    },
+    {
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "ereignisTimeStamp": 1609660800000
+    },
+    {
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "ereignisTimeStamp": 1609660800000
+    },
+    {
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "ereignisTimeStamp": 1609668000000
+    },
+    {
+      "patientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "ereignisTimeStamp": 1609747200000
+    },
+    {
+      "patientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "ereignisTimeStamp": 1609747200000
+    },
+    {
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "ereignisTimeStamp": 1609770600000
+    },
+    {
+      "patientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "ereignisTimeStamp": 1609833600000
+    },
+    {
+      "patientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "ereignisTimeStamp": 1609833600000
+    },
+    {
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "ereignisTimeStamp": 1609855200000
+    },
+    {
+      "patientID": "41952d73-2421-469c-91a2-03ed02bac668",
+      "ereignisTimeStamp": 1609920000000
+    },
+    {
+      "patientID": "41952d73-2421-469c-91a2-03ed02bac668",
+      "ereignisTimeStamp": 1609920000000
+    },
+    {
+      "patientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "ereignisTimeStamp": 1609920000000
+    },
+    {
+      "patientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "ereignisTimeStamp": 1609920000000
+    },
+    {
+      "patientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "ereignisTimeStamp": 1609920000000
+    },
+    {
+      "patientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "ereignisTimeStamp": 1609920000000
+    },
+    {
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "ereignisTimeStamp": 1609945200000
+    },
+    {
+      "patientID": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "ereignisTimeStamp": 1609945200000
+    },
+    {
+      "patientID": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "ereignisTimeStamp": 1609945200000
+    },
+    {
+      "patientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "ereignisTimeStamp": 1610006400000
+    },
+    {
+      "patientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "ereignisTimeStamp": 1610006400000
+    },
+    {
+      "patientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "ereignisTimeStamp": 1610024400000
+    },
+    {
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "ereignisTimeStamp": 1610028000000
+    },
+    {
+      "patientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "ereignisTimeStamp": 1610031600000
+    },
+    {
+      "patientID": "62982966-d62d-429b-86d8-d7f0784de086",
+      "ereignisTimeStamp": 1610107200000
+    },
+    {
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "ereignisTimeStamp": 1610110800000
+    },
+    {
+      "patientID": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "ereignisTimeStamp": 1610179200000
+    },
+    {
+      "patientID": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "ereignisTimeStamp": 1610179200000
+    },
+    {
+      "patientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "ereignisTimeStamp": 1610193600000
+    },
+    {
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "ereignisTimeStamp": 1610200800000
+    },
+    {
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "ereignisTimeStamp": 1610200800000
+    },
+    {
+      "patientID": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "ereignisTimeStamp": 1610265600000
+    },
+    {
+      "patientID": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "ereignisTimeStamp": 1610265600000
+    },
+    {
+      "patientID": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "ereignisTimeStamp": 1610298000000
+    },
+    {
+      "patientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "ereignisTimeStamp": 1610305200000
+    },
+    {
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "ereignisTimeStamp": 1584442799000
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "ereignisTimeStamp": 1584442799000
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "ereignisTimeStamp": 1584442799000
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "ereignisTimeStamp": 1587380399000
+    }
+  ],
+  "ereignisCircles": [],
+  "globalStartTS": 1580901180000,
+  "globalEndTS": 1634285248148,
+  "metaTextInfos": [
+    {
+      "patientID": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1581160380000,
+      "entlass_datum": 1582197180000,
+      "impfstoff": ""
+    },
+    {
+      "patientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1606475580000,
+      "entlass_datum": 1607771580000,
+      "impfstoff": ""
+    },
+    {
+      "patientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1606561980000,
+      "entlass_datum": 1607771580000,
+      "impfstoff": ""
+    },
+    {
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1609488000000,
+      "entlass_datum": 1609855200000,
+      "impfstoff": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1609574400000,
+      "entlass_datum": 1610028000000,
+      "impfstoff": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1609574400000,
+      "entlass_datum": 1610200800000,
+      "impfstoff": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1609660800000,
+      "entlass_datum": 1610200800000,
+      "impfstoff": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1609660800000,
+      "entlass_datum": 1610200800000,
+      "impfstoff": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "infektionsSituation": "Wahrscheinliche Nosokomiale Infektion",
+      "aufnahme_datum": 1609660800000,
+      "entlass_datum": 1610200800000,
+      "impfstoff": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 2
+    }
+  ],
+  "impfDaten": [
+    {
+      "patientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "medikament": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 2
+    },
+    {
+      "patientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 2
+    },
+    {
+      "patientID": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "medikament": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 2
+    },
+    {
+      "patientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "59d61e75-7e3a-4227-a535-6009c40fb8a5",
+      "medikament": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 2
+    },
+    {
+      "patientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "medikament": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "d01e837e-d221-4b17-a486-819a4a143500",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 2
+    },
+    {
+      "patientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "medikament": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "medikament": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "62982966-d62d-429b-86d8-d7f0784de086",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    },
+    {
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "medikament": "Vaxzevria / Janssen",
+      "anzahl_impfungen": 2
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "medikament": "Comirnaty / COVID-19 Vaccine Moderna",
+      "anzahl_impfungen": 1
+    }
+  ],
+  "symptomDaten": [
+    {
+      "patientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "symptomArt": "Nasal discharge (finding)",
+      "symptomBeginn": 1584442799000,
+      "symptomEnde": 1585035320000,
+      "negation": null
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "symptomArt": "Nasal discharge (finding)",
+      "symptomBeginn": 1584442799000,
+      "symptomEnde": 1585035320000,
+      "negation": null
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "symptomArt": "Pain in throat (finding)",
+      "symptomBeginn": 1584442799000,
+      "symptomEnde": 1585035320000,
+      "negation": null
+    },
+    {
+      "patientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "symptomArt": "Fever greater than 100.4 Fahrenheit / 38° Celsius (finding)",
+      "symptomBeginn": 1587380399000,
+      "symptomEnde": 1588001720000,
+      "negation": null
+    }
+  ],
+  "patientList": [
+    "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+    "52afa449-07a2-4d57-bb7a-86e7960124ac",
+    "d01e837e-d221-4b17-a486-819a4a143500",
+    "eae9b822-6015-430c-a694-123249e977eb",
+    "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+    "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+    "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+    "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+    "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+    "9b666a0c-2b8a-43de-8d7d-85a134945045",
+    "372e5194-42f7-4958-97de-220c223bf957",
+    "fda33376-7675-4b27-a9db-63ef8875530d",
+    "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+    "959c26c9-de4a-40b8-bf76-a315574d3da7",
+    "386ff697-7fe4-4fe0-942c-eb389b81704f",
+    "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+    "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+    "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+    "d8d63116-1358-4b60-9d28-24f91f0075a6",
+    "059d9e68-c096-4ee7-8551-c088a5488813",
+    "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+    "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+    "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+    "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+    "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+    "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+    "41952d73-2421-469c-91a2-03ed02bac668",
+    "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+    "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+    "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+    "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+    "62982966-d62d-429b-86d8-d7f0784de086",
+    "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+    "03ff2929-184c-4759-939b-d6fef9d4fa55",
+    "59d61e75-7e3a-4227-a535-6009c40fb8a5"
+  ]
+}

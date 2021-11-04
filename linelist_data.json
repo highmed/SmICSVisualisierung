@@ -1,0 +1,3055 @@
+{
+  "timestamp": 1634285248150,
+  "ts_start": 1580901180000,
+  "ts_end": 1621954977438,
+  "patientList": [
+    "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+    "52afa449-07a2-4d57-bb7a-86e7960124ac",
+    "d01e837e-d221-4b17-a486-819a4a143500",
+    "eae9b822-6015-430c-a694-123249e977eb",
+    "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+    "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+    "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+    "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+    "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+    "9b666a0c-2b8a-43de-8d7d-85a134945045",
+    "372e5194-42f7-4958-97de-220c223bf957",
+    "fda33376-7675-4b27-a9db-63ef8875530d",
+    "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+    "959c26c9-de4a-40b8-bf76-a315574d3da7",
+    "386ff697-7fe4-4fe0-942c-eb389b81704f",
+    "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+    "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+    "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+    "d8d63116-1358-4b60-9d28-24f91f0075a6",
+    "059d9e68-c096-4ee7-8551-c088a5488813",
+    "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+    "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+    "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+    "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+    "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+    "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+    "41952d73-2421-469c-91a2-03ed02bac668",
+    "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+    "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+    "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+    "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+    "62982966-d62d-429b-86d8-d7f0784de086",
+    "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+    "03ff2929-184c-4759-939b-d6fef9d4fa55"
+  ],
+  "movement_rects": [
+    {
+      "begin": 1580901180000,
+      "end": 1580901180000,
+      "patient_id": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1580901180000,
+      "end": 1581419580000,
+      "patient_id": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1581160380000,
+      "end": 1581160380000,
+      "patient_id": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1581160380000,
+      "end": 1582197180000,
+      "patient_id": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1581246780000,
+      "end": 1581246780000,
+      "patient_id": "d01e837e-d221-4b17-a486-819a4a143500",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1581246780000,
+      "end": 1582197180000,
+      "patient_id": "d01e837e-d221-4b17-a486-819a4a143500",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1581246780000,
+      "end": 1581246780000,
+      "patient_id": "eae9b822-6015-430c-a694-123249e977eb",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1581246780000,
+      "end": 1583320380000,
+      "patient_id": "eae9b822-6015-430c-a694-123249e977eb",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1581333180000,
+      "end": 1581333180000,
+      "patient_id": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1581333180000,
+      "end": 1583233980000,
+      "patient_id": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1581333180000,
+      "end": 1581937980000,
+      "patient_id": "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1581419580000,
+      "end": 1582456380000,
+      "patient_id": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1582197180000,
+      "end": 1582197180000,
+      "patient_id": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1582197180000,
+      "end": 1582197180000,
+      "patient_id": "d01e837e-d221-4b17-a486-819a4a143500",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1582456380000,
+      "end": 1582456380000,
+      "patient_id": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": true
+    },
+    {
+      "begin": 1583233980000,
+      "end": 1583233980000,
+      "patient_id": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1583320380000,
+      "end": 1583320380000,
+      "patient_id": "eae9b822-6015-430c-a694-123249e977eb",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1583406780000,
+      "end": 1583406780000,
+      "patient_id": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1583406780000,
+      "end": 1584184380000,
+      "patient_id": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1583665980000,
+      "end": 1583665980000,
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1583665980000,
+      "end": 1584443580000,
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1583752380000,
+      "end": 1583752380000,
+      "patient_id": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1583752380000,
+      "end": 1584789180000,
+      "patient_id": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1583838780000,
+      "end": 1583838780000,
+      "patient_id": "9b666a0c-2b8a-43de-8d7d-85a134945045",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1583838780000,
+      "end": 1585134780000,
+      "patient_id": "9b666a0c-2b8a-43de-8d7d-85a134945045",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1584184380000,
+      "end": 1584702780000,
+      "patient_id": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1584443580000,
+      "end": 1584443580000,
+      "patient_id": "372e5194-42f7-4958-97de-220c223bf957",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1584443580000,
+      "end": 1584529980000,
+      "patient_id": "372e5194-42f7-4958-97de-220c223bf957",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1584443580000,
+      "end": 1585307580000,
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1584443580000,
+      "end": 1584443580000,
+      "patient_id": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1584443580000,
+      "end": 1585134780000,
+      "patient_id": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1584529980000,
+      "end": 1585476780000,
+      "patient_id": "372e5194-42f7-4958-97de-220c223bf957",
+      "station_id": "KMT",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1584702780000,
+      "end": 1584702780000,
+      "patient_id": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": true
+    },
+    {
+      "begin": 1584789180000,
+      "end": 1584789180000,
+      "patient_id": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1585134780000,
+      "end": 1585134780000,
+      "patient_id": "9b666a0c-2b8a-43de-8d7d-85a134945045",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1585134780000,
+      "end": 1585134780000,
+      "patient_id": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1585307580000,
+      "end": 1585307580000,
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": true
+    },
+    {
+      "begin": 1585476780000,
+      "end": 1585476780000,
+      "patient_id": "372e5194-42f7-4958-97de-220c223bf957",
+      "station_id": "KMT",
+      "movement_type": 2,
+      "top": true
+    },
+    {
+      "begin": 1606389180000,
+      "end": 1607771580000,
+      "patient_id": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1606475580000,
+      "end": 1606475580000,
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1606475580000,
+      "end": 1607771580000,
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1606561980000,
+      "end": 1606561980000,
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1606561980000,
+      "end": 1607771580000,
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1606821180000,
+      "end": 1606821180000,
+      "patient_id": "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1606821180000,
+      "end": 1607771580000,
+      "patient_id": "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1607771580000,
+      "end": 1607771580000,
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1607771580000,
+      "end": 1607771580000,
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1607771580000,
+      "end": 1607771580000,
+      "patient_id": "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1607771580000,
+      "end": 1607771580000,
+      "patient_id": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "station_id": "Stationskennung X",
+      "movement_type": 2,
+      "top": true
+    },
+    {
+      "begin": 1609488000000,
+      "end": 1609488000000,
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609488000000,
+      "end": 1610024400000,
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609488000000,
+      "end": 1609488000000,
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609488000000,
+      "end": 1609855200000,
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609488000000,
+      "end": 1609488000000,
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609488000000,
+      "end": 1609671600000,
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609574400000,
+      "end": 1609574400000,
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609574400000,
+      "end": 1609668000000,
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609574400000,
+      "end": 1609574400000,
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609574400000,
+      "end": 1609770600000,
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609574400000,
+      "end": 1609574400000,
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609574400000,
+      "end": 1610028000000,
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609660800000,
+      "end": 1609660800000,
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609660800000,
+      "end": 1610200800000,
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609668000000,
+      "end": 1610200800000,
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1609671600000,
+      "end": 1610193600000,
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "station_id": "Radiologie",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1609747200000,
+      "end": 1609747200000,
+      "patient_id": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609747200000,
+      "end": 1621954976782,
+      "patient_id": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609747200000,
+      "end": 1609747200000,
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "station_id": "Stationskennung X",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609747200000,
+      "end": 1609916400000,
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "station_id": "Stationskennung X",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609770600000,
+      "end": 1609945200000,
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1609833600000,
+      "end": 1609833600000,
+      "patient_id": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609833600000,
+      "end": 1621954976859,
+      "patient_id": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609855200000,
+      "end": 1609855200000,
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "station_id": "Coronastation",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1609916400000,
+      "end": 1610031600000,
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "station_id": "Radiologie",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1609920000000,
+      "end": 1609920000000,
+      "patient_id": "41952d73-2421-469c-91a2-03ed02bac668",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609920000000,
+      "end": 1621954976600,
+      "patient_id": "41952d73-2421-469c-91a2-03ed02bac668",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609920000000,
+      "end": 1609920000000,
+      "patient_id": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609920000000,
+      "end": 1621954977151,
+      "patient_id": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609920000000,
+      "end": 1609920000000,
+      "patient_id": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609920000000,
+      "end": 1621954977438,
+      "patient_id": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609945200000,
+      "end": 1610110800000,
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "station_id": "Stationskennung Y",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1609945200000,
+      "end": 1609945200000,
+      "patient_id": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1609945200000,
+      "end": 1621954976712,
+      "patient_id": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1610006400000,
+      "end": 1610006400000,
+      "patient_id": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1610006400000,
+      "end": 1621954976377,
+      "patient_id": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1610006400000,
+      "end": 1610006400000,
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "station_id": "Radiologie",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1610006400000,
+      "end": 1610107200000,
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "station_id": "Radiologie",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1610024400000,
+      "end": 1621954976637,
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1610028000000,
+      "end": 1610028000000,
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "station_id": "Coronastation",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1610031600000,
+      "end": 1621954976821,
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1610107200000,
+      "end": 1621954976746,
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1610110800000,
+      "end": 1621954976419,
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1610179200000,
+      "end": 1610179200000,
+      "patient_id": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1610179200000,
+      "end": 1621954976461,
+      "patient_id": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1610193600000,
+      "end": 1610305200000,
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1610200800000,
+      "end": 1610200800000,
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "station_id": "Coronastation",
+      "movement_type": 2,
+      "top": true
+    },
+    {
+      "begin": 1610200800000,
+      "end": 1610200800000,
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "station_id": "Coronastation",
+      "movement_type": 2,
+      "top": false
+    },
+    {
+      "begin": 1610265600000,
+      "end": 1610265600000,
+      "patient_id": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "station_id": "Coronastation",
+      "movement_type": 1,
+      "top": false
+    },
+    {
+      "begin": 1610265600000,
+      "end": 1610298000000,
+      "patient_id": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "station_id": "Coronastation",
+      "movement_type": 3,
+      "top": true
+    },
+    {
+      "begin": 1610298000000,
+      "end": 1621954976259,
+      "patient_id": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "station_id": "Stationskennung Y",
+      "movement_type": 3,
+      "top": false
+    },
+    {
+      "begin": 1610305200000,
+      "end": 1621954977248,
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "station_id": "Stationskennung Y",
+      "movement_type": 3,
+      "top": false
+    }
+  ],
+  "movement_dots": [],
+  "investigation_rects": [
+    {
+      "investigation_hash": "2020-02-08T12:03:00+01:0052afa449-07a2-4d57-bb7a-86e7960124ac94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+          "FallID": "00000024",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-02-08T12:03:00+01:00",
+          "ZeitpunktProbeneingang": "2020-02-08T11:13:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-02-08T12:13:00+01:00",
+          "Viruslast": "24",
+          "MREKlasseID": "4",
+          "timestamp": 1581159780000
+        }
+      ],
+      "timestamp": 1581159780000,
+      "patient_id": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2020-02-10T21:47:45+01:007a347dcf-209f-46cf-ad4e-5f242b73d5cd94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+          "FallID": "00000023",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-02-10T21:47:45+01:00",
+          "ZeitpunktProbeneingang": "2020-02-10T22:47:45+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-02-10T22:47:45+01:00",
+          "Viruslast": "24",
+          "MREKlasseID": "4",
+          "timestamp": 1581367665000
+        }
+      ],
+      "timestamp": 1581367665000,
+      "patient_id": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-02-13T17:47:45+01:00f0f96c70-2d28-4f9d-aef7-8b7aa48664e194500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+          "FallID": "00000032",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-02-13T17:47:45+01:00",
+          "ZeitpunktProbeneingang": "2020-02-14T10:47:45+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-02-14T16:37:45+01:00",
+          "Viruslast": "9",
+          "MREKlasseID": "4",
+          "timestamp": 1581612465000
+        }
+      ],
+      "timestamp": 1581612465000,
+      "patient_id": "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-02-14T17:47:45+01:0011fcaa10-d510-4eb7-a4a4-c96add98bae294500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+          "FallID": "00000026",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-02-14T17:47:45+01:00",
+          "ZeitpunktProbeneingang": "2020-02-14T16:47:45+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-02-10T16:37:45+01:00",
+          "Viruslast": "2",
+          "MREKlasseID": "4",
+          "timestamp": 1581698865000
+        }
+      ],
+      "timestamp": 1581698865000,
+      "patient_id": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-02-14T19:47:45+01:00d01e837e-d221-4b17-a486-819a4a14350094500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "d01e837e-d221-4b17-a486-819a4a143500",
+          "FallID": "00000025",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-02-14T19:47:45+01:00",
+          "ZeitpunktProbeneingang": "2020-02-14T21:47:45+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-02-10T22:47:45+01:00",
+          "Viruslast": "25",
+          "MREKlasseID": "4",
+          "timestamp": 1581706065000
+        }
+      ],
+      "timestamp": 1581706065000,
+      "patient_id": "d01e837e-d221-4b17-a486-819a4a143500",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-02-15T17:47:45+01:00eae9b822-6015-430c-a694-123249e977eb94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "eae9b822-6015-430c-a694-123249e977eb",
+          "FallID": "00000027",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-02-15T17:47:45+01:00",
+          "ZeitpunktProbeneingang": "2020-02-16T10:47:45+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-02-16T16:37:45+01:00",
+          "Viruslast": "20",
+          "MREKlasseID": "4",
+          "timestamp": 1581785265000
+        }
+      ],
+      "timestamp": 1581785265000,
+      "patient_id": "eae9b822-6015-430c-a694-123249e977eb",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2020-03-13T17:47:45+01:00db7be72a-db86-4dc6-b55b-dcf510b0f23e94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+          "FallID": "00000029",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-03-13T17:47:45+01:00",
+          "ZeitpunktProbeneingang": "2020-03-14T10:47:45+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-03-14T16:37:45+01:00",
+          "Viruslast": "26",
+          "MREKlasseID": "4",
+          "timestamp": 1584118065000
+        }
+      ],
+      "timestamp": 1584118065000,
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2020-03-16T17:47:45+01:008e4d9c32-c59b-4fde-8331-f215ce79678f94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+          "FallID": "00000033",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-03-16T17:47:45+01:00",
+          "ZeitpunktProbeneingang": "2020-03-17T10:47:45+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-03-17T16:37:45+01:00",
+          "Viruslast": "20",
+          "MREKlasseID": "4",
+          "timestamp": 1584377265000
+        }
+      ],
+      "timestamp": 1584377265000,
+      "patient_id": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-03-18T17:47:45+01:00fda33376-7675-4b27-a9db-63ef8875530d94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "fda33376-7675-4b27-a9db-63ef8875530d",
+          "FallID": "00000034",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-03-18T17:47:45+01:00",
+          "ZeitpunktProbeneingang": "2020-03-19T10:47:45+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-03-19T16:37:45+01:00",
+          "Viruslast": "14",
+          "MREKlasseID": "4",
+          "timestamp": 1584550065000
+        }
+      ],
+      "timestamp": 1584550065000,
+      "patient_id": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-11-27T12:13:00+01:00959c26c9-de4a-40b8-bf76-a315574d3da794500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+          "FallID": "00000021",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-11-27T12:13:00+01:00",
+          "ZeitpunktProbeneingang": "2020-11-27T13:13:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-11-27T12:13:00+01:00",
+          "Viruslast": "10",
+          "MREKlasseID": "4",
+          "timestamp": 1606475580000
+        }
+      ],
+      "timestamp": 1606475580000,
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-11-28T12:13:00+01:00f7f106b1-3aef-481e-aa76-af9092dc63dc94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+          "FallID": "00000020",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-11-28T12:13:00+01:00",
+          "ZeitpunktProbeneingang": "2020-11-28T13:13:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-11-28T12:13:00+01:00",
+          "Viruslast": "11",
+          "MREKlasseID": "4",
+          "timestamp": 1606561980000
+        }
+      ],
+      "timestamp": 1606561980000,
+      "patient_id": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-11-28T12:13:00+01:00386ff697-7fe4-4fe0-942c-eb389b81704f94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+          "FallID": "00000019",
+          "ProbeID": "01",
+          "Eingangsdatum": "2020-11-28T12:13:00+01:00",
+          "ZeitpunktProbeneingang": "2020-11-28T13:13:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-11-28T12:13:00+01:00",
+          "Viruslast": "19",
+          "MREKlasseID": "4",
+          "timestamp": 1606561980000
+        }
+      ],
+      "timestamp": 1606561980000,
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2020-12-01T08:13:00+01:00959c26c9-de4a-40b8-bf76-a315574d3da794500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+          "FallID": "00000021",
+          "ProbeID": "02",
+          "Eingangsdatum": "2020-12-01T08:13:00+01:00",
+          "ZeitpunktProbeneingang": "2020-12-01T09:13:09+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-12-01T08:13:00+01:00",
+          "Viruslast": "17",
+          "MREKlasseID": "4",
+          "timestamp": 1606806780000
+        }
+      ],
+      "timestamp": 1606806780000,
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2020-12-02T10:13:33+01:00386ff697-7fe4-4fe0-942c-eb389b81704f94500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+          "FallID": "00000019",
+          "ProbeID": "02",
+          "Eingangsdatum": "2020-12-02T10:13:33+01:00",
+          "ZeitpunktProbeneingang": "2020-12-02T12:13:33+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-12-02T10:13:33+01:00",
+          "Viruslast": "17",
+          "MREKlasseID": "4",
+          "timestamp": 1606900413000
+        }
+      ],
+      "timestamp": 1606900413000,
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2020-12-02T10:22:33+01:00f7f106b1-3aef-481e-aa76-af9092dc63dc94500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+          "FallID": "00000020",
+          "ProbeID": "02",
+          "Eingangsdatum": "2020-12-02T10:22:33+01:00",
+          "ZeitpunktProbeneingang": "2020-12-02T12:40:33+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2020-12-02T10:22:33+01:00",
+          "Viruslast": "7",
+          "MREKlasseID": "4",
+          "timestamp": 1606900953000
+        }
+      ],
+      "timestamp": 1606900953000,
+      "patient_id": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-01T10:30:00+01:00c74f6215-4fc2-42a5-a3ad-f92536ca64dc94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+          "FallID": "00000001",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-01T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-01T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-01T10:30:00+01:00",
+          "Viruslast": "21",
+          "MREKlasseID": "4",
+          "timestamp": 1609493400000
+        }
+      ],
+      "timestamp": 1609493400000,
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-02T10:30:00+01:0096cdcae3-6c08-4eb7-8e41-45b012bf61d494500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+          "FallID": "00000002",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-02T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-02T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-02T10:30:00+01:00",
+          "Viruslast": "2",
+          "MREKlasseID": "4",
+          "timestamp": 1609579800000
+        }
+      ],
+      "timestamp": 1609579800000,
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-03T10:30:00+01:00059d9e68-c096-4ee7-8551-c088a548881394500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+          "FallID": "00000003",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-03T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-03T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-03T10:30:00+01:00",
+          "Viruslast": "3",
+          "MREKlasseID": "4",
+          "timestamp": 1609666200000
+        }
+      ],
+      "timestamp": 1609666200000,
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-03T10:30:00+01:007dab2503-06f1-4c42-b4a4-76ddaae0879494500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+          "FallID": "00000004",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-03T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-03T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-03T10:30:00+01:00",
+          "Viruslast": "19",
+          "MREKlasseID": "4",
+          "timestamp": 1609666200000
+        }
+      ],
+      "timestamp": 1609666200000,
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-03T10:30:00+01:00c74f6215-4fc2-42a5-a3ad-f92536ca64dc94500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+          "FallID": "00000001",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-03T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-03T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-03T10:30:00+01:00",
+          "Viruslast": "10",
+          "MREKlasseID": "4",
+          "timestamp": 1609666200000
+        }
+      ],
+      "timestamp": 1609666200000,
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-04T10:30:00+01:0023cdde3c-0e07-497d-bed4-fe9be5c6d16694500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+          "FallID": "00000005",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-04T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-04T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-04T10:30:00+01:00",
+          "Viruslast": "10",
+          "MREKlasseID": "4",
+          "timestamp": 1609752600000
+        }
+      ],
+      "timestamp": 1609752600000,
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-04T10:30:00+01:0096cdcae3-6c08-4eb7-8e41-45b012bf61d494500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+          "FallID": "00000002",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-04T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-04T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-04T10:30:00+01:00",
+          "Viruslast": "22",
+          "MREKlasseID": "4",
+          "timestamp": 1609752600000
+        }
+      ],
+      "timestamp": 1609752600000,
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-04T10:30:00+01:0071d6b0a9-34b5-43be-a2e6-00517066ad0f94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+          "FallID": "00000006",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-04T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-04T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-04T10:30:00+01:00",
+          "Viruslast": "20",
+          "MREKlasseID": "4",
+          "timestamp": 1609752600000
+        }
+      ],
+      "timestamp": 1609752600000,
+      "patient_id": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-05T10:30:00+01:00786e3c35-32d3-403e-b2f3-532ed5e78e0c94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+          "FallID": "00000007",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-05T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-05T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-05T10:30:00+01:00",
+          "Viruslast": "6",
+          "MREKlasseID": "4",
+          "timestamp": 1609839000000
+        }
+      ],
+      "timestamp": 1609839000000,
+      "patient_id": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-05T10:30:00+01:00c74f6215-4fc2-42a5-a3ad-f92536ca64dc94500-6",
+      "data": [
+        {
+          "LabordatenID": "03",
+          "PatientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+          "FallID": "00000001",
+          "ProbeID": "03",
+          "Eingangsdatum": "2021-01-05T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-05T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-05T10:30:00+01:00",
+          "Viruslast": "3",
+          "MREKlasseID": "4",
+          "timestamp": 1609839000000
+        }
+      ],
+      "timestamp": 1609839000000,
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-06T10:30:00+01:0041952d73-2421-469c-91a2-03ed02bac66894500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "41952d73-2421-469c-91a2-03ed02bac668",
+          "FallID": "00000010",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-06T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-06T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-06T10:30:00+01:00",
+          "Viruslast": "22",
+          "MREKlasseID": "4",
+          "timestamp": 1609925400000
+        }
+      ],
+      "timestamp": 1609925400000,
+      "patient_id": "41952d73-2421-469c-91a2-03ed02bac668",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-06T10:30:00+01:00b616e8d3-58e6-45a9-ba51-fdba1838d5cf94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+          "FallID": "00000008",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-06T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-06T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-06T10:30:00+01:00",
+          "Viruslast": "6",
+          "MREKlasseID": "4",
+          "timestamp": 1609925400000
+        }
+      ],
+      "timestamp": 1609925400000,
+      "patient_id": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-06T10:30:00+01:007dab2503-06f1-4c42-b4a4-76ddaae0879494500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+          "FallID": "00000004",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-06T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-06T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-06T10:30:00+01:00",
+          "Viruslast": "17",
+          "MREKlasseID": "4",
+          "timestamp": 1609925400000
+        }
+      ],
+      "timestamp": 1609925400000,
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-06T10:30:00+01:00fd26fc32-23f4-4f7a-b0cd-a4df9a510e9094500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+          "FallID": "00000009",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-06T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-06T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-06T10:30:00+01:00",
+          "Viruslast": "14",
+          "MREKlasseID": "4",
+          "timestamp": 1609925400000
+        }
+      ],
+      "timestamp": 1609925400000,
+      "patient_id": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-07T10:30:00+01:0052fd4e64-b8d0-4e20-811e-0f6a80800af694500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+          "FallID": "00000012",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-07T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-07T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-07T10:30:00+01:00",
+          "Viruslast": "18",
+          "MREKlasseID": "4",
+          "timestamp": 1610011800000
+        }
+      ],
+      "timestamp": 1610011800000,
+      "patient_id": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-07T10:30:00+01:0015cd4237-44dd-407a-bbe0-e35a88e99a4794500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+          "FallID": "00000013",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-07T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-07T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-07T10:30:00+01:00",
+          "Viruslast": "10",
+          "MREKlasseID": "4",
+          "timestamp": 1610011800000
+        }
+      ],
+      "timestamp": 1610011800000,
+      "patient_id": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-07T10:30:00+01:00059d9e68-c096-4ee7-8551-c088a548881394500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+          "FallID": "00000003",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-07T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-07T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-07T10:30:00+01:00",
+          "Viruslast": "19",
+          "MREKlasseID": "4",
+          "timestamp": 1610011800000
+        }
+      ],
+      "timestamp": 1610011800000,
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-07T10:30:00+01:0096cdcae3-6c08-4eb7-8e41-45b012bf61d494500-6",
+      "data": [
+        {
+          "LabordatenID": "03",
+          "PatientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+          "FallID": "00000002",
+          "ProbeID": "03",
+          "Eingangsdatum": "2021-01-07T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-07T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-07T10:30:00+01:00",
+          "Viruslast": "26",
+          "MREKlasseID": "4",
+          "timestamp": 1610011800000
+        }
+      ],
+      "timestamp": 1610011800000,
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-07T10:30:00+01:0077394cf2-ed61-4338-a2ec-59e4ddba31fa94500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+          "FallID": "00000011",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-07T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-07T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-07T10:30:00+01:00",
+          "Viruslast": "6",
+          "MREKlasseID": "4",
+          "timestamp": 1610011800000
+        }
+      ],
+      "timestamp": 1610011800000,
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-07T10:30:00+01:0043f30272-9e1e-4e41-ac4c-423b798d0d6194500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+          "FallID": "00000014",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-07T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-07T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-07T10:30:00+01:00",
+          "Viruslast": "27",
+          "MREKlasseID": "4",
+          "timestamp": 1610011800000
+        }
+      ],
+      "timestamp": 1610011800000,
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-08T10:30:00+01:0041952d73-2421-469c-91a2-03ed02bac66894500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "41952d73-2421-469c-91a2-03ed02bac668",
+          "FallID": "00000010",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-08T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-08T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-08T10:30:00+01:00",
+          "Viruslast": "9",
+          "MREKlasseID": "4",
+          "timestamp": 1610098200000
+        }
+      ],
+      "timestamp": 1610098200000,
+      "patient_id": "41952d73-2421-469c-91a2-03ed02bac668",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-08T10:30:00+01:0062982966-d62d-429b-86d8-d7f0784de08694500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "62982966-d62d-429b-86d8-d7f0784de086",
+          "FallID": "00000015",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-08T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-08T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-08T10:30:00+01:00",
+          "Viruslast": "14",
+          "MREKlasseID": "4",
+          "timestamp": 1610098200000
+        }
+      ],
+      "timestamp": 1610098200000,
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-08T10:30:00+01:0023cdde3c-0e07-497d-bed4-fe9be5c6d16694500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+          "FallID": "00000005",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-08T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-08T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-08T10:30:00+01:00",
+          "Viruslast": "11",
+          "MREKlasseID": "4",
+          "timestamp": 1610098200000
+        }
+      ],
+      "timestamp": 1610098200000,
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-09T10:30:00+01:00fd26fc32-23f4-4f7a-b0cd-a4df9a510e9094500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+          "FallID": "00000009",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-09T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-09T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-09T10:30:00+01:00",
+          "Viruslast": "19",
+          "MREKlasseID": "4",
+          "timestamp": 1610184600000
+        }
+      ],
+      "timestamp": 1610184600000,
+      "patient_id": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-09T10:30:00+01:007dab2503-06f1-4c42-b4a4-76ddaae0879494500-6",
+      "data": [
+        {
+          "LabordatenID": "03",
+          "PatientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+          "FallID": "00000004",
+          "ProbeID": "03",
+          "Eingangsdatum": "2021-01-09T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-09T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-09T10:30:00+01:00",
+          "Viruslast": "20",
+          "MREKlasseID": "4",
+          "timestamp": 1610184600000
+        }
+      ],
+      "timestamp": 1610184600000,
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-09T10:30:00+01:00786e3c35-32d3-403e-b2f3-532ed5e78e0c94500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+          "FallID": "00000007",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-09T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-09T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-09T10:30:00+01:00",
+          "Viruslast": "25",
+          "MREKlasseID": "4",
+          "timestamp": 1610184600000
+        }
+      ],
+      "timestamp": 1610184600000,
+      "patient_id": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-09T10:30:00+01:00d8d63116-1358-4b60-9d28-24f91f0075a694500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+          "FallID": "00000016",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-09T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-09T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-09T10:30:00+01:00",
+          "Viruslast": "22",
+          "MREKlasseID": "4",
+          "timestamp": 1610184600000
+        }
+      ],
+      "timestamp": 1610184600000,
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-09T10:30:00+01:002ac7d7e7-28f8-4bf7-819e-d3427170eef394500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+          "FallID": "00000017",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-09T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-09T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-09T10:30:00+01:00",
+          "Viruslast": "12",
+          "MREKlasseID": "4",
+          "timestamp": 1610184600000
+        }
+      ],
+      "timestamp": 1610184600000,
+      "patient_id": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-09T10:30:00+01:00059d9e68-c096-4ee7-8551-c088a548881394500-6",
+      "data": [
+        {
+          "LabordatenID": "03",
+          "PatientID": "059d9e68-c096-4ee7-8551-c088a5488813",
+          "FallID": "00000003",
+          "ProbeID": "03",
+          "Eingangsdatum": "2021-01-09T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-09T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-09T10:30:00+01:00",
+          "Viruslast": "25",
+          "MREKlasseID": "4",
+          "timestamp": 1610184600000
+        }
+      ],
+      "timestamp": 1610184600000,
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-09T10:30:00+01:0071d6b0a9-34b5-43be-a2e6-00517066ad0f94500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+          "FallID": "00000006",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-09T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-09T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-09T10:30:00+01:00",
+          "Viruslast": "11",
+          "MREKlasseID": "4",
+          "timestamp": 1610184600000
+        }
+      ],
+      "timestamp": 1610184600000,
+      "patient_id": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-10T10:30:00+01:0052fd4e64-b8d0-4e20-811e-0f6a80800af694500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+          "FallID": "00000012",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-10T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-10T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-10T10:30:00+01:00",
+          "Viruslast": "21",
+          "MREKlasseID": "4",
+          "timestamp": 1610271000000
+        }
+      ],
+      "timestamp": 1610271000000,
+      "patient_id": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-10T10:30:00+01:0003ff2929-184c-4759-939b-d6fef9d4fa5594500-6",
+      "data": [
+        {
+          "LabordatenID": "01",
+          "PatientID": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+          "FallID": "00000018",
+          "ProbeID": "01",
+          "Eingangsdatum": "2021-01-10T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-10T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": true,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-10T10:30:00+01:00",
+          "Viruslast": "10",
+          "MREKlasseID": "4",
+          "timestamp": 1610271000000
+        }
+      ],
+      "timestamp": 1610271000000,
+      "patient_id": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "pathogen_id": "94500-6",
+      "result": "diseased"
+    },
+    {
+      "investigation_hash": "2021-01-10T10:30:00+01:0062982966-d62d-429b-86d8-d7f0784de08694500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "62982966-d62d-429b-86d8-d7f0784de086",
+          "FallID": "00000015",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-10T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-10T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-10T10:30:00+01:00",
+          "Viruslast": "13",
+          "MREKlasseID": "4",
+          "timestamp": 1610271000000
+        }
+      ],
+      "timestamp": 1610271000000,
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-10T10:30:00+01:00b616e8d3-58e6-45a9-ba51-fdba1838d5cf94500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+          "FallID": "00000008",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-10T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-10T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-10T10:30:00+01:00",
+          "Viruslast": "14",
+          "MREKlasseID": "4",
+          "timestamp": 1610271000000
+        }
+      ],
+      "timestamp": 1610271000000,
+      "patient_id": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-11T10:30:00+01:0043f30272-9e1e-4e41-ac4c-423b798d0d6194500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+          "FallID": "00000014",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-11T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-11T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-11T10:30:00+01:00",
+          "Viruslast": "17",
+          "MREKlasseID": "4",
+          "timestamp": 1610357400000
+        }
+      ],
+      "timestamp": 1610357400000,
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-11T10:30:00+01:0077394cf2-ed61-4338-a2ec-59e4ddba31fa94500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+          "FallID": "00000011",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-11T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-11T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-11T10:30:00+01:00",
+          "Viruslast": "6",
+          "MREKlasseID": "4",
+          "timestamp": 1610357400000
+        }
+      ],
+      "timestamp": 1610357400000,
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    },
+    {
+      "investigation_hash": "2021-01-12T10:30:00+01:0015cd4237-44dd-407a-bbe0-e35a88e99a4794500-6",
+      "data": [
+        {
+          "LabordatenID": "02",
+          "PatientID": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+          "FallID": "00000013",
+          "ProbeID": "02",
+          "Eingangsdatum": "2021-01-12T10:30:00+01:00",
+          "ZeitpunktProbeneingang": "2021-01-12T11:00:00+01:00",
+          "Probenart": "119342007",
+          "Screening": false,
+          "Material_l": "Salvia specimen (specimen)",
+          "Befund": false,
+          "Befundkommentar": "Kommentar 1",
+          "KeimID": "94500-6",
+          "Befunddatum": "2021-01-12T10:30:00+01:00",
+          "Viruslast": "11",
+          "MREKlasseID": "4",
+          "timestamp": 1610443800000
+        }
+      ],
+      "timestamp": 1610443800000,
+      "patient_id": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "pathogen_id": "94500-6",
+      "result": "negative"
+    }
+  ],
+  "status_rects": [
+    {
+      "patient_id": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "begin": 1580901180000,
+      "end": 1582456380000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "pathogen_id": "94500-6",
+      "begin": 1580901180000,
+      "end": 1582456380000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "begin": 1581160380000,
+      "end": 1582197180000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "pathogen_id": "94500-6",
+      "begin": 1581160380000,
+      "end": 1581159780000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "pathogen_id": "94500-6",
+      "begin": 1581159780000,
+      "end": 1582197180000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "d01e837e-d221-4b17-a486-819a4a143500",
+      "begin": 1581246780000,
+      "end": 1582197180000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "d01e837e-d221-4b17-a486-819a4a143500",
+      "pathogen_id": "94500-6",
+      "begin": 1581246780000,
+      "end": 1582197180000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "eae9b822-6015-430c-a694-123249e977eb",
+      "begin": 1581246780000,
+      "end": 1583320380000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "eae9b822-6015-430c-a694-123249e977eb",
+      "pathogen_id": "94500-6",
+      "begin": 1581246780000,
+      "end": 1581785265000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "eae9b822-6015-430c-a694-123249e977eb",
+      "pathogen_id": "94500-6",
+      "begin": 1581785265000,
+      "end": 1583320380000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "begin": 1581333180000,
+      "end": 1583233980000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "pathogen_id": "94500-6",
+      "begin": 1581333180000,
+      "end": 1583233980000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+      "begin": 1581333180000,
+      "end": 1581937980000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+      "pathogen_id": "94500-6",
+      "begin": 1581333180000,
+      "end": 1581937980000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "begin": 1583406780000,
+      "end": 1584702780000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "begin": 1583665980000,
+      "end": 1585307580000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "pathogen_id": "94500-6",
+      "begin": 1583665980000,
+      "end": 1584118065000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "pathogen_id": "94500-6",
+      "begin": 1584118065000,
+      "end": 1585307580000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "begin": 1583752380000,
+      "end": 1584789180000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "pathogen_id": "94500-6",
+      "begin": 1583752380000,
+      "end": 1584789180000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "9b666a0c-2b8a-43de-8d7d-85a134945045",
+      "begin": 1583838780000,
+      "end": 1585134780000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "372e5194-42f7-4958-97de-220c223bf957",
+      "begin": 1584443580000,
+      "end": 1585476780000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "begin": 1584443580000,
+      "end": 1585134780000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "pathogen_id": "94500-6",
+      "begin": 1584443580000,
+      "end": 1585134780000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "begin": 1606389180000,
+      "end": 1607771580000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "pathogen_id": "94500-6",
+      "begin": 1606389180000,
+      "end": 1606900953000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "pathogen_id": "94500-6",
+      "begin": 1606900953000,
+      "end": 1607771580000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "begin": 1606475580000,
+      "end": 1607771580000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "pathogen_id": "94500-6",
+      "begin": 1606475580000,
+      "end": 1606806780000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "pathogen_id": "94500-6",
+      "begin": 1606806780000,
+      "end": 1607771580000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "begin": 1606561980000,
+      "end": 1607771580000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "pathogen_id": "94500-6",
+      "begin": 1606561980000,
+      "end": 1606900413000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "pathogen_id": "94500-6",
+      "begin": 1606900413000,
+      "end": 1607771580000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+      "begin": 1606821180000,
+      "end": 1607771580000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "begin": 1609488000000,
+      "end": 1621954976637,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "pathogen_id": "94500-6",
+      "begin": 1609488000000,
+      "end": 1610011800000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "pathogen_id": "94500-6",
+      "begin": 1610011800000,
+      "end": 1621954976637,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "begin": 1609488000000,
+      "end": 1609855200000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "pathogen_id": "94500-6",
+      "begin": 1609488000000,
+      "end": 1609493400000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "pathogen_id": "94500-6",
+      "begin": 1609493400000,
+      "end": 1609855200000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "begin": 1609488000000,
+      "end": 1621954977248,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "pathogen_id": "94500-6",
+      "begin": 1609488000000,
+      "end": 1610184600000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "pathogen_id": "94500-6",
+      "begin": 1610184600000,
+      "end": 1621954977248,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "begin": 1609574400000,
+      "end": 1610200800000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "pathogen_id": "94500-6",
+      "begin": 1609574400000,
+      "end": 1609666200000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "pathogen_id": "94500-6",
+      "begin": 1609666200000,
+      "end": 1610200800000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "begin": 1609574400000,
+      "end": 1621954976419,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "pathogen_id": "94500-6",
+      "begin": 1609574400000,
+      "end": 1609752600000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "pathogen_id": "94500-6",
+      "begin": 1609752600000,
+      "end": 1621954976419,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "begin": 1609574400000,
+      "end": 1610028000000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "pathogen_id": "94500-6",
+      "begin": 1609574400000,
+      "end": 1609579800000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "pathogen_id": "94500-6",
+      "begin": 1609579800000,
+      "end": 1610028000000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "begin": 1609660800000,
+      "end": 1610200800000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "pathogen_id": "94500-6",
+      "begin": 1609660800000,
+      "end": 1609666200000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "pathogen_id": "94500-6",
+      "begin": 1609666200000,
+      "end": 1610200800000,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "begin": 1609747200000,
+      "end": 1621954976782,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "pathogen_id": "94500-6",
+      "begin": 1609747200000,
+      "end": 1609752600000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "pathogen_id": "94500-6",
+      "begin": 1609752600000,
+      "end": 1621954976782,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "begin": 1609747200000,
+      "end": 1621954976821,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "pathogen_id": "94500-6",
+      "begin": 1609747200000,
+      "end": 1610011800000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "pathogen_id": "94500-6",
+      "begin": 1610011800000,
+      "end": 1621954976821,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "begin": 1609833600000,
+      "end": 1621954976859,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "pathogen_id": "94500-6",
+      "begin": 1609833600000,
+      "end": 1609839000000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "pathogen_id": "94500-6",
+      "begin": 1609839000000,
+      "end": 1621954976859,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "41952d73-2421-469c-91a2-03ed02bac668",
+      "begin": 1609920000000,
+      "end": 1621954976600,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "41952d73-2421-469c-91a2-03ed02bac668",
+      "pathogen_id": "94500-6",
+      "begin": 1609920000000,
+      "end": 1609925400000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "41952d73-2421-469c-91a2-03ed02bac668",
+      "pathogen_id": "94500-6",
+      "begin": 1609925400000,
+      "end": 1621954976600,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "begin": 1609920000000,
+      "end": 1621954977151,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "pathogen_id": "94500-6",
+      "begin": 1609920000000,
+      "end": 1609925400000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "pathogen_id": "94500-6",
+      "begin": 1609925400000,
+      "end": 1621954977151,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "begin": 1609920000000,
+      "end": 1621954977438,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "pathogen_id": "94500-6",
+      "begin": 1609920000000,
+      "end": 1609925400000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "pathogen_id": "94500-6",
+      "begin": 1609925400000,
+      "end": 1621954977438,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "begin": 1609945200000,
+      "end": 1621954976712,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "pathogen_id": "94500-6",
+      "begin": 1609945200000,
+      "end": 1610011800000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "pathogen_id": "94500-6",
+      "begin": 1610011800000,
+      "end": 1621954976712,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "begin": 1610006400000,
+      "end": 1621954976377,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "pathogen_id": "94500-6",
+      "begin": 1610006400000,
+      "end": 1610011800000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "pathogen_id": "94500-6",
+      "begin": 1610011800000,
+      "end": 1621954976377,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "begin": 1610006400000,
+      "end": 1621954976746,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "pathogen_id": "94500-6",
+      "begin": 1610006400000,
+      "end": 1610098200000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "pathogen_id": "94500-6",
+      "begin": 1610098200000,
+      "end": 1621954976746,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "begin": 1610179200000,
+      "end": 1621954976461,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "pathogen_id": "94500-6",
+      "begin": 1610179200000,
+      "end": 1610184600000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "pathogen_id": "94500-6",
+      "begin": 1610184600000,
+      "end": 1621954976461,
+      "status": "diseased"
+    },
+    {
+      "patient_id": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "begin": 1610265600000,
+      "end": 1621954976259,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "pathogen_id": "94500-6",
+      "begin": 1610265600000,
+      "end": 1610271000000,
+      "status": "unknown"
+    },
+    {
+      "patient_id": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "pathogen_id": "94500-6",
+      "begin": 1610271000000,
+      "end": 1621954976259,
+      "status": "diseased"
+    }
+  ],
+  "unknown_rects": {
+    "7a347dcf-209f-46cf-ad4e-5f242b73d5cd": {
+      "patient_id": "7a347dcf-209f-46cf-ad4e-5f242b73d5cd",
+      "begin": 1580901180000,
+      "end": 1582456380000,
+      "status": "unknown"
+    },
+    "52afa449-07a2-4d57-bb7a-86e7960124ac": {
+      "patient_id": "52afa449-07a2-4d57-bb7a-86e7960124ac",
+      "begin": 1581160380000,
+      "end": 1582197180000,
+      "status": "unknown"
+    },
+    "d01e837e-d221-4b17-a486-819a4a143500": {
+      "patient_id": "d01e837e-d221-4b17-a486-819a4a143500",
+      "begin": 1581246780000,
+      "end": 1582197180000,
+      "status": "unknown"
+    },
+    "eae9b822-6015-430c-a694-123249e977eb": {
+      "patient_id": "eae9b822-6015-430c-a694-123249e977eb",
+      "begin": 1581246780000,
+      "end": 1583320380000,
+      "status": "unknown"
+    },
+    "11fcaa10-d510-4eb7-a4a4-c96add98bae2": {
+      "patient_id": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
+      "begin": 1581333180000,
+      "end": 1583233980000,
+      "status": "unknown"
+    },
+    "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1": {
+      "patient_id": "f0f96c70-2d28-4f9d-aef7-8b7aa48664e1",
+      "begin": 1581333180000,
+      "end": 1581937980000,
+      "status": "unknown"
+    },
+    "ac8a6002-d728-4b4e-a629-bfa66ebeace7": {
+      "patient_id": "ac8a6002-d728-4b4e-a629-bfa66ebeace7",
+      "begin": 1583406780000,
+      "end": 1584702780000,
+      "status": "unknown"
+    },
+    "db7be72a-db86-4dc6-b55b-dcf510b0f23e": {
+      "patient_id": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
+      "begin": 1583665980000,
+      "end": 1585307580000,
+      "status": "unknown"
+    },
+    "8e4d9c32-c59b-4fde-8331-f215ce79678f": {
+      "patient_id": "8e4d9c32-c59b-4fde-8331-f215ce79678f",
+      "begin": 1583752380000,
+      "end": 1584789180000,
+      "status": "unknown"
+    },
+    "9b666a0c-2b8a-43de-8d7d-85a134945045": {
+      "patient_id": "9b666a0c-2b8a-43de-8d7d-85a134945045",
+      "begin": 1583838780000,
+      "end": 1585134780000,
+      "status": "unknown"
+    },
+    "372e5194-42f7-4958-97de-220c223bf957": {
+      "patient_id": "372e5194-42f7-4958-97de-220c223bf957",
+      "begin": 1584443580000,
+      "end": 1585476780000,
+      "status": "unknown"
+    },
+    "fda33376-7675-4b27-a9db-63ef8875530d": {
+      "patient_id": "fda33376-7675-4b27-a9db-63ef8875530d",
+      "begin": 1584443580000,
+      "end": 1585134780000,
+      "status": "unknown"
+    },
+    "f7f106b1-3aef-481e-aa76-af9092dc63dc": {
+      "patient_id": "f7f106b1-3aef-481e-aa76-af9092dc63dc",
+      "begin": 1606389180000,
+      "end": 1607771580000,
+      "status": "unknown"
+    },
+    "959c26c9-de4a-40b8-bf76-a315574d3da7": {
+      "patient_id": "959c26c9-de4a-40b8-bf76-a315574d3da7",
+      "begin": 1606475580000,
+      "end": 1607771580000,
+      "status": "unknown"
+    },
+    "386ff697-7fe4-4fe0-942c-eb389b81704f": {
+      "patient_id": "386ff697-7fe4-4fe0-942c-eb389b81704f",
+      "begin": 1606561980000,
+      "end": 1607771580000,
+      "status": "unknown"
+    },
+    "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a": {
+      "patient_id": "dc1a7b9a-bb9c-4212-9c80-26a78dfbea5a",
+      "begin": 1606821180000,
+      "end": 1607771580000,
+      "status": "unknown"
+    },
+    "43f30272-9e1e-4e41-ac4c-423b798d0d61": {
+      "patient_id": "43f30272-9e1e-4e41-ac4c-423b798d0d61",
+      "begin": 1609488000000,
+      "end": 1621954976637,
+      "status": "unknown"
+    },
+    "c74f6215-4fc2-42a5-a3ad-f92536ca64dc": {
+      "patient_id": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
+      "begin": 1609488000000,
+      "end": 1609855200000,
+      "status": "unknown"
+    },
+    "d8d63116-1358-4b60-9d28-24f91f0075a6": {
+      "patient_id": "d8d63116-1358-4b60-9d28-24f91f0075a6",
+      "begin": 1609488000000,
+      "end": 1621954977248,
+      "status": "unknown"
+    },
+    "059d9e68-c096-4ee7-8551-c088a5488813": {
+      "patient_id": "059d9e68-c096-4ee7-8551-c088a5488813",
+      "begin": 1609574400000,
+      "end": 1610200800000,
+      "status": "unknown"
+    },
+    "23cdde3c-0e07-497d-bed4-fe9be5c6d166": {
+      "patient_id": "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
+      "begin": 1609574400000,
+      "end": 1621954976419,
+      "status": "unknown"
+    },
+    "96cdcae3-6c08-4eb7-8e41-45b012bf61d4": {
+      "patient_id": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
+      "begin": 1609574400000,
+      "end": 1610028000000,
+      "status": "unknown"
+    },
+    "7dab2503-06f1-4c42-b4a4-76ddaae08794": {
+      "patient_id": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
+      "begin": 1609660800000,
+      "end": 1610200800000,
+      "status": "unknown"
+    },
+    "71d6b0a9-34b5-43be-a2e6-00517066ad0f": {
+      "patient_id": "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
+      "begin": 1609747200000,
+      "end": 1621954976782,
+      "status": "unknown"
+    },
+    "77394cf2-ed61-4338-a2ec-59e4ddba31fa": {
+      "patient_id": "77394cf2-ed61-4338-a2ec-59e4ddba31fa",
+      "begin": 1609747200000,
+      "end": 1621954976821,
+      "status": "unknown"
+    },
+    "786e3c35-32d3-403e-b2f3-532ed5e78e0c": {
+      "patient_id": "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
+      "begin": 1609833600000,
+      "end": 1621954976859,
+      "status": "unknown"
+    },
+    "41952d73-2421-469c-91a2-03ed02bac668": {
+      "patient_id": "41952d73-2421-469c-91a2-03ed02bac668",
+      "begin": 1609920000000,
+      "end": 1621954976600,
+      "status": "unknown"
+    },
+    "b616e8d3-58e6-45a9-ba51-fdba1838d5cf": {
+      "patient_id": "b616e8d3-58e6-45a9-ba51-fdba1838d5cf",
+      "begin": 1609920000000,
+      "end": 1621954977151,
+      "status": "unknown"
+    },
+    "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90": {
+      "patient_id": "fd26fc32-23f4-4f7a-b0cd-a4df9a510e90",
+      "begin": 1609920000000,
+      "end": 1621954977438,
+      "status": "unknown"
+    },
+    "52fd4e64-b8d0-4e20-811e-0f6a80800af6": {
+      "patient_id": "52fd4e64-b8d0-4e20-811e-0f6a80800af6",
+      "begin": 1609945200000,
+      "end": 1621954976712,
+      "status": "unknown"
+    },
+    "15cd4237-44dd-407a-bbe0-e35a88e99a47": {
+      "patient_id": "15cd4237-44dd-407a-bbe0-e35a88e99a47",
+      "begin": 1610006400000,
+      "end": 1621954976377,
+      "status": "unknown"
+    },
+    "62982966-d62d-429b-86d8-d7f0784de086": {
+      "patient_id": "62982966-d62d-429b-86d8-d7f0784de086",
+      "begin": 1610006400000,
+      "end": 1621954976746,
+      "status": "unknown"
+    },
+    "2ac7d7e7-28f8-4bf7-819e-d3427170eef3": {
+      "patient_id": "2ac7d7e7-28f8-4bf7-819e-d3427170eef3",
+      "begin": 1610179200000,
+      "end": 1621954976461,
+      "status": "unknown"
+    },
+    "03ff2929-184c-4759-939b-d6fef9d4fa55": {
+      "patient_id": "03ff2929-184c-4759-939b-d6fef9d4fa55",
+      "begin": 1610265600000,
+      "end": 1621954976259,
+      "status": "unknown"
+    }
+  },
+  "allStations": [
+    "Stationskennung X",
+    "KMT",
+    "Coronastation",
+    "Radiologie",
+    "Stationskennung Y"
+  ]
+}

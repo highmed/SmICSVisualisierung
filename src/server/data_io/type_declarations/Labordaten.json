@@ -180,6 +180,9 @@
         "type": "string",
         "minLength": 1,
         "maxLength": 10
+      },
+      "Viruslast": {
+        "type": "string"
       }
     },
     "required": [
@@ -188,7 +191,8 @@
       "ProbeID",
       "Probenart",
       "Befund",
-      "KeimID"
+      "KeimID",
+      "Viruslast"
     ],
     "anyOf": [
       {
