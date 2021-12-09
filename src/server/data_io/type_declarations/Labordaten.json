@@ -24,7 +24,14 @@
         "type": "string"
       },
       "FallID": {
-        "type": "string"
+	"oneOf": [
+	  {
+	    "type": "string"
+	  },
+	  {
+	    "type": "null"
+	  }
+	]
       },
       "ResultatID": {
         "type": "string"
