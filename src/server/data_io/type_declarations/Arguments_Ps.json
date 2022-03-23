@@ -12,7 +12,5 @@
       }
     }
   },
-  "required": [
-    "patientList"
-  ]
+  "required": ["patientList", "pathogen"]
 }

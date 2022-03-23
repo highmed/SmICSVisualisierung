@@ -31,19 +31,14 @@
         ]
       }
     },
-    "pathogenList": {
-      "type": "array",
-      "description": "pathogen IDs",
-      "uniqueItems": true,
-      "items": {
-        "type": "string"
-      }
+    "pathogen": {
+      "type": "string"
     },
     "hospital": {
       "type": "string",
       "minimum": 0
     },
-    "station": {
+    "stationList": {
       "type": "array",
       "description": "station IDs",
       "uniqueItems": true,
@@ -52,11 +47,5 @@
       }
     }
   },
-  "required": [
-    "starttime",
-    "endtime",
-    "pathogenList",
-    "hospital",
-    "station"
-  ]
+  "required": ["starttime", "endtime", "pathogen", "hospital", "stationList"]
 }

@@ -4,6 +4,10 @@ import { RestAPI } from "./concrete_data_providers/rest_api"
 import CONFIG from "../config"
 
 /**
+ * ! This file is not in use, our only datasource is the restAPI !
+ */
+
+/**
  * Used only by #resolveDataSource to not always create a new one.
  */
 const restDataSource: AbstractDataSource = new RestAPI(CONFIG.rest_api_path)

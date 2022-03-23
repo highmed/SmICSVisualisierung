@@ -185,30 +185,16 @@
         "type": "string"
       }
     },
-    "required": [
-      "PatientID",
-      "FallID",
-      "ProbeID",
-      "Probenart",
-      "Befund",
-      "KeimID",
-      "Viruslast"
-    ],
+    "required": ["PatientID", "FallID", "Probenart", "Befund", "KeimID"],
     "anyOf": [
       {
-        "required": [
-          "Auftragsdatum"
-        ]
+        "required": ["Auftragsdatum"]
       },
       {
-        "required": [
-          "Eingangsdatum"
-        ]
+        "required": ["Eingangsdatum"]
       },
       {
-        "required": [
-          "ZeitpunktProbenentnahme"
-        ]
+        "required": ["ZeitpunktProbenentnahme"]
       }
     ]
   }

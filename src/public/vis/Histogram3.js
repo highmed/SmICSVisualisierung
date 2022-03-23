@@ -10,6 +10,8 @@ class Histogram3 extends Component {
     this.width
     this.height
 
+    this.translate = props.translate
+
     this.margin = {
       top: 100,
       bottom: 100,
@@ -202,7 +204,7 @@ class Histogram3 extends Component {
       .merge(y_label)
       .transition()
       .duration(200)
-      .text("Anzahl")
+      .text(this.translate("number"))
       .attr("font-size", this.margin.left / 3)
       .attr("y", this.margin.left / 2)
       .attr("x", -this.height / 2)
@@ -220,7 +222,7 @@ class Histogram3 extends Component {
       .merge(x_label)
       .transition()
       .duration(200)
-      .text("Blutgruppe")
+      .text(this.translate("bType"))
       .attr("font-size", this.margin.bottom / 3)
       .attr("y", this.height - this.margin.bottom / 4)
       .attr("x", this.width / 2)

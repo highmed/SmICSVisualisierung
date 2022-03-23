@@ -51,7 +51,7 @@ export default class CONFIG {
       : true
 
   /**
-   * This flag is used to decide whether to enable or diable authentication for the webserver.
+   * This flag is used to decide whether to enable or disable authentication for the webserver.
    * It is either set via the `USE_AUTH` environment variable or else defaults to `false`.
    */
   public static readonly use_auth: boolean =
@@ -60,7 +60,17 @@ export default class CONFIG {
       : false
 
   /**
+   * This flag is used to decide whether to enable or disable the export of errors
+   * to an external .log file in the ./src/server/logs folder
+   */
+  public static readonly use_logging: boolean =
+    process.env.USE_LOGGING !== undefined
+      ? process.env.USE_LOGGING.toLowerCase() !== "true"
+      : false
+
+  /**
    * The configuration for connecting with the internal MySQL database. See #PoolConfig for available options.
+   * ! Note: This configuration is not used at the moment !
    */
   public static readonly igd_database_config: PoolConfig = {
     host: "highmeddatstring.igd.fraunhofer.de",

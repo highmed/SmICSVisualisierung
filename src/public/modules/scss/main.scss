@@ -29,7 +29,6 @@
   // flex-direction: row;
   // flex-wrap: nowrap;
   margin-top: 0px;
-  width: 100%;
   box-sizing: border-box;
 
   padding: 5px;
@@ -47,6 +46,9 @@
 .content {
   grid-area: content;
   background: white;
+  position: relative;
+
+  width: 100%;
 }
 
 .footer {
@@ -93,6 +95,7 @@
 #header_menu {
   grid-area: header-menu;
   // background: white;
+  // width: 100%;
 }
 
 .tooltip {

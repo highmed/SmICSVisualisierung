@@ -3,18 +3,20 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
 } from "react-router-dom"
 
 import { SocketProvider } from "./hooks/socket"
 import Main from "./modules/Main"
+import PredRiskMain from "./modules/predRisk/predRiskMain"
 
 import "./app.scss"
 
-const Error404 = () => <h2 style={{marginLeft: "15px"}}>404 Seite nicht gefunden</h2>
+const Error404 = () => (
+  <h2 style={{ marginLeft: "15px" }}>404 Seite nicht gefunden</h2>
+)
 
 class App extends Component {
-
   render() {
     return (
       <SocketProvider>
@@ -24,6 +26,9 @@ class App extends Component {
               <Redirect exact from="/logout" to="/auth/logout" />
               <Route exact path="/">
                 <Main />
+              </Route>
+              <Route exact path="/predRisk">
+                <PredRiskMain />
               </Route>
               <Route>
                 <Error404 />
@@ -37,4 +42,3 @@ class App extends Component {
 }
 
 export default App
-

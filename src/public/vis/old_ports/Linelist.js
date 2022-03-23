@@ -13,6 +13,8 @@ class LineList extends Component {
 
     this.socket = props.socket.client
 
+    this.translate = props.translate
+
     this.id = globals.newComponentID()
 
     this.color = d3.scaleOrdinal(d3.schemeCategory10)
@@ -24,7 +26,7 @@ class LineList extends Component {
     this.width
     this.height
 
-    this.title = "Linelist"
+    this.title = this.translate("Linelist")
 
     this.state = {
       data: {
@@ -212,7 +214,7 @@ class LineList extends Component {
           "Dec",
         ],
       }
-    } else if (lang === "ger") {
+    } else if (lang === "ger" || lang === "cov") {
       self.locale = {
         dateTime: "%A, der %e. %B %Y, %X",
         date: "%d.%m.%Y",
@@ -287,7 +289,7 @@ class LineList extends Component {
     //     content: []
     // }
 
-    let datumformat = self.props.translate("dateFormat", self.state.lang)
+    let datumformat = this.translate("dateFormat", self.state.lang)
     if (i === "link") {
       let momentB = moment(d.b)
       let momentE = moment(d.e)
@@ -299,14 +301,14 @@ class LineList extends Component {
       let secs = duration.seconds()
 
       tableObj = {
-        title: "P" + d.PatientID + " Station " + d.StationID,
+        title: "P" + d.PatientID + " " + this.translate("ward") + " " + d.StationID,
         header: ["DataName", "Value"],
         content: [
           ["Bewegungsart", d.Bewegungsart_l],
           ["Bewegungstyp", d.Bewegungstyp],
           ["CaseType", d.CaseType_l],
           [
-            self.props.translate("duration", self.state.lang),
+            this.translate("duration", self.state.lang),
             months +
               "M " +
               days +
@@ -319,14 +321,14 @@ class LineList extends Component {
               "s",
           ],
           [
-            self.props.translate("begin", self.state.lang),
+            this.translate("begin", self.state.lang),
             momentB.format(datumformat) + " Uhr",
           ],
           [
-            self.props.translate("end", self.state.lang),
+            this.translate("end", self.state.lang),
             momentE.format(datumformat) + " Uhr",
           ],
-          ["FallID", d.FallID],
+          [this.translate("caseID"), d.FallID],
           ["id", d.id],
         ],
       }
@@ -341,11 +343,11 @@ class LineList extends Component {
           insDate.format(datumformat) +
           " Uhr",
         header: [
-          self.props.translate("result", self.state.lang),
-          self.props.translate("pathogen", self.state.lang),
-          self.props.translate("antibiotika", self.state.lang),
-          self.props.translate("material", self.state.lang),
-          self.props.translate("id", self.state.lang),
+          this.translate("result", self.state.lang),
+          this.translate("pathogen", self.state.lang),
+          this.translate("antibiotika", self.state.lang),
+          this.translate("material", self.state.lang),
+          this.translate("id", self.state.lang),
         ],
         content: [],
       }
@@ -359,7 +361,7 @@ class LineList extends Component {
         ])
       })
     } else {
-      tableObj = i + " not defined"
+      tableObj = i + " " + this.translate("notDefined")
     }
 
     // d.patients.forEach(pat => {
@@ -445,11 +447,11 @@ class LineList extends Component {
           ) + " h"
       }
 
-      let anchor = "middle"
+      let anchor = this.translate("middle")
       if (offsetX > containerWidth / 2) {
-        anchor = "end"
+        anchor = this.translate("end2")
       } else if (offsetX < containerWidth / 2) {
-        anchor = "start"
+        anchor = this.translate("start2")
       }
 
       // self.gGraphics
@@ -738,13 +740,13 @@ class LineList extends Component {
     let missingParam = []
     // falls ungültige Auswahl
     if (filterValues.hospitalID <= -1) {
-      missingParam.push("Standort-Auswahl ungültig.")
+      missingParam.push(this.translate("invLocation"))
     }
     if (filterValues.keimID <= -1) {
-      missingParam.push("Keim-Auswahl ungültig.")
+      missingParam.push(this.translate("invPathogen"))
     }
     if (filterValues.patientID <= -1) {
-      missingParam.push("Patient-Auswahl ungültig.")
+      missingParam.push(this.translate("invPatient"))
     }
 
     // MISSINGTODO
@@ -784,7 +786,7 @@ class LineList extends Component {
       // // })
       // title += String(filterValues.lop)
       // let title = "Linelist"
-      let title = "Patient Timeline View"
+      let title = this.translate("Linelist")
       self.props.glContainer.setTitle(title)
     }
   }
@@ -2976,51 +2978,51 @@ class LineList extends Component {
     })
     const minimaleAnzeigeOptions = [
       <option key={"ma0"} value={0}>
-        {self.props.translate("normalView", self.state.lang)}
+        {this.translate("normalView", self.state.lang)}
       </option>,
       <option key={"ma1"} value={1}>
-        {self.props.translate("minimalView", self.state.lang)}
+        {this.translate("minimalView", self.state.lang)}
       </option>,
     ]
     const sortingOptions = [
       <option key={"cat0"} value={0}>
-        {self.props.translate("sortManually", self.state.lang)}
+        {this.translate("sortManually", self.state.lang)}
       </option>,
       <option key={"cat1"} value={1}>
-        {self.props.translate("sortInital", self.state.lang)}
+        {this.translate("sortInital", self.state.lang)}
       </option>,
       // <option key={"cat2"} value={2}>{"Stacked/ Treppe"}</option>,
       // <option key={"cat3"} value={3}>{"auf dem Boden"}</option>
     ]
     const colorOptions = [
       <option key={"col0"} value={0}>
-        {self.props.translate("colorSelect", self.state.lang)}
+        {this.translate("colorSelect", self.state.lang)}
       </option>,
       <option key={"col1"} value={1}>
-        {self.props.translate("colorWard", self.state.lang)}
+        {this.translate("colorWard", self.state.lang)}
       </option>,
       <option key={"col3"} value={3}>
-        {self.props.translate("colorMovement", self.state.lang)}
+        {this.translate("colorMovement", self.state.lang)}
       </option>,
       // <option key={"col2"} value={2}>{"CaseType Farben"}</option>
     ]
     const behandlungConfigOptions = [
       <option key={"col0"} value={0}>
-        {self.props.translate("treatmentOn", self.state.lang)}
+        {this.translate("treatmentOn", self.state.lang)}
       </option>,
       <option key={"col1"} value={1}>
-        {self.props.translate("treatmentOff", self.state.lang)}
+        {this.translate("treatmentOff", self.state.lang)}
       </option>,
     ]
     const untersuchungConfigOptions = [
       <option key={"col0"} value={0}>
-        {self.props.translate("examAll", self.state.lang)}
+        {this.translate("examAll", self.state.lang)}
       </option>,
       <option key={"col1"} value={1}>
-        {self.props.translate("examRel", self.state.lang)}
+        {this.translate("examRel", self.state.lang)}
       </option>,
       <option key={"col2"} value={2}>
-        {self.props.translate("examOff", self.state.lang)}
+        {this.translate("examOff", self.state.lang)}
       </option>,
     ]
     const keimOptions = [
@@ -3123,13 +3125,13 @@ class LineList extends Component {
     // }
     const contact_depth_options = [
       <option key={"depth0"} value={0}>
-        {self.props.translate("nodepth", self.state.lang)}
+        {this.translate("nodepth", self.state.lang)}
       </option>,
       <option key={"depth1"} value={1}>
-        {self.props.translate("depthone", self.state.lang)}
+        {this.translate("depthone", self.state.lang)}
       </option>,
       <option key={"depth2"} value={2}>
-        {self.props.translate("depthn", self.state.lang)}
+        {this.translate("depthn", self.state.lang)}
       </option>,
     ]
 
@@ -3207,13 +3209,13 @@ class LineList extends Component {
               <th>wird Krank/Träger</th>
               <th>Träger</th>
               <th>Krank</th> */}
-              <th>{self.props.translate("UnknownContact", self.state.lang)}</th>
-              <th>{self.props.translate("willBeInfected", self.state.lang)}</th>
+              <th>{this.translate("UnknownContact", self.state.lang)}</th>
+              <th>{this.translate("willBeInfected", self.state.lang)}</th>
               <th>
-                {self.props.translate("infectedCarrier", self.state.lang)}
+                {this.translate("infectedCarrier", self.state.lang)}
               </th>
               <th>
-                {self.props.translate("infectedDiseased", self.state.lang)}
+                {this.translate("infectedDiseased", self.state.lang)}
               </th>
 
               {/* <th>sicherer Kontakt</th>

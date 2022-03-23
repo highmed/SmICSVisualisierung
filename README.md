@@ -1,11 +1,15 @@
-# Repository for the *HiGHmed Infection Control Dashboard* 2.0
+# Repository for the _HiGHmed Infection Control Dashboard_ 2.0
+
 [![pipeline status](https://gitlab.gcc.informatik.tu-darmstadt.de/highmed/infectioncontrolsystem2/badges/master/pipeline.svg)](https://gitlab.gcc.informatik.tu-darmstadt.de/highmed/infectioncontrolsystem2/-/commits/master)
+
+test
 
 This software allows for the visualization of disease spreading in hospitals for both bacteria and viruses.
 
 It consists of
-  1. a web server built on Node.js ("backend"), which handles connections to the data sources and performs computations on it, and
-  2. a website ("frontend") served by the same Node.js instance for the actual interaction with the data.
+
+1. a web server built on Node.js ("backend"), which handles connections to the data sources and performs computations on it, and
+2. a website ("frontend") served by the same Node.js instance for the actual interaction with the data.
 
 See [Structure of the project](#structure-of-the-project) for details.
 
@@ -18,14 +22,14 @@ See [Structure of the project](#structure-of-the-project) for details.
 
 ## Limitations
 
-- Most IDs which are used are strings and *may not contain any commas*, as it uses comma-separated ID lists internally (when communicating with the SQL DB).
+- Most IDs which are used are strings and _may not contain any commas_, as it uses comma-separated ID lists internally (when communicating with the SQL DB).
 - The `IgdSqlDatabaseSource` does not reliably reflect time zones as the underlying data base does not take care of it sufficiently and always runs in local time
-- This application is *not* engineered for security in any way. It assumes to be executed in a trusted (virtual) network/environment *only*.
+- This application is _not_ engineered for security in any way. It assumes to be executed in a trusted (virtual) network/environment _only_.
 - Dates being processed must all lie between the years 1980 and 2100. This is an intentional restriction to make sure no bogus dates are being processed, e.g. Unix Epoch 0 or the SAP placeholder year 9999. The restriction is easy to lift if required: Simply change the relevant bounds in the schemas or remove them entirely in `src/server/data_io/type_declarations/*.json`. Searching for `"value": "1980-01-01T00:00:00Z"` and `"value": "2100-01-01T00:00:00Z"` should do the job. It might be required if anonymization of the sensible medical and health databases introduces such values.
 
 ## Installation
 
-The software is *intended* to be run on modern Linux systems only. It will *probably* also run on Windows 10 or other major platforms supporting [Node.js](https://nodejs.org/en/about/) & [Typescript](https://www.typescriptlang.org/). Components wich might cause issues include the foreign language libraries. See [src/server/foreign_libraries/README.md](src/server/foreign_libraries/README.md) for details.
+The software is _intended_ to be run on modern Linux systems only. It will _probably_ also run on Windows 10 or other major platforms supporting [Node.js](https://nodejs.org/en/about/) & [Typescript](https://www.typescriptlang.org/). Components wich might cause issues include the foreign language libraries. See [src/server/foreign_libraries/README.md](src/server/foreign_libraries/README.md) for details.
 
 The web server requires a recent Node.js version. It is designed and known to be working with version 14 (LTS) and will probably work with future versions too. See [here](https://nodejs.org/en/download/releases/) for more information on Node.js versions.
 
@@ -52,7 +56,7 @@ The actual installation of the main parts is quite straightforward, although the
 
 ```bash
 cd to/change/into/a/new/directory
-git clone git@gitlab.gcc.informatik.tu-darmstadt.de:highmed/infectioncontrolsystem2.git
+git clone git@github.com:highmed/SmICSVisualisierung.git
 
 # change into the project
 cd infectioncontrolsystem2
@@ -101,36 +105,36 @@ These commands are defined in the [`package.json`](package.json) file. You can e
 
 #### Installation
 
-*There are currently no special commands needed for this.*
+_There are currently no special commands needed for this._
 
 #### Build process
 
-| **command**      | **description** |
-|------------------|-----------------|
-| `build`          | This builds both the server and the client, concurrently. |
-| `build-client`   | This builds the client (i.e. the website/frontend) using webpack. It does stuff like Javascript transpilation for compatibility and performance (using Babel & Webpack), reducing the file count by combining stuff like all JS or CSS code from different files and obfuscation. |
-| `build-server`   | This builds the server (i.e. the backend/webserver code). This does two things: (1) it invokes `tsc` to build the Typescript code according to `tsconfig.json` and (2) it invokes `build-types`. |
-| `build-types`    | This command constructs Typescript type annotations from the JSON schemes in `src/server/data_io/type_declarations/` to typing information in `src/server/data_io/type_declarations/generated/`. It automatically deletes typing files for deleted schemes. This has to be called each time a schema is modified, removed, or added. However, this is already done each time by `build-server` and thus also by `build`. |
+| **command**    | **description**                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `build`        | This builds both the server and the client, concurrently.                                                                                                                                                                                                                                                                                                                                                                |
+| `build-client` | This builds the client (i.e. the website/frontend) using webpack. It does stuff like Javascript transpilation for compatibility and performance (using Babel & Webpack), reducing the file count by combining stuff like all JS or CSS code from different files and obfuscation.                                                                                                                                        |
+| `build-server` | This builds the server (i.e. the backend/webserver code). This does two things: (1) it invokes `tsc` to build the Typescript code according to `tsconfig.json` and (2) it invokes `build-types`.                                                                                                                                                                                                                         |
+| `build-types`  | This command constructs Typescript type annotations from the JSON schemes in `src/server/data_io/type_declarations/` to typing information in `src/server/data_io/type_declarations/generated/`. It automatically deletes typing files for deleted schemes. This has to be called each time a schema is modified, removed, or added. However, this is already done each time by `build-server` and thus also by `build`. |
 
 #### Development Mode
 
-| **command**      | **description** |
-|------------------|-----------------|
-| `dev`            | This starts both the client and the server in development mode. |
-| `dev-client`     | This runs the frontend in development mode. This makes the browser hot-reload on changes to e.g. style and code and restarts the website seamlessly in-place if required. |
-| `dev-server`     | This runs the server in development mode. This makes the webserver (backend) restart if server code changes. |
+| **command**  | **description**                                                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dev`        | This starts both the client and the server in development mode.                                                                                                           |
+| `dev-client` | This runs the frontend in development mode. This makes the browser hot-reload on changes to e.g. style and code and restarts the website seamlessly in-place if required. |
+| `dev-server` | This runs the server in development mode. This makes the webserver (backend) restart if server code changes.                                                              |
 
 #### Starting Server & Tests
 
-| **command**      | **description** |
-|------------------|-----------------|
-| `start`          | This starts the webserver. See also [Starting the Server](#starting-the-server). |
-| `test`           | This runs all tests. See also [Starting the Server](#starting-the-server).  |
+| **command** | **description**                                                                  |
+| ----------- | -------------------------------------------------------------------------------- |
+| `start`     | This starts the webserver. See also [Starting the Server](#starting-the-server). |
+| `test`      | This runs all tests. See also [Starting the Server](#starting-the-server).       |
 
 #### Miscellaneous
 
-| **command**      | **description** |
-|------------------|-----------------|
+| **command**      | **description**                                                                                                                                                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `mirror-release` | This "mirrors" the compiled frontend and backend as source code to the [Infection Control System 2 - Release](https://gitlab.gcc.informatik.tu-darmstadt.de/highmed/infection-control-system-2-release) repository. |
 
 ### Design Decisions: The Choice of Programming Languages
@@ -276,7 +280,7 @@ TODO: add link
 
 ## See also
 
-- The archetypes can be found like this: visit the [*HiGHmed* Clinical Knowledge manager](http://88.198.146.13/ckm/templates/1246.169.69) -> select "Use Case Infektionskontrolle" at the top as "project" -> select the orange tab "Templates" on the left -> expand "EHR Templates -> Composition"
+- The archetypes can be found like this: visit the [_HiGHmed_ Clinical Knowledge manager](http://88.198.146.13/ckm/templates/1246.169.69) -> select "Use Case Infektionskontrolle" at the top as "project" -> select the orange tab "Templates" on the left -> expand "EHR Templates -> Composition"
 - [GitLab repository of queries](https://gitlab.gwdg.de/HiGHmed/shared_aql)
 
 ## Questions / TODOs

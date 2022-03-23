@@ -7,6 +7,9 @@ class Linelist extends Component {
   constructor(props) {
     super(props)
 
+    this.module_id = props.create_new_id()
+    this.module_type = "linelist"
+
     /**
      * TODO: hier für das Module feste Parameter/"globale" variablen
      */
@@ -36,7 +39,7 @@ class Linelist extends Component {
       right: 25,
     }
 
-    this.title = "Linelist"
+    this.title = this.translate("Linelist")
 
     this.transition_duration = 200
     this.row_height = 50
@@ -60,48 +63,58 @@ class Linelist extends Component {
 
     this.currentPixelOffset = 0
 
+    //TODO: Datumsformate
+
     this.locale = {
       dateTime: "%A, der %e. %B %Y, %X",
       date: "%d.%m.%Y",
       time: "%H:%M:%S",
       periods: ["AM", "PM"],
       days: [
-        "Sonntag",
-        "Montag",
-        "Dienstag",
-        "Mittwoch",
-        "Donnerstag",
-        "Freitag",
-        "Samstag",
+        this.translate("sunday"),
+        this.translate("monday"),
+        this.translate("tuesday"),
+        this.translate("wednesday"),
+        this.translate("thursday"),
+        this.translate("friday"),
+        this.translate("saturday"),
       ],
-      shortDays: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+      shortDays: [
+        this.translate("sundayS"),
+        this.translate("mondayS"),
+        this.translate("tuesdayS"),
+        this.translate("wednesdayS"),
+        this.translate("thursdayS"),
+        this.translate("fridayS"),
+        this.translate("saturdayS"),
+      ],
       months: [
-        "Januar",
-        "Februar",
-        "März",
-        "April",
-        "Mai",
-        "Juni",
-        "Juli",
-        "August",
-        "September",
-        "Oktober",
-        "November",
-        "Dezember",
+        this.translate("january"),
+        this.translate("february"),
+        this.translate("march"),
+        this.translate("april"),
+        this.translate("may"),
+        this.translate("june"),
+        this.translate("july"),
+        this.translate("august"),
+        this.translate("september"),
+        this.translate("october"),
+        this.translate("november"),
+        this.translate("december"),
       ],
       shortMonths: [
-        "Jan",
-        "Feb",
-        "Mrz",
-        "Apr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Dez",
+        this.translate("januaryS"),
+        this.translate("februaryS"),
+        this.translate("marchS"),
+        this.translate("aprilS"),
+        this.translate("mayS"),
+        this.translate("juneS"),
+        this.translate("julyS"),
+        this.translate("augustS"),
+        this.translate("septemberS"),
+        this.translate("octoberS"),
+        this.translate("novemberS"),
+        this.translate("decemberS"),
       ],
     }
 
@@ -174,8 +187,15 @@ class Linelist extends Component {
       let secs = duration.seconds()
 
       tableObj = {
-        title: "Patient " + d.patient_id + " Station " + d.station_id,
-        header: ["DataName", "Value"],
+        title:
+          this.translate("patient") +
+          " " +
+          d.patient_id +
+          " " +
+          this.translate("ward") +
+          " " +
+          d.station_id,
+        //header: ["DataName", "Value"],
         content: [
           // ["Bewegungsart", d.Bewegungsart_l],
           // ["Bewegungstyp", d.Bewegungstyp],
@@ -185,23 +205,31 @@ class Linelist extends Component {
           [
             this.translate("duration"),
             months +
-              "M " +
+              this.translate("M") +
+              " " +
               days +
-              "d " +
+              this.translate("d") +
+              " " +
               hrs +
-              "h " +
+              this.translate("h") +
+              " " +
               mins +
-              "min " +
+              this.translate("min") +
+              " " +
               secs +
-              "s",
+              this.translate("s"),
           ],
           [
             this.translate("begin"),
-            momentB.format(this.translate("dateFormat")) + " Uhr",
+            momentB.format(this.translate("dateFormat")) +
+              " " +
+              this.translate("clock"),
           ],
           [
             this.translate("end"),
-            momentE.format(this.translate("dateFormat")) + " Uhr",
+            momentE.format(this.translate("dateFormat")) +
+              " " +
+              this.translate("clock"),
           ],
           // ["FallID", d.FallID],
           // ["id", d.id],
@@ -230,7 +258,11 @@ class Linelist extends Component {
           d.patient_id +
           " | " +
           insDate.format(this.translate("dateFormat")) +
-          " Uhr | Result: " +
+          " " +
+          this.translate("clock") +
+          " | " +
+          this.translate("Result") +
+          ": " +
           d.result,
         header: [
           //   this.translate("result"),
@@ -239,7 +271,7 @@ class Linelist extends Component {
           //   this.translate("material"),
           //   this.translate("id"),
           this.translate("KeimID"),
-          this.translate("MREclass"),
+          // this.translate("MREclass"),
           this.translate("material"),
           this.translate("ResultComment"),
         ],
@@ -254,7 +286,7 @@ class Linelist extends Component {
           // o.Material_l,
           // o.id,
           o.KeimID,
-          o.MREKlasseID,
+          // o.MREKlasseID,
           o.Material_l,
           o.Befundkommentar,
         ])
@@ -283,6 +315,8 @@ class Linelist extends Component {
     console.log("linelist module did mount")
 
     this.socket.on("linelist", this.handle_data)
+
+    this.props.register_module(this.module_id, this.module_type, this.draw_vis)
 
     /**
      * Modul auf Größenänderung alle 100ms überprüfen.
@@ -329,7 +363,9 @@ class Linelist extends Component {
         newText =
           moment(self.scaleReverseX(offsetX)).format(
             self.translate("dateFormat")
-          ) + " Uhr"
+          ) +
+          " " +
+          this.translate("clock")
       }
 
       let anchor = "middle"
@@ -628,6 +664,8 @@ class Linelist extends Component {
 
   componentWillUnmount() {
     this.socket.off("linelist")
+
+    this.props.unregister_module(this.module_id)
 
     clearInterval(this.checkSize)
   }
@@ -1153,7 +1191,8 @@ class Linelist extends Component {
 
     let investigation_rects = this.gInvestigation_rects
       .selectAll(".investigation_rect")
-      .data(filtered_investigation_rects)
+      // .data(filtered_investigation_rects)
+      .data(data.investigation_rects)
 
     investigation_rects
       .enter()
@@ -1187,15 +1226,15 @@ class Linelist extends Component {
       .attr("fill", (d) => {
         let c = "white"
         switch (d.result) {
-        case "negative":
-          c = this.get_color("negative")
-          break
-        case "infected":
-          c = this.get_color("infectedCarrier")
-          break
-        case "diseased":
-          c = this.get_color("infectedDiseased")
-          break
+          case "negative":
+            c = this.get_color("negative")
+            break
+          case "infected":
+            c = this.get_color("infectedCarrier")
+            break
+          case "diseased":
+            c = this.get_color("infectedDiseased")
+            break
         }
 
         return c
@@ -1222,7 +1261,9 @@ class Linelist extends Component {
     )
 
     let patients_with_status_rects = []
-    filtered_investigation_rects.forEach((sr) => {
+    // filtered_investigation_rects.forEach((sr) => {
+    // data.investigation_rects.forEach((sr) => {
+    data.status_rects.forEach((sr) => {
       if (!patients_with_status_rects.includes(sr.patient_id)) {
         patients_with_status_rects.push(sr.patient_id)
       }
@@ -1230,14 +1271,16 @@ class Linelist extends Component {
     if (patients_with_status_rects.length < data.patientList.length) {
       data.patientList.forEach((pID) => {
         if (!patients_with_status_rects.includes(pID)) {
-          filtered_status_rects.push(data.unknown_rects[pID])
+          // filtered_status_rects.push(data.unknown_rects[pID])
+          data.status_rects.push(data.unknown_rects[pID])
         }
       })
     }
 
     let status_rects = this.gStatus_rects
       .selectAll(".status_rect")
-      .data(filtered_status_rects)
+      // .data(filtered_status_rects)
+      .data(data.status_rects)
 
     status_rects
       .enter()
@@ -1256,20 +1299,20 @@ class Linelist extends Component {
       .attr("fill", (d) => {
         let c = "yellow"
         switch (d.status) {
-        case "negative":
-          c = this.get_color("negative")
-          // TODO: SMICS-0.8
-          c = this.get_color("unknown")
-          break
-        case "unknown":
-          c = this.get_color("unknown")
-          break
-        case "infected":
-          c = this.get_color("infectedCarrier")
-          break
-        case "diseased":
-          c = this.get_color("infectedDiseased")
-          break
+          case "negative":
+            c = this.get_color("negative")
+            // TODO: SMICS-0.8
+            c = this.get_color("unknown")
+            break
+          case "unknown":
+            c = this.get_color("unknown")
+            break
+          case "infected":
+            c = this.get_color("infectedCarrier")
+            break
+          case "diseased":
+            c = this.get_color("infectedDiseased")
+            break
         }
         return c
       })
@@ -1395,6 +1438,7 @@ class Linelist extends Component {
           onClick={() => {
             self.select_station(s.name)
           }}
+          key={s.name}
         >
           {s.name}
         </th>

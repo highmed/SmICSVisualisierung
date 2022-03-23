@@ -11,18 +11,18 @@ import CloudDownloadIcon from "@material-ui/icons/CloudDownload"
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever"
 import ExitToApp from "@material-ui/icons/ExitToApp"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
+import LooksTwo from "@material-ui/icons/LooksTwo"
 
 import { withAuth } from "../hooks/auth"
 import { withRouter } from "react-router-dom"
 import "./scss/headerMenu.scss"
 
-
 class HeaderMenu extends Component {
-  static propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
-  };
+  // static propTypes = {
+  //   match: PropTypes.object.isRequired,
+  //   location: PropTypes.object.isRequired,
+  //   history: PropTypes.object.isRequired
+  // };
 
   constructor(props) {
     super(props)
@@ -30,7 +30,7 @@ class HeaderMenu extends Component {
     this.state = {}
     this.hostname = window.location.hostname
     this.protocol = window.location.protocol
-    this.port = 80
+    this.port = 9787
 
     this.translate = props.translate
   }
@@ -111,8 +111,16 @@ class HeaderMenu extends Component {
       this.props.global_legend
     )
 
+    let predRisk = this.create_button(
+      this.translate("predRisk"),
+      <LooksTwo />,
+      () => {
+        window.open(window.location.origin + "/predRisk", "_blank")
+      }
+    )
+
     let logout = this.create_button(
-      "Logout user session",
+      this.translate("Logout"),
       <ExitToApp />,
       () => {
         window.location.href = window.location.origin + "/logout"
@@ -136,7 +144,7 @@ class HeaderMenu extends Component {
       <TextField
         key="min_time"
         id="min_time"
-        label="Beginn"
+        label={this.translate("begin")}
         // type="datetime-local"
         // defaultValue="2017-05-24T10:30"
         type="date"
@@ -155,7 +163,7 @@ class HeaderMenu extends Component {
       <TextField
         key="max_time"
         id="max_time"
-        label="Ende"
+        label={this.translate("end")}
         // type="datetime-local"
         // defaultValue="2017-05-24T10:30"
         type="date"
@@ -174,11 +182,11 @@ class HeaderMenu extends Component {
       <TextField
         id="patient_selection"
         key="patient_selection"
-        label="Patienten (Historie)"
+        label={this.translate("Linelist")}
         // helperText="Patienten-IDs"
         // variant="outlined"
         value={this.props.parameters.patientList_string || ""}
-        onChange={this.props.change_patientList}
+        onChange={(e) => this.props.change_patient_list(e.target.value)}
         // InputLabelProps={{
         //   shrink: true,
         // }}
@@ -189,7 +197,7 @@ class HeaderMenu extends Component {
       <TextField
         id="contact_patient_selection"
         key="contact_patient_selection"
-        label="Patient (Kontaktnetzwerk)"
+        label={this.translate("Kontaktnetzwerk")}
         // helperText="Patienten-IDs"
         // variant="outlined"
         value={this.props.parameters.patientID || ""}
@@ -206,11 +214,11 @@ class HeaderMenu extends Component {
         key="pathogen_selection"
         // label="Pathogens"
         // TODO: SMICS-0.8
-        label="Virus"
+        label={this.translate("pathogen")}
         // helperText="Pathogen-IDs"
         // variant="outlined"
         value={this.props.parameters.pathogenList_string || ""}
-        onChange={this.props.change_pathogenList}
+        onChange={this.props.change_pathogen_list}
       />
     )
 
@@ -220,27 +228,28 @@ class HeaderMenu extends Component {
         key="station_selection"
         // label="Stationen"
         // TODO: SMICS-0.8
-        label="Station"
+        label={this.translate("StationIDs")}
         // helperText="Station-IDs"
         // variant="outlined"
         value={this.props.parameters.station_string || ""}
-        onChange={this.props.change_stationList}
+        onChange={this.props.change_station_list}
       />
     )
 
     let ui_elements = [
-      min_time,
-      max_time,
-      contact_patient_selection,
-      patient_selection,
-      // pathogen_selection,
-      // station_selection,
+      // min_time,
+      // max_time,
+      // contact_patient_selection,
+      // patient_selection,
+      // // pathogen_selection,
+      // // station_selection,
       requestData,
       statistic_module,
       help_legend,
       showCache,
+      predRisk,
       // deleteCache,
-      logout
+      logout,
     ]
 
     let ui_elements_spaced = []

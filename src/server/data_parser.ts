@@ -3,6 +3,15 @@ import {
   get_carrier_status,
   get_worse_carrier_status,
 } from "./utilities/carrier_status"
+import { createError, errorDataType, Error_Log } from "./error_log"
+import * as cli_color from "cli-color"
+
+const error_prio: number = 1.4
+
+/**
+ * @Tom in call_function: (...., parameters: any) werden nur noch die notwendigen Parameter mitgegeben
+ * Notwendig heißt: Alle Paras die für den api-call benötigt werden
+ */
 
 const data_parser: { [key: string]: any } = {
   /**
@@ -14,297 +23,35 @@ const data_parser: { [key: string]: any } = {
    * ein leeres Array ([]) zurueck geben
    */
 
-  // TODO: ERROR-Message(s) mit zurueck geben...
   generate_mibi_investigations: {
     needed_raw_data: ["Patient_Labordaten_Ps"],
     call_function: (input_data: any, parameters: any) => {
       let { Patient_Labordaten_Ps } = input_data
 
-      // Patient_Labordaten_Ps.data = [
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     FallID: "00000001",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-01T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-01T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-01T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     FallID: "00000001",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-03T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-03T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-03T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "03",
-      //     PatientID: "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      //     FallID: "00000001",
-      //     ProbeID: "03",
-      //     Eingangsdatum: "2021-01-05T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-05T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-05T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     FallID: "00000002",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-02T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-02T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-02T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     FallID: "00000002",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-04T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-04T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-04T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "03",
-      //     PatientID: "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      //     FallID: "00000002",
-      //     ProbeID: "03",
-      //     Eingangsdatum: "2021-01-07T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-07T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-07T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     FallID: "00000004",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-03T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-03T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-03T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     FallID: "00000004",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-06T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-06T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-06T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "03",
-      //     PatientID: "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      //     FallID: "00000004",
-      //     ProbeID: "03",
-      //     Eingangsdatum: "2021-01-09T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-09T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-09T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     FallID: "00000003",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-03T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-03T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-03T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     FallID: "00000003",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-07T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-07T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-07T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "03",
-      //     PatientID: "059d9e68-c096-4ee7-8551-c088a5488813",
-      //     FallID: "00000003",
-      //     ProbeID: "03",
-      //     Eingangsdatum: "2021-01-09T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-09T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-09T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
-      //     FallID: "00000006",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-04T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-04T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-04T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "71d6b0a9-34b5-43be-a2e6-00517066ad0f",
-      //     FallID: "00000006",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-09T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-09T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-09T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     FallID: "00000005",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-04T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-04T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-04T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "23cdde3c-0e07-497d-bed4-fe9be5c6d166",
-      //     FallID: "00000005",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-08T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-08T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-08T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "01",
-      //     PatientID: "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
-      //     FallID: "00000007",
-      //     ProbeID: "01",
-      //     Eingangsdatum: "2021-01-05T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-05T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: true,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-05T10:30:00+01:00",
-      //   },
-      //   {
-      //     LabordatenID: "02",
-      //     PatientID: "786e3c35-32d3-403e-b2f3-532ed5e78e0c",
-      //     FallID: "00000007",
-      //     ProbeID: "02",
-      //     Eingangsdatum: "2021-01-09T11:00:00+01:00",
-      //     ZeitpunktProbeneingang: "2021-01-09T10:30:00+01:00",
-      //     Probenart: "119342007",
-      //     Screening: false,
-      //     Material_l: "Salvia specimen (specimen)",
-      //     Befund: false,
-      //     Befundkommentar: "Kommentar 1",
-      //     KeimID: "94500-6",
-      //     Befunddatum: "2021-01-09T10:30:00+01:00",
-      //   },
-      // ]
-
-      let { patientList } = parameters
+      let { patientList, parameter_pathogen, pathogen } = parameters
+      if (patientList === undefined) {
+        patientList = []
+      }
 
       let first_timestamp = Number.MAX_VALUE
       let last_timestamp = 0
 
       let investigations: any[] = []
 
+      let status_changes: any = {}
+
+      let error_log = new Error_Log()
+
       // Selber Patient, selbes Datum und selber Keim gehoeren zusammen
       if (Patient_Labordaten_Ps.error === undefined) {
         // TODO: SMICS-0.8
         // Patientenliste wegen Nth-Degree rauslesen
         let new_patient_list: any[] = []
+        let filtered_by_parameter_pathogen = Patient_Labordaten_Ps.data.filter(
+          (d: any) => d.KeimID === pathogen
+        )
+
+        Patient_Labordaten_Ps.data = filtered_by_parameter_pathogen
         Patient_Labordaten_Ps.data.forEach((invest: any) => {
           invest.timestamp = new Date(invest.Eingangsdatum).getTime()
           if (!new_patient_list.includes(invest.PatientID)) {
@@ -369,54 +116,64 @@ const data_parser: { [key: string]: any } = {
             // console.log("index > 0")
           }
         })
+
+        // just to track current patient status for pathogen
+        let last_status: any = {}
+
+        patientList.forEach((pID: any) => {
+          status_changes[pID] = {}
+          last_status[pID] = {}
+
+          /**
+           * Für jeden Patienten pro Keim eine Liste an Status-Veränderungen erzeugen:
+           *
+           * - Alle Investigations durchiterieren
+           * - Falls noch kein Eintrag für diesen Keim, dann einen anlegen
+           *      (empty Array + unknown falls im Krankenhaus bis dahin)
+           * - Schauen, ob Status-Veränderung
+           * - Falls Status-Veränderung -> diese Statusveränderung auf das Array pushen
+           *
+           * ! JEDE ÄNDERUNG, nicht nur Verschlimmerung !
+           */
+
+          let pat_investigations: any = investigations.filter(
+            (d) => d.patient_id === pID
+          )
+
+          pat_investigations.forEach((invest: any) => {
+            // abchecken, ob neuer status "schlimmer" ist
+            // -> dann status-wechsel
+            // kann ich generisch implementieren!
+
+            let path_id: any = invest.pathogen_id
+            let old_status: any = last_status[pID][path_id]
+            let new_status: any = invest.result
+
+            if (old_status === undefined) {
+              status_changes[pID][path_id] = []
+            }
+
+            if (old_status !== new_status) {
+              status_changes[pID][path_id].push({
+                new_status,
+                timestamp: invest.timestamp,
+              })
+              last_status[pID][path_id] = new_status
+            }
+          })
+        })
+      } else {
+        error_log.addError(
+          createError(
+            "Patient_Labordaten_Ps",
+            parameters,
+            error_prio,
+            Patient_Labordaten_Ps.error
+          )
+        )
       }
 
-      let status_changes: any = {}
-      // just to track current patient status for pathogen
-      let last_status: any = {}
-
-      patientList.forEach((pID: any) => {
-        status_changes[pID] = {}
-        last_status[pID] = {}
-
-        /**
-         * Für jeden Patienten pro Keim eine Liste an Status-Veränderungen erzeugen:
-         *
-         * - Alle Investigations durchiterieren
-         * - Falls noch kein Eintrag für diesen Keim, dann einen anlegen
-         *      (empty Array + unknown falls im Krankenhaus bis dahin)
-         * - Schauen, ob Status-Veränderung
-         * - Falls Status-Veränderung -> diese Statusveränderung auf das Array pushen
-         *
-         * ! JEDE ÄNDERUNG, nicht nur Verschlimmerung !
-         */
-
-        let pat_investigations: any = investigations.filter(
-          (d) => d.patient_id === pID
-        )
-
-        pat_investigations.forEach((invest: any) => {
-          // abchecken, ob neuer status "schlimmer" ist
-          // -> dann status-wechsel
-          // kann ich generisch implementieren!
-
-          let path_id: any = invest.pathogen_id
-          let old_status: any = last_status[pID][path_id]
-          let new_status: any = invest.result
-
-          if (old_status === undefined) {
-            status_changes[pID][path_id] = []
-          }
-
-          if (old_status !== new_status) {
-            status_changes[pID][path_id].push({
-              new_status,
-              timestamp: invest.timestamp,
-            })
-            last_status[pID][path_id] = new_status
-          }
-        })
-      })
+      let return_log: errorDataType[] = error_log.getErrorLog()
 
       return {
         timestamp: new Date().getTime(),
@@ -425,6 +182,7 @@ const data_parser: { [key: string]: any } = {
         patientList,
         investigations,
         status_changes,
+        return_log,
       }
     },
   },
@@ -432,15 +190,40 @@ const data_parser: { [key: string]: any } = {
   generate_mibi_investigations_TEMP: {
     needed_raw_data: ["Contact_NthDegree_TTKP_Degree"],
     call_function: (input_data: any, parameters: any) => {
-      let { Contact_NthDegree_TTKP_Degree } = input_data
-      let { Labordaten } = Contact_NthDegree_TTKP_Degree.data
+      let error_log = new Error_Log()
 
-      let Patient_Labordaten_Ps = {
-        error: undefined,
-        data: Labordaten,
+      let { Contact_NthDegree_TTKP_Degree } = input_data
+      let Patient_Labordaten_Ps: any
+      if (Contact_NthDegree_TTKP_Degree.error === undefined) {
+        let { Labordaten } = Contact_NthDegree_TTKP_Degree.data
+
+        Labordaten = Labordaten.filter(
+          (d: any) => d.KeimID === parameters.pathogen
+        )
+
+        Patient_Labordaten_Ps = {
+          error: undefined,
+          data: Labordaten,
+        }
+      } else {
+        Patient_Labordaten_Ps = {
+          error: true,
+          data: [],
+        }
+        error_log.addError(
+          createError(
+            "Contact_NthDegree_TTKP_Degree",
+            parameters,
+            error_prio,
+            Contact_NthDegree_TTKP_Degree.error
+          )
+        )
       }
 
       let { patientList } = parameters
+      if (patientList === undefined) {
+        patientList = []
+      }
 
       let first_timestamp = Number.MAX_VALUE
       let last_timestamp = 0
@@ -511,6 +294,15 @@ const data_parser: { [key: string]: any } = {
             )
           }
         })
+      } else {
+        error_log.addError(
+          createError(
+            "Patient_Labordaten_Ps",
+            parameters,
+            error_prio,
+            Patient_Labordaten_Ps.error
+          )
+        )
       }
 
       let status_changes: any = {}
@@ -559,7 +351,7 @@ const data_parser: { [key: string]: any } = {
           }
         })
       })
-
+      let return_log: errorDataType[] = error_log.getErrorLog()
       return {
         timestamp: new Date().getTime(),
         first_timestamp,
@@ -567,6 +359,7 @@ const data_parser: { [key: string]: any } = {
         patientList,
         investigations,
         status_changes,
+        return_log,
       }
     },
   },
@@ -574,6 +367,8 @@ const data_parser: { [key: string]: any } = {
     needed_raw_data: ["Patient_Bewegung_Ps"],
     call_function: (input_data: any, parameters: any) => {
       let { Patient_Bewegung_Ps } = input_data
+
+      let error_log = new Error_Log()
 
       let { patientList } = parameters
 
@@ -601,8 +396,18 @@ const data_parser: { [key: string]: any } = {
         // generate visualization for movement data (horizontal rectangles)
         // only if there is no error in the data
         Patient_Bewegung_Ps.data.forEach((movement: any) => {
+          if (movement.StationID === undefined) {
+            if (movement.Station === undefined) {
+              movement.StationID = movement.Fachabteilung
+            } else {
+              movement.StationID = movement.Station
+            }
+          }
+
           if (!allStations.includes(movement.StationID)) {
-            allStations.push(movement.StationID)
+            if (movement.BewegungstypID !== 4) {
+              allStations.push(movement.StationID)
+            }
           }
 
           let begin = new Date(movement.Beginn).getTime()
@@ -635,7 +440,18 @@ const data_parser: { [key: string]: any } = {
             movement_rects.push(vis_struct)
           }
         })
+      } else {
+        error_log.addError(
+          createError(
+            "Patient_Bewegung_Ps",
+            parameters,
+            error_prio,
+            Patient_Bewegung_Ps.error
+          )
+        )
       }
+
+      let return_log: errorDataType[] = error_log.getErrorLog()
 
       return {
         timestamp: new Date().getTime(),
@@ -646,6 +462,7 @@ const data_parser: { [key: string]: any } = {
         movement_dots,
         allStations,
         unknown_rects,
+        return_log,
       }
     },
   },
@@ -659,8 +476,41 @@ const data_parser: { [key: string]: any } = {
 
       // TODO: generate_mibi_investigations aufrufen... (falls noch nicht vorhanden...)
 
+      let error_log = new Error_Log()
+
+      console.log(`
+      
+      
+      
+      
+      
+      
+      
+      generate contact graph
+      
+      
+      
+      
+      
+      `)
+
+      if (true) {
+        // Wenn KEIN ERROR in vorherigen daten...
+      } else {
+        error_log.addError(
+          createError(
+            "dataname that produces error",
+            parameters,
+            error_prio,
+            { error: "dataname that produceed error" }.error
+          )
+        )
+      }
+
+      let return_log: errorDataType[] = error_log.getErrorLog()
       return {
         data: "data",
+        return_log,
       }
     },
   },
@@ -670,6 +520,8 @@ const data_parser: { [key: string]: any } = {
       let { RKIalgo } = input_data
 
       let parsed_rki: any[] = []
+
+      let error_log = new Error_Log()
 
       if (RKIalgo.error === undefined) {
         let data = RKIalgo.data
@@ -691,15 +543,29 @@ const data_parser: { [key: string]: any } = {
             classification: data["Klassifikation der Alarmfaelle"][index],
           })
         })
+
+        parsed_rki.forEach((d: any) => {
+          if (d.StationID === null || d.StationID === undefined) {
+            d.StationID = "klinik"
+          }
+        })
+      } else {
+        error_log.addError(
+          createError("RKIalgo", parameters, error_prio, RKIalgo.error)
+        )
       }
+      let return_log: errorDataType[] = error_log.getErrorLog()
+      return { parsed_rki, return_log }
+    },
+  },
+  prediction_data_parser: {
+    needed_raw_data: ["PredictionDummy"],
+    call_function: (input_data: any, parameters: any) => {
+      let { PredictionDummy } = input_data
+      console.log(PredictionDummy)
 
-      parsed_rki.forEach((d: any) => {
-        if (d.StationID === null || d.StationID === undefined) {
-          d.StationID = "klinik"
-        }
-      })
-
-      return parsed_rki
+      let return_log: errorDataType[] = []
+      return { PredictionDummy, return_log }
     },
   },
 }

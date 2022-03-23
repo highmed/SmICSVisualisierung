@@ -29,6 +29,7 @@
   stroke-width: 1.25px;
 }
 
-.patientLabel {
+.patientLabel,
+.mouseLine {
   pointer-events: none;
 }

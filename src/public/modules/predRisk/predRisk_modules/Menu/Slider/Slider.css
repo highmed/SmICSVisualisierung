@@ -1,0 +1,26 @@
+.slide-container {
+  position: relative;
+  width: 100%;
+  height: 0.00001%;
+}
+
+.slide-container input[type="range"] {
+  width: 95%;
+  height: 0.00001%;
+  background-color: yellowgreen;
+}
+
+.slide-container input[type="range"]::-webkit-slider-thumb {
+  width: 250px;
+  height: 250px;
+  border-radius: 100%;
+  background: #04aa6d;
+  cursor: pointer;
+}
+
+.slide-container input[type="range"]::-moz-range-thumb {
+  width: 250px;
+  height: 250px;
+  border-radius: 100%;
+  background: #04aa6d;
+}

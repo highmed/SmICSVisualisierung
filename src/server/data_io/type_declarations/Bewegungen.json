@@ -51,7 +51,7 @@
         "type": "integer",
         "minimum": 0
       },
-      "Station": {
+      "stationList": {
         "type": "string"
       },
       "ZimmerNr": {
@@ -93,12 +93,6 @@
         "minLength": 1
       }
     },
-    "required": [
-      "Beginn",
-      "Ende",
-      "PatientID",
-      "FallID",
-      "BewegungstypID"
-    ]
+    "required": ["Beginn", "Ende", "PatientID", "FallID", "BewegungstypID"]
   }
 }

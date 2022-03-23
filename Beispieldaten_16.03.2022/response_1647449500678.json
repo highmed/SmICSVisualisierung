@@ -1,0 +1,38 @@
+[
+  {
+    "LabordatenID": "99999900003",
+    "Eingangsdatum": "2021-05-04T11:00:00+02:00",
+    "ZeitpunktProbeneingang": "2021-05-04T12:00:00+02:00",
+    "Probenart": "03AB",
+    "Material_l": "Abstrich",
+    "Befund": true,
+    "Befundtext": "Nachweis",
+    "Keim_l": "Staphylococcus aureus",
+    "KeimID": "sau",
+    "Befunddatum": "2021-05-04T11:00:00+02:00",
+    "Befundkommentar": null,
+    "Quantity": null,
+    "Einheit": null,
+    "Bereich": "mikrobiologisch",
+    "FallID": "99999903",
+    "PatientID": "Patient102"
+  },
+  {
+    "LabordatenID": "99999900004",
+    "Eingangsdatum": "2021-06-02T11:00:00+02:00",
+    "ZeitpunktProbeneingang": "2021-06-02T12:00:00+02:00",
+    "Probenart": "03AB",
+    "Material_l": "Abstrich",
+    "Befund": true,
+    "Befundtext": "Nachweis",
+    "Keim_l": "Staphylococcus aureus",
+    "KeimID": "sau",
+    "Befunddatum": "2021-06-02T11:00:00+02:00",
+    "Befundkommentar": null,
+    "Quantity": null,
+    "Einheit": null,
+    "Bereich": "mikrobiologisch",
+    "FallID": "99999904",
+    "PatientID": "Patient102"
+  }
+]

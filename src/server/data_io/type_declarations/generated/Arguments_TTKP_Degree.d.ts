@@ -11,5 +11,9 @@ export interface Arguments_TTKP_Degree {
   patientID: string;
   hospital: string;
   degree: number;
+  /**
+   * patient IDs
+   */
+  patientList?: string[];
   [k: string]: unknown;
 }

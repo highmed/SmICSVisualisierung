@@ -1,0 +1,104 @@
+.filter_window {
+  display: flex;
+  flex-wrap: wrap;
+  // justify-content: space-evenly;
+  // flex-direction: column;
+  // justify-content: flex-start;
+  align-items: flex-start;
+
+  // overflow-y: scroll;
+
+  // height: 100%;
+
+  overflow-x: hidden;
+}
+
+.parameters_window > * {
+  left: 0px;
+}
+
+.para_input_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-direction: column;
+  padding: 5px;
+
+  // width: 100%;
+  width: 175px;
+}
+
+.textfield_and_buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.deleteable_list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-direction: column;
+
+  // max-height: 200px;
+  // overflow-y: scroll;
+}
+
+.delete_clickable {
+  cursor: pointer;
+
+  text-align: bottom;
+
+  transform: scale(0.8);
+
+  vertical-align: bottom;
+}
+
+.delete_clickable:hover {
+  color: red;
+
+  transform: scale(1);
+}
+
+.deleteable_list_item {
+  // border-radius: 20px;
+  // border: solid black 1px;
+  // background-color: rgb(222, 222, 222);
+
+  // padding: 2px;
+  // margin: 2px;
+
+  // line-height: 25px;
+  white-space: nowrap;
+  width: 175px;
+
+  margin: 0px;
+  padding: 0px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deleteable_list_item_text {
+  max-width: 120px;
+  // display: inline-block;
+  margin: 0px;
+  padding: 0px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list_button_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: right;
+  flex-direction: column;
+}
+
+.list_button {
+  min-width: 10px;
+  width: 10px;
+  height: 20px;
+
+  margin: 2px;
+}

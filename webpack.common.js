@@ -1,10 +1,9 @@
 module.exports = {
-  stats: 'minimal', // see: https://webpack.js.org/configuration/stats/#stats-presets
+  stats: "minimal", // see: https://webpack.js.org/configuration/stats/#stats-presets
   entry: {
     main: "./src/public/index.js",
     app: [
-      "./node_modules/react-grid-layout/css/styles.css",
-      "./node_modules/react-resizable/css/styles.css",
+      "/node_modules/flexlayout-react/style/light.css",
       // "react-hot-loader/patch",
     ],
   },
@@ -19,7 +18,8 @@ module.exports = {
         use: {
           loader: "file-loader",
           options: {
-            name: "[name].[hash].[ext]",
+            // name: "[name].[hash].[ext]",
+            name: "[name].[ext]",
             outputPath: "imgs",
           },
         },

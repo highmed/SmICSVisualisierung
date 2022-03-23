@@ -10,9 +10,6 @@ import * as Arguments_TTPK_JSON from "./type_declarations/Arguments_TTPK.json"
 import * as Arguments_OutbreakDetectionConfigurations_JSON from "./type_declarations/Arguments_OutbreakDetectionConfigurations.json"
 import * as Arguments_OutbreakDetectionResultSet_JSON from "./type_declarations/Arguments_OutbreakDetectionResultSet.json"
 import * as Arguments_RKIalgo_JSON from "./type_declarations/Arguments_RKIalgo.json"
-import * as Arguments_Patient_Symptom_JSON from "./type_declarations/Arguments_Patient_Symptom.json"
-import * as Arguments_Patient_Vaccination_JSON from "./type_declarations/Arguments_Patient_Vaccination.json"
-import * as Arguments_Metadaten_JSON from "./type_declarations/Arguments_Metadaten.json"
 import * as Bewegungen_JSON from "./type_declarations/Bewegungen.json"
 import * as ErregerProTag_JSON from "./type_declarations/ErregerProTag.json"
 import * as Hospitals_JSON from "./type_declarations/Hospitals.json"
@@ -27,6 +24,7 @@ import * as RKIalgo_JSON from "./type_declarations/RKIalgo.json"
 import * as Patient_Symptom_JSON from "./type_declarations/Patient_Symptom.json"
 import * as Patient_Vaccination_JSON from "./type_declarations/Patient_Vaccination.json"
 import * as Metadaten_JSON from "./type_declarations/Metadaten.json"
+import * as Prediction_dummy_JSON from "./type_declarations/PredictionDummy.json"
 import { Arguments_Empty } from "./type_declarations/generated/Arguments_Empty"
 import { Arguments_Ps } from "./type_declarations/generated/Arguments_Ps"
 import { Arguments_TTEsKSs } from "./type_declarations/generated/Arguments_TTEsKSs"
@@ -35,9 +33,6 @@ import { Arguments_TTPK } from "./type_declarations/generated/Arguments_TTPK"
 import { Arguments_OutbreakDetectionConfigurations } from "./type_declarations/generated/Arguments_OutbreakDetectionConfigurations"
 import { Arguments_OutbreakDetectionResultSet } from "./type_declarations/generated/Arguments_OutbreakDetectionResultSet"
 import { Arguments_RKIalgo } from "./type_declarations/generated/Arguments_RKIalgo"
-import { Arguments_Patient_Symptom } from "./type_declarations/generated/Arguments_Patient_Symptom"
-import { Arguments_Patient_Vaccination } from "./type_declarations/generated/Arguments_Patient_Vaccination"
-import { Arguments_Metadaten } from "./type_declarations/generated/Arguments_Metadaten"
 import { Bewegungen } from "./type_declarations/generated/Bewegungen"
 import { ErregerProTag } from "./type_declarations/generated/ErregerProTag"
 import { Hospitals } from "./type_declarations/generated/Hospitals"
@@ -52,6 +47,10 @@ import { Patient_Symptom } from "./type_declarations/generated/Patient_Symptom"
 import { Patient_Vaccination } from "./type_declarations/generated/Patient_Vaccination"
 import { Metadaten } from "./type_declarations/generated/Metadaten"
 import { Praktikum_CF_2020_Result } from "./type_declarations/generated/Praktikum_CF_2020_Result"
+import { PredictionDummy } from "./type_declarations/generated/PredictionDummy"
+import { AbstractDataSource } from "./abstract_data_provider"
+import { RestAPI } from "./concrete_data_providers/rest_api"
+import CONFIG from "../config"
 
 /*
  * This file imports lots of type and corresponding schema definitions for the procedures. That simplifies the use of
@@ -69,11 +68,9 @@ export {
   Arguments_OutbreakDetectionConfigurations,
   Arguments_OutbreakDetectionResultSet,
   Arguments_RKIalgo,
-  Arguments_Patient_Symptom,
-  Arguments_Patient_Vaccination,
-  Arguments_Metadaten,
 }
-const ARGUMENT_SCHEMAS: ReadonlyArray<object> = [
+
+export const ARGUMENT_SCHEMAS: ReadonlyArray<object> = [
   Arguments_Empty_JSON,
   Arguments_Ps_JSON,
   Arguments_TTEsKSs_JSON,
@@ -82,9 +79,6 @@ const ARGUMENT_SCHEMAS: ReadonlyArray<object> = [
   Arguments_OutbreakDetectionConfigurations_JSON,
   Arguments_OutbreakDetectionResultSet_JSON,
   Arguments_RKIalgo_JSON,
-  Arguments_Patient_Symptom_JSON,
-  Arguments_Patient_Vaccination_JSON,
-  Arguments_Metadaten_JSON,
 ]
 
 export {
@@ -102,6 +96,7 @@ export {
   Patient_Symptom,
   Patient_Vaccination,
   Metadaten,
+  PredictionDummy,
 }
 const DATA_SCHEMAS: ReadonlyArray<object> = [
   Bewegungen_JSON,
@@ -118,6 +113,7 @@ const DATA_SCHEMAS: ReadonlyArray<object> = [
   Patient_Symptom_JSON,
   Patient_Vaccination_JSON,
   Metadaten_JSON,
+  Prediction_dummy_JSON,
 ]
 
 // see: https://github.com/ajv-validator/ajv#options for available options
@@ -178,14 +174,13 @@ export const validate = async <T>(
       success: true,
       data: data as T,
     }
-  else
+  else {
     return {
       success: false,
       rawData: data,
-      errorMessage: `could not validate data against schema "${schema_name}": ${ajv.errorsText()}; data was ${JSON.stringify(
-        data
-      )}`,
+      errorMessage: `could not validate data against schema "${schema_name}": ${ajv.errorsText()}`,
     }
+  }
 }
 
 /**

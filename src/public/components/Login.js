@@ -30,7 +30,7 @@ function Copyright() {
 class Login extends Component {
   constructor(props) {
     super(props)
-
+    this.translate = props.translate
     this.state = {
       username: "",
       password: ""
@@ -74,7 +74,7 @@ class Login extends Component {
                 error={!!this.props.auth.error}
                 autoComplete="user"
                 id="username"
-                label="Benutzername"
+                label={this.translate("Benutzername")}
                 margin="normal"
                 name="username"
                 variant="outlined"
@@ -86,7 +86,7 @@ class Login extends Component {
                 error={!!this.props.auth.error}
                 autoComplete="current-password"
                 id="password"
-                label="Passwort"
+                label={this.translate("password")}
                 margin="normal"
                 name="password"
                 type="password"
@@ -102,7 +102,7 @@ class Login extends Component {
                 type="submit"
                 variant="contained"
               >
-                { this.props.auth.username ? "Abmelden" : "Anmelden" }
+                { this.props.auth.username ? this.translate("logOut") : this.translate("logIn") }
               </Button>
             </form>
           </div>

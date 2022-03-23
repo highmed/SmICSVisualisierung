@@ -1,0 +1,20 @@
+[
+  {
+    "LabordatenID": "99999900001",
+    "Eingangsdatum": "2021-06-04T11:00:00+02:00",
+    "ZeitpunktProbeneingang": "2021-06-04T12:00:00+02:00",
+    "Probenart": "03AB",
+    "Material_l": "Abstrich",
+    "Befund": true,
+    "Befundtext": "Nachweis",
+    "Keim_l": "Staphylococcus aureus",
+    "KeimID": "sau",
+    "Befunddatum": "2021-06-04T11:00:00+02:00",
+    "Befundkommentar": null,
+    "Quantity": null,
+    "Einheit": null,
+    "Bereich": "mikrobiologisch",
+    "FallID": "99999910",
+    "PatientID": "Patient109"
+  }
+]

@@ -1,4 +1,5 @@
 import {
+  ARGUMENT_SCHEMAS,
   Arguments_Empty,
   Arguments_Ps,
   Arguments_TTEsKSs,
@@ -13,6 +14,7 @@ import {
   PathogenFlag,
   Praktikum_CF_2020_Result,
   ValidationResult,
+  PredictionDummy,
 } from "./types"
 import { call_Praktikum_CF_2020 } from "../foreign_libraries/interfaces/praktikumcf2020"
 
@@ -90,16 +92,20 @@ export abstract class AbstractDataSource {
         results: "data/RKIalgo",
       },
       Patient_Symptom: {
-        arguments: "args/Arguments_Patient_Symptom",
+        arguments: "args/Arguments_Ps",
         results: "data/Patient_Symptom",
       },
       Patient_Vaccination: {
-        arguments: "args/Arguments_Patient_Vaccination",
+        arguments: "args/Arguments_Ps",
         results: "data/Patient_Vaccination",
       },
       Metadaten: {
-        arguments: "args/Arguments_Metadaten",
+        arguments: "args/Arguments_Ps",
         results: "data/Metadaten",
+      },
+      PredictionDummy: {
+        arguments: "args/Arguments_Empty",
+        results: "data/PredictionDummy",
       },
     })
   )
@@ -133,6 +139,7 @@ export abstract class AbstractDataSource {
     parameter: object,
     authToken?: string
   ): Promise<ValidationResult<unknown>> => {
+    // TODO: Erst hier die spez. request_parameter für API-Anfrage holen!
     this.authToken = authToken || ""
     const specification = AbstractDataSource.MAPPING.get(name)
     if (specification === undefined)
@@ -140,14 +147,53 @@ export abstract class AbstractDataSource {
         `There was en error trying to call the procedure: no procedure with the name "${name}" was found`
       )
 
-    const method: (
-      param: object
-    ) => Promise<ValidationResult<unknown>> = (this as any)[name] // this translation is not type checked!
+    const method: (param: object) => Promise<ValidationResult<unknown>> = (
+      this as any
+    )[name] // this translation is not type checked!
     const validatedParameter = await ensureIsValid<object>(
       specification.arguments,
       parameter
     )
     return method(validatedParameter)
+  }
+
+  /**
+   * @param procedureName The name of the procedure call at the api
+   * @param all_parameters All parameters that come with the payload
+   * @returns The neccessary parameters for the procedure
+   */
+  public static readonly getProcedureParameters = (
+    procedureName: string,
+    all_parameters: any
+  ): { [key: string]: string[] } => {
+    let args_tmp = AbstractDataSource.MAPPING.get(procedureName)?.arguments
+    let args: string
+    if (args_tmp === undefined) {
+      console.log(
+        `[getProcedureParameters]: There are no specified parameters for procedure ${procedureName}.`
+      )
+      // TODO: Hier einen Error setzen?
+      // Arguments_Empty case
+      return {}
+    } else {
+      args = args_tmp
+
+      let JSON_schema: any
+
+      ARGUMENT_SCHEMAS.forEach((schema: any) => {
+        if (JSON.stringify(schema).indexOf(args) !== -1) {
+          JSON_schema = schema
+        }
+      })
+
+      let parameters: { [key: string]: string[] } = {}
+
+      JSON_schema.required.forEach((para: string) => {
+        parameters[para] = all_parameters[para]
+      })
+
+      return parameters
+    }
   }
 
   public abstract GetHospitals: (

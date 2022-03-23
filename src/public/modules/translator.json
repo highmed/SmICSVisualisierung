@@ -39,7 +39,7 @@
     "eng": "Duration stay/infected",
     "ger": "Aufenthalts-/Krankheitsdauer",
     "rus": "- ? -",
-    "cov": "Aufenthals-/Krankheitsdauer"
+    "cov": "Aufenthalts-/Krankheitsdauer"
   },
   "Kontaktnetzwerk": {
     "eng": "Contactnetwork",
@@ -159,7 +159,7 @@
     "eng": "No data loaded so far.",
     "ger": "Keine Daten bisher geladen.",
     "rus": "- ? -",
-    "cov": "noch keine Daten geladen"
+    "cov": "Noch keine Daten geladen"
   },
   "dateFormat": {
     "eng": "dd YYYY.MM.DD hh:mm:ss",
@@ -168,10 +168,10 @@
     "cov": "dd DD.MM.YYYY HH:mm:ss"
   },
   "duration": {
-    "eng": "duration",
-    "ger": "Dauer",
+    "eng": "Duration of contact",
+    "ger": "Kontaktdauer",
     "rus": "- ? -",
-    "cov": "Dauer"
+    "cov": "Kontaktdauer"
   },
   "result": {
     "eng": "result",
@@ -192,22 +192,46 @@
     "cov": "n/a"
   },
   "material": {
-    "eng": "material",
+    "eng": "Material",
     "ger": "Material",
     "rus": "- ? -",
     "cov": "Material"
   },
   "begin": {
-    "eng": "start time",
+    "eng": "Start time",
     "ger": "Beginn",
     "rus": "- ? -",
     "cov": "Beginn"
+  },
+  "begin2": {
+    "eng": "Start of Contact",
+    "ger": "Kontaktbeginn",
+    "rus": "- ? -",
+    "cov": "Kontaktbeginn"
+  },
+  "begin3": {
+    "eng": "Start of timespan",
+    "ger": "Zeitraum-Beginn",
+    "rus": "- ? -",
+    "cov": "Zeitraum-Beginn"
   },
   "end": {
     "eng": "end time",
     "ger": "Ende",
     "rus": "- ? -",
     "cov": "Ende"
+  },
+  "end2": {
+    "eng": "End of contact",
+    "ger": "Kontaktende",
+    "rus": "- ? -",
+    "cov": "Kontaktende"
+  },
+  "end3": {
+    "eng": "End of timespan",
+    "ger": "Zeitraum-Ende",
+    "rus": "- ? -",
+    "cov": "Zeitraum-Ende"
   },
   "showAll": {
     "eng": "show all",
@@ -327,7 +351,7 @@
     "eng": "no pathogen selected",
     "ger": "Kein Erreger ausgewählt",
     "rus": "- ? -",
-    "cov": "- - - -"
+    "cov": "Kein Erreger ausgewählt"
   },
   "criticalpath": {
     "eng": "critical path",
@@ -384,13 +408,13 @@
     "cov": "Linienstärke: dünn"
   },
   "hypcircoff": {
-    "eng": "no circles",
+    "eng": "no marks",
     "ger": "Hypothesen nicht hervorheben",
     "rus": "- ? -",
     "cov": "Hypothesen nicht hervorheben"
   },
   "hypcircon": {
-    "eng": "hypothesis circles",
+    "eng": "mark hypotheses",
     "ger": "Hypothesen hervorheben",
     "rus": "- ? -",
     "cov": "Hypothesen hervorheben"
@@ -422,67 +446,709 @@
   "HospitalIDs": {
     "eng": "HospitalIDs",
     "ger": "Krankenhaus",
-    "rus": "Krankenhaus",
+    "rus": "- ? -",
     "cov": "Krankenhaus"
   },
-  "AnnotationTimeline": {
+  "PatientDetail": {
     "eng": "Patient-Detail View",
     "ger": "Patient-Detail Ansicht",
-    "rus": "AnnotationTimeline RUS",
+    "rus": "PatientDetail RUS",
     "cov": "Patient-Detail Ansicht"
   },
   "EpiTopTitle": {
-    "eng": "TODO",
-    "ger": "TODO",
-    "rus": "TODO",
+    "eng": "todays number of stationary COVID-19 patients",
+    "ger": "Tagesaktuelle Anzahl der stationären COVID-19 Patienten",
+    "rus": "- ? -",
     "cov": "Tagesaktuelle Fallzahl der stationären COVID-19 Patienten"
   },
   "EpiBottomTitle": {
-    "eng": "TODO",
-    "ger": "TODO",
-    "rus": "TODO",
+    "eng": "new stationary COVID-19 patients",
+    "ger": "Neue stationäre COVID-19 Patienten",
+    "rus": "- ? -",
     "cov": "Neue Fälle der stationären COVID-19 Patienten"
   },
   "MREclass": {
-    "eng": "TODO",
+    "eng": "MRP Classification",
     "ger": "MRE Klasse",
-    "rus": "TODO",
+    "rus": "- ? -",
     "cov": "MRE Klasse"
   },
   "ResultComment": {
-    "eng": "TODO",
+    "eng": "commentary on finding",
     "ger": "Befundkommentar",
-    "rus": "TODO",
+    "rus": "- ? -",
     "cov": "Befundkommentar"
   },
   "loadData": {
     "eng": "Load Data",
     "ger": "Lade Daten",
-    "rus": "TODO",
+    "rus": "- ? -",
     "cov": "Lade Daten"
   },
   "showCache": {
     "eng": "Show Cache",
     "ger": "Zeige Cache",
-    "rus": "TODO",
+    "rus": "- ? -",
     "cov": "Zeige Cache"
   },
   "deleteCache": {
     "eng": "Delete Cache",
     "ger": "Lösche Cache",
-    "rus": "TODO",
+    "rus": "- ? -",
     "cov": "Lösche Cache"
   },
   "help_legend": {
     "eng": "Help/Legend",
     "ger": "Hilfe/Legende",
-    "rus": "TODO",
+    "rus": "- ? -",
     "cov": "Hilfe/Legende"
   },
   "statistic_module": {
     "eng": "Open statistic module",
     "ger": "Statistik Modul öffnen",
-    "rus": "TODO",
+    "rus": "- ? -",
     "cov": "Statistik Modul öffnen"
+  },
+  "predRisk": {
+    "eng": "Predicted infection risk",
+    "ger": "Berechnetes Infektionsrisiko",
+    "rus": "TODO",
+    "cov": "Berechnetes Infektionsrisiko"
+  },
+  "Logout": {
+    "eng": "Logout",
+    "ger": "Ausloggen",
+    "rus": "- ? -",
+    "cov": "Ausloggen"
+  },
+  "switchingCases": {
+    "eng": "Switch between new and all cases",
+    "ger": "Wechsel zwischen Neuen und Gesamtzahl Fällen",
+    "rus": "- ? -",
+    "cov": "Wechsel zwischen Neuen und Gesamtzahl Fällen"
+  },
+  "switchingDays": {
+    "eng": "Switch between accumulation to 7 and 28 days",
+    "ger": "Wechsel zwischen Akkumulation auf 7 und 28 Tage",
+    "rus": "- ? -",
+    "cov": "Wechsel zwischen Akkumulation auf 7 und 28 Tage"
+  },
+  "limitTimespan": {
+    "eng": "Limit the lower time span",
+    "ger": "Eingrenzen des unteren Zeitraums",
+    "rus": "- ? -",
+    "cov": "Eingrenzen des unteren Zeitraums"
+  },
+  "circleLine": {
+    "eng": "Circle = Patient; Line = Contact between patients",
+    "ger": "Kreis = Patient; Linie = Kontakt zweier Patienten",
+    "rus": "- ? -",
+    "cov": "Kreis = Patient; Linie = Kontakt zweier Patienten"
+  },
+  "zoom": {
+    "eng": "Zoom via mouse wheel; Move with mouse button pressed",
+    "ger": "Zoom per Mausrad; Bewegen mit gedrückter Maustaste",
+    "rus": "- ? -",
+    "cov": "Zoom per Mausrad; Bewegen mit gedrückter Maustaste"
+  },
+  "statusPatient": {
+    "eng": "Background color = Patient status",
+    "ger": "Hintergrundfarbe = Status des Patienten",
+    "rus": "- ? -",
+    "cov": "Hintergrundfarbe = Status des Patienten"
+  },
+  "horizontalBars": {
+    "eng": "Horizontol bars = Ward stay (???)",
+    "ger": "Waagrechte Balken = Stationsaufenthalte",
+    "rus": "- ? -",
+    "cov": "Waagrechte Balken = Stationsaufenthalte"
+  },
+  "verticalBars": {
+    "eng": "Vertical bars = Check-ups",
+    "ger": "Senkrechte Balken = Untersuchungen",
+    "rus": "- ? -",
+    "cov": "Senkrechte Balken = Untersuchungen"
+  },
+  "dotCircle": {
+    "eng": "Dots/small circles = Treatment at a ward",
+    "ger": "Punkte/kleine Kreise = Behandlungen auf einer Station",
+    "rus": "- ? -",
+    "cov": "Punkte/kleine Kreise = Behandlungen auf einer Station"
+  },
+  "zoomH": {
+    "eng": "Zoom via mouse wheel; Move horizontal with mouse button pressed",
+    "ger": "Zoom per Mausrad; horizontales Bewegen mit gedrückter Maustaste",
+    "rus": "- ? -",
+    "cov": "Zoom per Mausrad; horizontales Bewegen mit gedrückter Maustaste"
+  },
+  "scrollBar": {
+    "eng": "Vertical movement with scroll bar",
+    "ger": "Vertikales Bewegen mit Scroll-Leiste",
+    "rus": "- ? -",
+    "cov": "Vertikales Bewegen mit Scroll-Leiste"
+  },
+  "newWindow": {
+    "eng": "New window",
+    "ger": "Neues Fenster",
+    "rus": "- ? -",
+    "cov": "Neues Fenster"
+  },
+  "userName": {
+    "eng": "Username",
+    "ger": "Benutzername",
+    "rus": "- ? -",
+    "cov": "Benutzername"
+  },
+  "password": {
+    "eng": "Password",
+    "ger": "Passwort",
+    "rus": "- ? -",
+    "cov": "Passwort"
+  },
+  "logIn": {
+    "eng": "Log in",
+    "ger": "Anmelden",
+    "rus": "- ? -",
+    "cov": "Anmelden"
+  },
+  "logOut": {
+    "eng": "Log out",
+    "ger": "Abmelden",
+    "rus": "- ? -",
+    "cov": "Abmelden"
+  },
+  "monday": {
+    "eng": "Monday",
+    "ger": "Montag",
+    "rus": "- ? -",
+    "cov": "Montag"
+  },
+  "mondayS": {
+    "eng": "Mo",
+    "ger": "Mo",
+    "rus": "- ? -",
+    "cov": "Mo"
+  },
+  "tuesday": {
+    "eng": "Tuesday",
+    "ger": "Dienstag",
+    "rus": "- ? -",
+    "cov": "Dienstag"
+  },
+  "tuesdayS": {
+    "eng": "Tu",
+    "ger": "Di",
+    "rus": "- ? -",
+    "cov": "Di"
+  },
+  "wednesday": {
+    "eng": "Wednesday",
+    "ger": "Mittwoch",
+    "rus": "- ? -",
+    "cov": "Mittwoch"
+  },
+  "wednesdayS": {
+    "eng": "We",
+    "ger": "Mi",
+    "rus": "- ? -",
+    "cov": "Mi"
+  },
+  "thursday": {
+    "eng": "Thursday",
+    "ger": "Donnerstag",
+    "rus": "- ? -",
+    "cov": "Donnerstag"
+  },
+  "thursdayS": {
+    "eng": "Th",
+    "ger": "Do",
+    "rus": "- ? -",
+    "cov": "Do"
+  },
+  "friday": {
+    "eng": "Friday",
+    "ger": "Freitag",
+    "rus": "- ? -",
+    "cov": "Freitag"
+  },
+  "fridayS": {
+    "eng": "Fr",
+    "ger": "Fr",
+    "rus": "- ? -",
+    "cov": "Fr"
+  },
+  "saturday": {
+    "eng": "Saturday",
+    "ger": "Samstag",
+    "rus": "- ? -",
+    "cov": "Samstag"
+  },
+  "saturdayS": {
+    "eng": "Sa",
+    "ger": "Sa",
+    "rus": "- ? -",
+    "cov": "Sa"
+  },
+  "sunday": {
+    "eng": "Sunday",
+    "ger": "Sonntag",
+    "rus": "- ? -",
+    "cov": "Sonntag"
+  },
+  "sundayS": {
+    "eng": "Su",
+    "ger": "So",
+    "rus": "- ? -",
+    "cov": "So"
+  },
+  "january": {
+    "eng": "January",
+    "ger": "Januar",
+    "rus": "- ? -",
+    "cov": "Januar"
+  },
+  "januaryS": {
+    "eng": "Jan",
+    "ger": "Jan",
+    "rus": "- ? -",
+    "cov": "Jan"
+  },
+  "february": {
+    "eng": "February",
+    "ger": "Februar",
+    "rus": "- ? -",
+    "cov": "Februar"
+  },
+  "februaryS": {
+    "eng": "Feb",
+    "ger": "Feb",
+    "rus": "- ? -",
+    "cov": "Feb"
+  },
+  "march": {
+    "eng": "March",
+    "ger": "März",
+    "rus": "- ? -",
+    "cov": "März"
+  },
+  "marchS": {
+    "eng": "Mar",
+    "ger": "Mrz",
+    "rus": "- ? -",
+    "cov": "Mrz"
+  },
+  "april": {
+    "eng": "April",
+    "ger": "April",
+    "rus": "- ? -",
+    "cov": "April"
+  },
+  "aprilS": {
+    "eng": "Apr",
+    "ger": "Apr",
+    "rus": "- ? -",
+    "cov": "Apr"
+  },
+  "may": {
+    "eng": "May",
+    "ger": "Mai",
+    "rus": "- ? -",
+    "cov": "Mai"
+  },
+  "mayS": {
+    "eng": "May",
+    "ger": "Mai",
+    "rus": "- ? -",
+    "cov": "Mai"
+  },
+  "june": {
+    "eng": "June",
+    "ger": "Juni",
+    "rus": "- ? -",
+    "cov": "Juni"
+  },
+  "juneS": {
+    "eng": "Jun",
+    "ger": "Jun",
+    "rus": "- ? -",
+    "cov": "Jun"
+  },
+  "july": {
+    "eng": "July",
+    "ger": "Juli",
+    "rus": "- ? -",
+    "cov": "Juli"
+  },
+  "julyS": {
+    "eng": "Jul",
+    "ger": "Jul",
+    "rus": "- ? -",
+    "cov": "Jul"
+  },
+  "august": {
+    "eng": "August",
+    "ger": "August",
+    "rus": "- ? -",
+    "cov": "August"
+  },
+  "augustS": {
+    "eng": "Aug",
+    "ger": "Aug",
+    "rus": "- ? -",
+    "cov": "Aug"
+  },
+  "september": {
+    "eng": "September",
+    "ger": "September",
+    "rus": "- ? -",
+    "cov": "September"
+  },
+  "septemberS": {
+    "eng": "Sep",
+    "ger": "Sep",
+    "rus": "- ? -",
+    "cov": "Sep"
+  },
+  "october": {
+    "eng": "October",
+    "ger": "Oktober",
+    "rus": "- ? -",
+    "cov": "Oktober"
+  },
+  "octoberS": {
+    "eng": "Oct",
+    "ger": "Okt",
+    "rus": "- ? -",
+    "cov": "Okt"
+  },
+  "november": {
+    "eng": "November",
+    "ger": "Novmeber",
+    "rus": "- ? -",
+    "cov": "November"
+  },
+  "novemberS": {
+    "eng": "Nov",
+    "ger": "Nov",
+    "rus": "- ? -",
+    "cov": "Nov"
+  },
+  "december": {
+    "eng": "December",
+    "ger": "Dezember",
+    "rus": "- ? -",
+    "cov": "Dezember"
+  },
+  "decemberS": {
+    "eng": "Dec",
+    "ger": "Dez",
+    "rus": "- ? -",
+    "cov": "Dez"
+  },
+  "ward": {
+    "eng": "Ward",
+    "ger": "Station",
+    "rus": "- ? -",
+    "cov": "Station"
+  },
+  "station": {
+    "eng": "Ward",
+    "ger": "Station",
+    "rus": "- ? -",
+    "cov": "Station"
+  },
+  "caseID": {
+    "eng": "Case ID",
+    "ger": "Fall ID",
+    "rus": "- ? -",
+    "cov": "Fall ID"
+  },
+  "clock": {
+    "eng": "Clock",
+    "ger": "Uhr",
+    "rus": "- ? -",
+    "cov": "Uhr"
+  },
+  "notDefined": {
+    "eng": "not defined",
+    "ger": "nicht definiert",
+    "rus": "- ? -",
+    "cov": "nicht definiert"
+  },
+  "middle": {
+    "eng": "middle",
+    "ger": "Mitte",
+    "rus": "- ? -",
+    "cov": "Mitte"
+  },
+  "invLocation": {
+    "eng": "invalid location.",
+    "ger": "Standort-Auswahl ungültig.",
+    "rus": "- ? -",
+    "cov": "Standort-Auswahl ungültig."
+  },
+  "invPatient": {
+    "eng": "invalid patient.",
+    "ger": "Patient-Auswahl ungültig.",
+    "rus": "- ? -",
+    "cov": "Patient-Auswahl ungültig."
+  },
+  "invPathogen": {
+    "eng": "invalid pathogen.",
+    "ger": "Keim-Auswahl ungültig.",
+    "rus": "- ? -",
+    "cov": "Virus-Auswahl ungültig."
+  },
+  "symptomType": {
+    "eng": "Symptom type",
+    "ger": "Symptomart",
+    "rus": "- ? -",
+    "cov": "Symptomart"
+  },
+  "symptomStart": {
+    "eng": "Symptom start",
+    "ger": "Symptom-Beginn",
+    "rus": "- ? -",
+    "cov": "Symptom-Beginn"
+  },
+  "symptomEnd": {
+    "eng": "Symptom end",
+    "ger": "Symptom-Ende",
+    "rus": "- ? -",
+    "cov": "Symptom-Ende"
+  },
+  "viralLoad": {
+    "eng": "Pathogen load - patient",
+    "ger": "Keimlast - Patient",
+    "rus": "- ? -",
+    "cov": "Viruslast - Patient"
+  },
+  "findingsDate": {
+    "eng": "Findings date",
+    "ger": "Befunddatum",
+    "rus": "- ? -",
+    "cov": "Befunddatum"
+  },
+  "vaccinationP": {
+    "eng": "Vaccination - Patient ",
+    "ger": "Impfung - Patient",
+    "rus": "- ? -",
+    "cov": "Impfung - Patient"
+  },
+  "docuTime": {
+    "eng": "documentary time",
+    "ger": "Doku-Zeit",
+    "rus": "- ? -",
+    "cov": "Doku-Zeit"
+  },
+  "dosing": {
+    "eng": "dosing",
+    "ger": "Dosiermenge",
+    "rus": "- ? -",
+    "cov": "Dosiermenge"
+  },
+  "vaccine": {
+    "eng": "Vaccine",
+    "ger": "Impfstoff",
+    "rus": "- ? -",
+    "cov": "Impfstoff"
+  },
+  "vacciationA": {
+    "eng": "Vaccination against",
+    "ger": "Impfung gegen",
+    "rus": "- ? -",
+    "cov": "Impfung gegen"
+  },
+  "patient": {
+    "eng": "Patient ",
+    "ger": "Patient ",
+    "rus": "- ? -",
+    "cov": "Patient "
+  },
+  "number": {
+    "eng": "Number",
+    "ger": "Anzahl",
+    "rus": "- ? -",
+    "cov": "Anzahl"
+  },
+  "bType": {
+    "eng": "Blood type",
+    "ger": "Blutgruppe",
+    "rus": "- ? -",
+    "cov": "Blutgruppe"
+  },
+  "movementOf": {
+    "eng": "Movement of ",
+    "ger": "Bewegung von ",
+    "rus": "- ? -",
+    "cov": "Bewegung von"
+  },
+  "room": {
+    "eng": "Room",
+    "ger": "Zimmer",
+    "rus": "- ? -",
+    "cov": "Zimmer"
+  },
+  "contactOf": {
+    "eng": "Contact between",
+    "ger": "Kontakt von",
+    "rus": "- ? -",
+    "cov": "Kontakt von"
+  },
+  "and": {
+    "eng": "and",
+    "ger": "und",
+    "rus": "- ? -",
+    "cov": "und"
+  },
+  "M": {
+    "eng": "M",
+    "ger": "M",
+    "rus": "- ? -",
+    "cov": "M"
+  },
+  "d": {
+    "eng": "d",
+    "ger": "t",
+    "rus": "- ? -",
+    "cov": "t"
+  },
+  "h": {
+    "eng": "h",
+    "ger": "std",
+    "rus": "- ? -",
+    "cov": "std"
+  },
+  "min": {
+    "eng": "min",
+    "ger": "min",
+    "rus": "- ? -",
+    "cov": "min"
+  },
+  "s": {
+    "eng": "s",
+    "ger": "s",
+    "rus": "- ? -",
+    "cov": "s"
+  },
+  "symptomPatient": {
+    "eng": "SYMPTOM - Patient ",
+    "ger": "SYMPTOM - Patient ",
+    "rus": "- ? -",
+    "cov": "SYMPTOM - Patient "
+  },
+  "tom": {
+    "eng": "Type of movement",
+    "ger": "Bewegungstyp",
+    "rus": "- ? -",
+    "cov": "Bewegungstyp"
+  },
+  "kom": {
+    "eng": "Kind of movement",
+    "ger": "Bewegungsart",
+    "rus": "- ? -",
+    "cov": "Bewegungsart"
+  },
+  "pathogen/virus": {
+    "eng": "Pathogen/Virus",
+    "ger": "Pathogen",
+    "rus": "- ? -",
+    "cov": "Pathogen"
+  },
+  "patientlist": {
+    "eng": "Patientlist",
+    "ger": "Patientenliste",
+    "rus": "- ? -",
+    "cov": "Patientenliste"
+  },
+  "viruslist": {
+    "eng": "Viruslist",
+    "ger": "Pathogen-Liste",
+    "rus": "- ? -",
+    "cov": "Virus-Liste"
+  },
+  "wardlist": {
+    "eng": "Wardlist",
+    "ger": "Stations-Liste",
+    "rus": "- ? -",
+    "cov": "Stations-Liste"
+  },
+  "ctValue": {
+    "eng": "Quantitative result (ct-value)",
+    "ger": "Quantitatives Ergebnis (ct-Wert)",
+    "rus": "- ? -",
+    "cov": "Quantitatives Ergebnis (ct-Wert)"
+  },
+  "zeitProbe": {
+    "eng": "Time of sample receipt",
+    "ger": "Zeitpunkt Probeneingang",
+    "rus": "- ? -",
+    "cov": "Zeitpunkt Probeneingang"
+  },
+  "ctValueF": {
+    "eng": "CT-value finding",
+    "ger": "CT-Wert Befund",
+    "rus": "- ? -",
+    "cov": "CT-Wert Befund"
+  },
+  "OnePatient": {
+    "eng": "Horizontal line = one patient",
+    "ger": "Waagerechte Zeile = Ein Patient",
+    "rus": "- ? -",
+    "cov": "Waagerechte Zeile = Ein Patient"
+  },
+  "Vaccination": {
+    "eng": "Needels provide information about vaccinations",
+    "ger": "Spritzen geben Auskunft über den Impfstatus",
+    "rus": "- ? -",
+    "cov": "Spritzen geben Auskunft über den Impfstatus"
+  },
+  "Coloring": {
+    "eng": "Select wards for highlighting",
+    "ger": "Stationen mit Farben markieren",
+    "rus": "- ? -",
+    "cov": "Stationen mit Farben markieren"
+  },
+  "ColoringPatient": {
+    "eng": "Color of line indicates status of patient",
+    "ger": "Farbe einer Linie = Status des Patienten",
+    "rus": "- ? -",
+    "cov": "Farbe einer Linie = Status des Patienten"
+  },
+  "BackgroundColoring": {
+    "eng": "Backgroundcolor indicates the CT-value",
+    "ger": "Hintergrundfarbe zeigt CT-Wet",
+    "rus": "- ? -",
+    "cov": "Hintergrundfarbe zeigt CT-Wert"
+  },
+  "Overview": {
+    "eng": "Overview",
+    "ger": "Überblick",
+    "rus": "- ? -",
+    "cov": "Überblick"
+  },
+  "Identify": {
+    "eng": "Identify possible transmission pathways",
+    "ger": "Erkennung möglicher Verbreitungswege",
+    "rus": "- ? -",
+    "cov": "Erkennung möglicher Verbreitungswege"
+  },
+  "ContactCircle": {
+    "eng": "Circle = Contact; Backgroundcolor = Wards",
+    "ger": "Kreise = Kontakt; Hintergrundfarbe = Station",
+    "rus": "- ? -",
+    "cov": "Kreise = Kontakt; Hintergrundfarbe = Station"
+  },
+  "Forward": {
+    "eng": "Forward = Who got infected by the selected patient",
+    "ger": "Forward = Wen infiziert der ausgewählte Patient",
+    "rus": "- ? -",
+    "cov": "Forward = Wen infiziert der ausgewählte Patient"
+  },
+  "Backward": {
+    "eng": "Backward = Who infected the selected patient",
+    "ger": "Backward = Wer hat den ausgewählten Patient infiziert",
+    "rus": "- ? -",
+    "cov": "Backward = Wer hat den ausgewählten Patient infiziert"
   }
 }

@@ -6,6 +6,9 @@ class Kontaktnetzwerk extends Component {
   constructor(props) {
     super(props)
 
+    this.module_id = props.create_new_id()
+    this.module_type = "kontaktnetzwerk"
+
     this.data
     this.width
     this.height
@@ -26,7 +29,7 @@ class Kontaktnetzwerk extends Component {
       right: 25,
     }
 
-    this.title = "Kontaktnetzwerk"
+    this.title = this.translate("Kontaktnetzwerk")
 
     this.transition_duration = 200
 
@@ -55,6 +58,8 @@ class Kontaktnetzwerk extends Component {
     console.log("Kontaktnetzwerk module did mount")
 
     this.socket.on("kontaktnetzwerk", this.handle_data)
+
+    this.props.register_module(this.module_id, this.module_type, this.draw_vis)
 
     /**
      * Modul auf Größenänderung alle 100ms überprüfen.
@@ -192,6 +197,8 @@ class Kontaktnetzwerk extends Component {
   componentWillUnmount() {
     this.socket.off("kontaktnetzwerk")
 
+    this.props.unregister_module(this.module_id)
+
     clearInterval(this.checkSize)
   }
 
@@ -275,7 +282,7 @@ class Kontaktnetzwerk extends Component {
 
     // title.exit().remove()
 
-    if (this.data === undefined) {
+    if (this.data === undefined || this.data.graph_data === undefined) {
       return
     }
 
@@ -441,15 +448,15 @@ class Kontaktnetzwerk extends Component {
           c = "lightgray"
         } else {
           switch (path_status_obj.status) {
-          case "unknown":
-            c = this.get_color("unknown")
-            break
-          case "infected":
-            c = this.get_color("infectedCarrier")
-            break
-          case "diseased":
-            c = this.get_color("infectedDiseased")
-            break
+            case "unknown":
+              c = this.get_color("unknown")
+              break
+            case "infected":
+              c = this.get_color("infectedCarrier")
+              break
+            case "diseased":
+              c = this.get_color("infectedDiseased")
+              break
           }
         }
 
@@ -595,18 +602,18 @@ class Kontaktnetzwerk extends Component {
     // tableObj = tooltipArt
     if (tooltipArt === "node") {
       let tmpObj = {
-        title: `Bewegungen von ${d.patient_id}`,
+        title: `${this.translate("movementOf")} ${d.patient_id}`,
         header: [
           // "StationID",
           // "Station",
           // this.locations[this.selected_location_index],
-          "Station",
-          "Raum",
-          "Bewegungstyp",
-          "Bewegungsart",
-          "Beginn",
-          "Ende",
-          "Dauer",
+          this.translate("ward"),
+          this.translate("room"),
+          //this.translate("kom"),
+          this.translate("begin2"),
+          this.translate("end2"),
+          this.translate("duration"),
+          this.translate("tom"),
         ],
         content: [],
       }
@@ -623,24 +630,28 @@ class Kontaktnetzwerk extends Component {
           // m.Station,
           // m[this.location_prop_names[this.selected_location_index]],
           m.StationID,
-          m.Raum,
-          m.Bewegungstyp,
-          m.Bewegungsart_l,
+          m.Raum === null ? "nicht definiert" : m.Raum,
+          //m.Bewegungsart_l,
           moment(m.Beginn).format("dd DD.MM.YYYY HH:mm:ss"),
           moment(m.Ende).format("dd DD.MM.YYYY HH:mm:ss"),
           m.Ende === m.Beginn
             ? " - "
             : months +
-              "M " +
+              this.translate("M") +
+              " " +
               days +
-              "d " +
+              this.translate("d") +
+              " " +
               hrs +
-              "h " +
+              this.translate("h") +
+              " " +
               mins +
-              "min " +
+              this.translate("min") +
+              " " +
               secs +
-              "s",
+              this.translate("s"),
           ,
+          m.Bewegungstyp,
         ])
       })
       tableObj = tmpObj
@@ -649,13 +660,15 @@ class Kontaktnetzwerk extends Component {
       // tableObj = d.name
     } else if (tooltipArt === "link") {
       let tmpObj = {
-        title: `Kontakt von ${d.source.patient_id} und ${d.target.patient_id}`,
+        title: `${this.translate("contactOf")} ${
+          d.source.patient_id
+        } ${this.translate("and")} ${d.target.patient_id}`,
         // header: ["StationID", "Beginn", "Ende", "Dauer"],
         header: [
-          this.locations[this.selected_location_index],
-          "Beginn",
-          "Ende",
-          "Dauer",
+          this.translate(this.locations[this.selected_location_index]),
+          this.translate("begin2"),
+          this.translate("end2"),
+          this.translate("duration"),
         ],
         content: [],
       }
@@ -674,15 +687,19 @@ class Kontaktnetzwerk extends Component {
           c.end === c.begin
             ? " - "
             : months +
-              "M " +
+              this.translate("M") +
+              " " +
               days +
-              "d " +
+              this.translate("d") +
+              " " +
               hrs +
-              "h " +
+              this.translate("h") +
+              " " +
               mins +
-              "min " +
+              this.translate("min") +
+              " " +
               secs +
-              "s",
+              this.translate("s"),
           ,
         ])
       })
@@ -723,10 +740,10 @@ class Kontaktnetzwerk extends Component {
 
     let selections = []
     this.state.locations.forEach((s_id, i) => {
-      console.log("render", s_id)
+      // console.log("render", s_id)
       selections.push(
         <option key={s_id} value={i}>
-          {s_id}
+          {this.translate(s_id)}
         </option>
       )
     })

@@ -1,0 +1,50 @@
+[
+  {
+    "Beginn": "2021-05-20T10:00:00+02:00",
+    "Ende": "2021-05-20T10:00:00+02:00",
+    "Raum": "01",
+    "Station": "46",
+    "Fachabteilung": "Innere Medizin",
+    "FachabteilungsID": "0100",
+    "BewegungstypID": 1,
+    "Bewegungstyp": "Aufnahme",
+    "FallID": "99999906",
+    "PatientID": "Patient105"
+  },
+  {
+    "Beginn": "2021-05-20T10:00:00+02:00",
+    "Ende": "2021-05-28T11:00:00+02:00",
+    "Raum": "01",
+    "Station": "46",
+    "Fachabteilung": "Innere Medizin",
+    "FachabteilungsID": "0100",
+    "BewegungstypID": 3,
+    "Bewegungstyp": "Wechsel",
+    "FallID": "99999906",
+    "PatientID": "Patient105"
+  },
+  {
+    "Beginn": "2021-05-28T11:00:00+02:00",
+    "Ende": "2021-06-10T18:00:00+02:00",
+    "Raum": "04",
+    "Station": "47",
+    "Fachabteilung": "Innere Medizin",
+    "FachabteilungsID": "0100",
+    "BewegungstypID": 3,
+    "Bewegungstyp": "Wechsel",
+    "FallID": "99999906",
+    "PatientID": "Patient105"
+  },
+  {
+    "Beginn": "2021-06-10T18:00:00+02:00",
+    "Ende": "2021-06-10T18:00:00+02:00",
+    "Raum": "04",
+    "Station": "47",
+    "Fachabteilung": "Innere Medizin",
+    "FachabteilungsID": "0100",
+    "BewegungstypID": 2,
+    "Bewegungstyp": "Entlassung",
+    "FallID": "99999906",
+    "PatientID": "Patient105"
+  }
+]

@@ -16,7 +16,7 @@ export type Bewegungen = {
   FallID: string;
   StationID?: string;
   LfdNr?: number;
-  Station?: string;
+  stationList?: string;
   /**
    * this is only called 'number', but is really a textual identifier
    */

@@ -105,7 +105,7 @@ class Mosaic_LM extends Component {
       c: this.translate("Kontaktnetzwerk"),
       d: this.translate("Linelist"),
       e: this.translate("AnnotationTimeline old"),
-      new: "New Window",
+      new: this.translate("newWindow"),
     }
   }
 

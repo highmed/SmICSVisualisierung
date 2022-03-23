@@ -6,9 +6,6 @@ import {
   Arguments_OutbreakDetectionConfigurations,
   Arguments_OutbreakDetectionResultSet,
   Arguments_RKIalgo,
-  Arguments_Patient_Symptom,
-  Arguments_Patient_Vaccination,
-  Arguments_Metadaten,
   Patient_Symptom,
   Patient_Vaccination,
   Metadaten,
@@ -21,6 +18,7 @@ import {
   PathogenFlag,
   validate,
   ValidationResult,
+  PredictionDummy,
 } from "../types"
 import { AbstractDataSource } from "../abstract_data_provider"
 import { default as fetch } from "node-fetch"
@@ -194,7 +192,7 @@ export class RestAPI extends AbstractDataSource {
   }
 
   public Patient_Symptom = async (
-    parameters: Arguments_Patient_Symptom
+    parameters: Arguments_Ps
   ): Promise<ValidationResult<Patient_Symptom>> => {
     return this._low_level_call(
       "Patient_Symptom",
@@ -204,7 +202,7 @@ export class RestAPI extends AbstractDataSource {
   }
 
   public Patient_Vaccination = async (
-    parameters: Arguments_Patient_Vaccination
+    parameters: Arguments_Ps
   ): Promise<ValidationResult<Patient_Vaccination>> => {
     return this._low_level_call(
       "Patient_Vaccination",
@@ -214,7 +212,7 @@ export class RestAPI extends AbstractDataSource {
   }
 
   public Metadaten = async (
-    parameters: Arguments_Metadaten
+    parameters: Arguments_Ps
   ): Promise<ValidationResult<Metadaten>> => {
     return this._low_level_call("Metadaten", parameters, "data/Metadaten")
   }
@@ -236,6 +234,16 @@ export class RestAPI extends AbstractDataSource {
       "Patient_PathogenFlag_Ps",
       parameters,
       "data/PathogenFlag"
+    )
+  }
+
+  public PredictionDummy = async (
+    parameters: Arguments_Empty
+  ): Promise<ValidationResult<PredictionDummy>> => {
+    return this._low_level_call(
+      "PredictionDummy",
+      parameters,
+      "data/PredictionDummy"
     )
   }
 
@@ -269,9 +277,7 @@ export class RestAPI extends AbstractDataSource {
       ...(!CONFIG.dev_mode && { body }),
     }
     console.log(
-      `end point ${procedureName} has been called with request data: ${JSON.stringify(
-        request
-      )}`
+      `end point ${procedureName} has been called with request data: ${body}`
     )
     const response = await fetch(this.url.concat(procedureName), request)
 
