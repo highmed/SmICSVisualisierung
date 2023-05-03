@@ -132,6 +132,11 @@ export class WebsocketApi {
       ]
       printArrayInColor(clientConnected, cli_color.white)
     }
+    client.on("getSmicsPort", () => {
+      let smics_port = this.getSmicsPort()
+      console.log("Sending Smics-Port from .env file", smics_port)
+      client.emit("smics_port", smics_port)
+    })
 
     client.on("disconnect", this.onDisconnected)
     client.on("error", this.onError)
@@ -374,6 +379,10 @@ export class WebsocketApi {
       ]
       printArrayInColor(clientDisconnected, cli_color.yellow)
     }
+  }
+
+  private getSmicsPort = (): number => {
+    return CONFIG.smics_port
   }
 
   /**

@@ -21,6 +21,8 @@ import { withAuth } from "../hooks/auth"
 import { withRouter } from "react-router-dom"
 import "./scss/sideMenu.scss"
 
+import "./../hooks/socket"
+
 class SideMenu extends Component {
   // static propTypes = {
   //   match: PropTypes.object.isRequired,
@@ -34,7 +36,8 @@ class SideMenu extends Component {
     this.state = {}
     this.hostname = window.location.hostname
     this.protocol = window.location.protocol
-    this.port = 9787
+    // this.port = window.smics_port ? window.smics_port : 9999
+    // this.port = props.get_smics_port()
 
     this.translate = props.translate
   }
@@ -136,7 +139,11 @@ class SideMenu extends Component {
       () => {
         // console.log("STATISTIC MODULE BUTTON PRESSED")
         window.open(
-          this.protocol + "//" + this.hostname + ":" + this.port,
+          this.protocol +
+            "//" +
+            this.hostname +
+            ":" +
+            this.props.get_smics_port(),
           "_blank"
         )
       },

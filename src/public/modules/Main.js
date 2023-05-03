@@ -14,7 +14,7 @@ import { sankey, sankeyLinkHorizontal } from "../vis/d3-sankey"
 // import logo_svg from "../assets/highmed_logo.svg"
 // import tud_svg from "../assets/TU_Darmstadt_Logo.svg"
 
-import HeaderMenu from "../components/HeaderMenu"
+// import HeaderMenu from "../components/HeaderMenu"
 import LegendWindow from "./LegendWindow"
 import * as Translator from "./translator.json"
 import { withSocket } from "../hooks/socket"
@@ -44,6 +44,8 @@ class Main extends Component {
     this.current_parameters_hash = ""
 
     this.subscriptions = []
+
+    this.smics_port = 9999
 
     this.open_modules = []
 
@@ -2998,6 +3000,8 @@ class Main extends Component {
     })
   }
 
+  get_smics_port = () => this.smics_port
+
   change_to_next_language = () => {
     if (this.current_language_index < this.all_languages.length - 1) {
       this.current_language_index++
@@ -3446,6 +3450,13 @@ class Main extends Component {
     // setInterval(() => {
     //   this.publish_to("MEIN TOPIC", "meine message lol")
     // }, 1000)
+
+    self.socket.on("smics_port", (payload) => {
+      console.log("Smics-Port from .env file:", payload)
+      this.smics_port = payload
+    })
+
+    self.socket.emit("getSmicsPort")
 
     self.socket.on("new_parameters", (payload) => {
       this.set_complete_parameters(payload.frontend_parameters)
@@ -4189,6 +4200,7 @@ class Main extends Component {
           <Flex_LM
             key="MEIN_LM"
             {...this.state}
+            get_smics_port={this.get_smics_port}
             change_to_next_language={this.change_to_next_language}
             requestVisData={this.requestVisData}
             reload_state={this.reload_state}
