@@ -1,12 +1,68 @@
 #main {
   display: grid;
 
-  grid-template-areas: "header" "content" "footer";
-  grid-template-rows: 125px auto 25px;
+  // grid-template-areas: "header" "content" "footer";
+  // grid-template-rows: 125px auto 25px;
+  grid-template-areas: "top-footer" "content" "footer";
+  grid-template-rows: 25px auto 25px;
   grid-template-columns: 100%;
 
   height: 100%;
   width: 100%;
+}
+
+.file-drop {
+  display: none;
+}
+
+.module_container {
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+
+.loader {
+  border: 10px solid #dedede; /* Light grey */
+  border-top: 10px solid #29235c; /* Blue */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+
+  // display: inline-block;
+  margin-left: calc(50% - 20px);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading_message {
+}
+
+.error_message,
+.too_small {
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  // line-height: 200px;
+  font-size: 2em;
+
+  color: darkgray;
+  font-family: monospace;
+
+  // height: 100%;
+  // vertical-align: middle;
+  margin: 50px;
+}
+
+.too_small {
+  margin: 0;
 }
 
 .testdiv {
@@ -62,6 +118,17 @@
   );
 }
 
+.top-footer {
+  grid-area: top-footer;
+
+  background-color: rgb(41, 35, 92);
+  background: linear-gradient(
+    to bottom,
+    rgb(41, 35, 92) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
 #HiGhmed_Logo {
   grid-area: highmed-logo;
 
@@ -112,6 +179,46 @@
   text-align: center;
   /* opacity: 0.8; */
   z-index: 802;
+}
+
+.contextmenu-background {
+  background: rgba(255, 255, 255, 0.1);
+
+  position: fixed;
+
+  height: 100%;
+  width: 100%;
+  z-index: 803;
+}
+
+.contextmenu {
+  font-size: 1em;
+
+  position: fixed;
+  display: none;
+  /* min-width: 80px; */
+  height: auto;
+  background: #ffffff;
+  /* border: 1px solid #6F257F; */
+  border: 1px solid #000000;
+  /* padding: 14px; */
+  text-align: center;
+  /* opacity: 0.8; */
+  z-index: 804;
+
+  padding: 5px;
+  border-radius: 20px;
+
+  cursor: pointer;
+}
+
+.contextmenu tr {
+  margin: 5px;
+  border-radius: 20px;
+}
+
+.contextmenu tr:hover {
+  background: lightgray;
 }
 
 .tooltipTable,

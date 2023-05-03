@@ -1,0 +1,129 @@
+.sidemenu-container {
+  // height: 100%;
+  // width: calc(100% - 15px - 15px);
+  // padding: 15px;
+  // padding-top: 5px;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  align-content: flex-start;
+
+  height: inherit;
+  overflow-x: hidden;
+}
+
+.sidemenu-item_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  // flex-direction: column;
+  flex-direction: row;
+  padding: 5px;
+
+  width: 100%;
+  // width: 175px;
+}
+
+.sidemenu-button {
+  // margin-bottom: 10px;
+  // max-width: 50px;
+  // height: 30px;
+  // border-style: black solid 2px;
+
+  height: 36px;
+  width: 30px;
+}
+
+.state_item {
+  width: 175px;
+
+  display: grid;
+  grid-template-areas: "state_description timegone" "state_description restore" "state_value download";
+  grid-template-columns: auto 30px;
+  grid-template-rows: 15px 25px auto;
+
+  border: solid 1px;
+  border-radius: 20px;
+
+  padding: 5px;
+  margin: 2px;
+}
+
+.state_description {
+  grid-area: state_description;
+  // font-size: 0.75em;
+  font-size: 0.9em;
+}
+
+.state_value {
+  grid-area: state_value;
+}
+
+.timegone {
+  grid-area: timegone;
+
+  font-size: 0.75em;
+  text-align: center;
+
+  margin: 0;
+  padding: 0;
+}
+
+.restore {
+  grid-area: restore;
+
+  margin-top: -3px;
+
+  border-radius: 20px;
+}
+
+.download {
+  grid-area: download;
+
+  margin-top: -3px;
+
+  border-radius: 20px;
+}
+
+.input-container {
+  overflow: hidden;
+  white-space: nowrap;
+
+  // display: inline-block;
+  // width: 800px;
+  position: relative;
+  // top: 15px;
+  // height: calc(100%-10px);
+  margin: auto;
+  background-color: rgb(255, 255, 255);
+
+  border-radius: 10px;
+  padding: 15px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.help_legend_button {
+  grid-area: help_legend_button;
+}
+
+.static_module_button {
+  grid-area: static_module_button;
+}
+
+.change_language_button {
+  grid-area: change_language_button;
+}
+
+.logout_button {
+  grid-area: logout_button;
+}
+
+.space-div {
+  width: 10px;
+}

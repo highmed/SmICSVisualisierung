@@ -1,11 +1,7 @@
-import { IgdSqlDatabaseSource } from "./concrete_data_providers/igd_sql_database"
+import { IgdSqlDatabaseSource } from "./old_data_providers/igd_sql_database"
 import { AbstractDataSource } from "./abstract_data_provider"
 import { RestAPI } from "./concrete_data_providers/rest_api"
 import CONFIG from "../config"
-
-/**
- * ! This file is not in use, our only datasource is the restAPI !
- */
 
 /**
  * Used only by #resolveDataSource to not always create a new one.
@@ -24,17 +20,15 @@ export const ALL_DATA_SOURCES: ReadonlyArray<string> = ["hmhdnov18_sql", "rest"]
  * @return the right data source
  * @throws and error message and a list of all available data sources if an data provider is requested
  */
-export const resolveDataSource = async (
-  identifier: string
-): Promise<AbstractDataSource> => {
+export const resolveDataSource = (identifier: string): AbstractDataSource => {
   switch (identifier) {
-  case "hmhdnov18_sql":
-    return IgdSqlDatabaseSource.getInstance() // retrieve the singleton instance
-  case "rest":
-    return restDataSource
-  default:
-    throw new Error(
-      `Unknown data source selected: "${identifier}". Available are: [${ALL_DATA_SOURCES}]`
-    )
+    case "hmhdnov18_sql":
+      return IgdSqlDatabaseSource.getInstance() // retrieve the singleton instance
+    case "rest":
+      return restDataSource
+    default:
+      throw new Error(
+        `Unknown data source selected: "${identifier}". Available are: [${ALL_DATA_SOURCES}]`
+      )
   }
 }

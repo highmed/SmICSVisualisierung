@@ -47,5 +47,5 @@
       }
     }
   },
-  "required": ["starttime", "endtime", "pathogen", "hospital", "stationList"]
+  "required": ["starttime", "endtime", "pathogen"]
 }

@@ -50,12 +50,5 @@
       }
     }
   },
-  "required": [
-    "starttime",
-    "endtime",
-    "patientID",
-    "hospital",
-    "degree",
-    "pathogen"
-  ]
+  "required": ["starttime", "endtime", "patientID", "hospital", "degree"]
 }

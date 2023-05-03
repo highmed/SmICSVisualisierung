@@ -5,6 +5,9 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface Kontakte {
+export type Kontakte2 = Kontakte | Kontakte1;
+export type Kontakte = unknown[];
+
+export interface Kontakte1 {
   [k: string]: unknown;
 }

@@ -10,7 +10,10 @@
       "items": {
         "type": "string"
       }
+    },
+    "pathogen": {
+      "type": "string"
     }
   },
-  "required": ["patientList", "pathogen"]
+  "required": ["patientList"]
 }

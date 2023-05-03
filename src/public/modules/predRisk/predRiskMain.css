@@ -1,9 +1,9 @@
-body {
+/* body {
   background-color: #fffaf0;
-}
+} */
 
 .App-header {
-  background-color: #fffaf0;
+  /* background-color: #fffaf0; */
   min-height: 100vh;
   display: grid;
   grid-template-columns: 2fr 5fr 3fr;
@@ -17,15 +17,15 @@ body {
 }
 
 /* Axis */
-.tick line {
+.App .tick line {
   stroke: #635f5d;
 }
-.tick text {
+.App .tick text {
   fill: #635f5d;
   font-size: 50% !important;
   /*font-size: small;*/
 }
-.axis-label {
+.App .axis-label {
   fill: #635f5d;
   font-size: 65%;
   /*font-size: large;*/

@@ -9,10 +9,10 @@ export interface Arguments_TTEsKSs {
   starttime: string;
   endtime: string;
   pathogen: string;
-  hospital: string;
+  hospital?: string;
   /**
    * station IDs
    */
-  stationList: string[];
+  stationList?: string[];
   [k: string]: unknown;
 }

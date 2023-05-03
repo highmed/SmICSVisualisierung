@@ -8,7 +8,6 @@ import {
   Arguments_RKIalgo,
   Patient_Symptom,
   Patient_Vaccination,
-  Metadaten,
   Bewegungen,
   DiagnosticResults,
   ErregerProTag,
@@ -18,7 +17,6 @@ import {
   PathogenFlag,
   validate,
   ValidationResult,
-  PredictionDummy,
 } from "../types"
 import { AbstractDataSource } from "../abstract_data_provider"
 import { default as fetch } from "node-fetch"
@@ -39,6 +37,27 @@ export class RestAPI extends AbstractDataSource {
   private readonly url: string
 
   /**
+   * All request parameters for the corresponding methods
+   */
+  protected readonly request_parameters = {
+    Patient_Bewegung_Ps: ["patientList", "pathogen"],
+    Patient_Labordaten_Ps: ["patientList", "pathogen"],
+    Contact_NthDegree_TTKP_Degree: [
+      "starttime",
+      "endtime",
+      "patientID",
+      "hospital",
+      "degree",
+      "pathogen",
+    ],
+    Labor_ErregerProTag_TTEsKSs: ["starttime", "endtime", "pathogen"],
+    Patient_Vaccination: ["patientList", "pathogen"],
+    Patient_Symptom: ["patientList", "pathogen"],
+    OutbreakDetectionConfigurations: [],
+    OutbreakDetectionResultSet: ["starttime", "endtime", "configName"],
+  }
+
+  /**
    * Create a new data source instance.
    *
    * @param url the entry to the REST API; a missing slash at the end is automatically appended
@@ -47,6 +66,40 @@ export class RestAPI extends AbstractDataSource {
     super()
     if (!url.endsWith("/")) url = url.concat("/")
     this.url = url
+  }
+
+  public mapping = (
+    procedureName: string,
+    response: ValidationResult<unknown>,
+    all_parameters: { [key: string]: string[] }
+  ): Promise<object> => {
+    const raw_data = JSON.parse(JSON.stringify(response))
+
+    if (procedureName === "Contact_NthDegree_TTKP_Degree") {
+      // TODO eigentlich könnten/sollten die Daten direkt gemergt werden
+      // TODO und nicht eine Liste an Patienten angefertigt werden
+      // TODO um die Daten erneut anzufragen...
+      let patient_contact_list: any = []
+
+      raw_data.data.Patienten_Bewegungen.forEach((d: any) => {
+        if (!patient_contact_list.includes(d.patientID)) {
+          patient_contact_list.push(d.patientID)
+        }
+      })
+
+      raw_data.data.Labordaten.forEach((d: any) => {
+        if (!patient_contact_list.includes(d.PatientID)) {
+          patient_contact_list.push(d.PatientID)
+        }
+      })
+
+      return new Promise((resolve, reject) => {
+        resolve({ contact_patients: patient_contact_list })
+      })
+    }
+    return new Promise((resolve, reject) => {
+      resolve(JSON.parse(JSON.stringify(response)))
+    })
   }
 
   public GetHospitals = async (
@@ -211,12 +264,6 @@ export class RestAPI extends AbstractDataSource {
     )
   }
 
-  public Metadaten = async (
-    parameters: Arguments_Ps
-  ): Promise<ValidationResult<Metadaten>> => {
-    return this._low_level_call("Metadaten", parameters, "data/Metadaten")
-  }
-
   public Patient_DiagnosticResults_Ps = async (
     parameters: Arguments_Ps
   ): Promise<ValidationResult<DiagnosticResults>> => {
@@ -234,16 +281,6 @@ export class RestAPI extends AbstractDataSource {
       "Patient_PathogenFlag_Ps",
       parameters,
       "data/PathogenFlag"
-    )
-  }
-
-  public PredictionDummy = async (
-    parameters: Arguments_Empty
-  ): Promise<ValidationResult<PredictionDummy>> => {
-    return this._low_level_call(
-      "PredictionDummy",
-      parameters,
-      "data/PredictionDummy"
     )
   }
 
@@ -277,7 +314,7 @@ export class RestAPI extends AbstractDataSource {
       ...(!CONFIG.dev_mode && { body }),
     }
     console.log(
-      `end point ${procedureName} has been called with request data: ${body}`
+      `end point '${procedureName}' has been called with request data: ${body}`
     )
     const response = await fetch(this.url.concat(procedureName), request)
 

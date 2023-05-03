@@ -10,5 +10,6 @@ export interface Arguments_Ps {
    * patient IDs
    */
   patientList: string[];
+  pathogen?: string;
   [k: string]: unknown;
 }

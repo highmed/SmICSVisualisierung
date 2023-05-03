@@ -2,7 +2,7 @@
   "$id": "data/Bewegungen",
   "$schema": "http://json-schema.org/schema#",
   "type": "array",
-  "uniqueItems": true,
+  "uniqueItems": false,
   "items": {
     "type": "object",
     "properties": {
@@ -55,7 +55,14 @@
         "type": "string"
       },
       "ZimmerNr": {
-        "type": "string",
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
         "description": "this is only called 'number', but is really a textual identifier"
       },
       "CaseID": {

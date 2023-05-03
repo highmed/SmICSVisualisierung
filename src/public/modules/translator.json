@@ -1150,5 +1150,179 @@
     "ger": "Backward = Wer hat den ausgewählten Patient infiziert",
     "rus": "- ? -",
     "cov": "Backward = Wer hat den ausgewählten Patient infiziert"
+  },
+  "no_data_loaded": {
+    "eng": "No data loaded yet. Please enter parameters and click on the 'load data' button.",
+    "ger": "Keine Daten geladen. Bitte Parameter auswählen und die 'Lade Daten' Schaltfläche klicken.",
+    "rus": "- ? -",
+    "cov": "Keine Daten geladen. Bitte Parameter auswählen und die 'Lade Daten' Schaltfläche klicken."
+  },
+  "loading_data": {
+    "eng": "Data are beeing loaded...",
+    "ger": "Daten werden geladen...",
+    "rus": "- ? -",
+    "cov": "Daten werden geladen..."
+  },
+  "data_successfully_loaded": {
+    "eng": "Data successfully loaded.",
+    "ger": "Daten erfolgreich geladen.",
+    "rus": "- ? -",
+    "cov": "Daten erfolgreich geladen."
+  },
+  "data_loading_error": {
+    "eng": "Error while loading the data.",
+    "ger": "Fehler beim Laden der Daten.",
+    "rus": "- ? -",
+    "cov": "Fehler beim Laden der Daten."
+  },
+  "progress_title": {
+    "eng": "Data fetching progress",
+    "ger": "Daten-Lade Fortschritt",
+    "rus": "- ? -",
+    "cov": "Daten-Lade Fortschritt"
+  },
+  "errors": {
+    "eng": "Errors occured.",
+    "ger": "Fehler aufgetreten.",
+    "rus": "- ? -",
+    "cov": "Fehler aufgetreten."
+  },
+  "no_errors": {
+    "eng": "No errors",
+    "ger": "Fehlerfrei",
+    "rus": "- ? -",
+    "cov": "Fehlerfrei"
+  },
+  "viewport_too_small": {
+    "eng": "Module is too small for graphics.",
+    "ger": "Modul ist für die Grafik zu klein.",
+    "rus": "- ? - ",
+    "cov": "Modul ist für die Grafik zu klein."
+  },
+  "change_language": {
+    "eng": "Change language",
+    "ger": "Sprache wechseln",
+    "rus": "- ? - ",
+    "cov": "Sprache wechseln"
+  },
+  "change_filter_station": {
+    "eng": "Selected wards changed",
+    "ger": "Stationsauswahl geändert",
+    "rus": "- ? - ",
+    "cov": "Stationsauswahl geändert"
+  },
+  "change_filter_location": {
+    "eng": "Location level changed",
+    "ger": "Orts-Präzision geändert",
+    "rus": "- ? - ",
+    "cov": "Orts-Präzision geändert"
+  },
+  "change_filter_starttime": {
+    "eng": "Starttime changed",
+    "ger": "Beginn geändert",
+    "rus": "- ? - ",
+    "cov": "Beginn geändert"
+  },
+  "change_filter_endtime": {
+    "eng": "Endtime changed",
+    "ger": "Ende geändert",
+    "rus": "- ? - ",
+    "cov": "Ende geändert"
+  },
+  "change_filter_timespan": {
+    "eng": "Timespan changed",
+    "ger": "Zeitraum geändert",
+    "rus": "- ? - ",
+    "cov": "Zeitraum geändert"
+  },
+  "adapt_filter_values": {
+    "eng": "New data received",
+    "ger": "Neue Daten erhalten",
+    "rus": "- ? - ",
+    "cov": "Neue Daten erhalten"
+  },
+  "load_filter_set": {
+    "eng": "Reloaded previous state",
+    "ger": "Vorherigen Filterstatus wiederhergestellt",
+    "rus": "- ? - ",
+    "cov": "Vorherigen Filterstatus wiederhergestellt"
+  },
+  "delete_patientlist": {
+    "eng": "Deleted patient from selection",
+    "ger": "Patient aus der Auswahl entfernt",
+    "rus": "- ? - ",
+    "cov": "Patient aus der Auswahl entfernt"
+  },
+  "add_patientlist": {
+    "eng": "Added patient to selection",
+    "ger": "Patient zur Auswahl hinzugefügt",
+    "rus": "- ? - ",
+    "cov": "Patient zur Auswahl hinzugefügt"
+  },
+  "empty_data": {
+    "eng": "Dataset is empty.",
+    "ger": "Datensatz ist leer.",
+    "rus": "- ? - ",
+    "cov": "Datensatz ist leer."
+  },
+  "critical_patient": {
+    "eng": "Critical patient",
+    "ger": "Kritischer Patient",
+    "rus": "- ? - ",
+    "cov": "Kritischer Patient"
+  },
+  "statusHoltKeim": {
+    "eng": "not infected",
+    "ger": "keine Infection",
+    "rus": "- ? - ",
+    "cov": "keine Infection"
+  },
+  "statusUnbekannt": {
+    "eng": "not infected",
+    "ger": "keine Infection",
+    "rus": "- ? - ",
+    "cov": "keine Infection"
+  },
+  "statusKrank": {
+    "eng": "deseased",
+    "ger": "erkrankt",
+    "rus": "- ? - ",
+    "cov": "erkrankt"
+  },
+  "statusTraeger": {
+    "eng": "infected",
+    "ger": "infiziert",
+    "rus": "- ? - ",
+    "cov": "infiziert"
+  },
+  "add_patient_to_selection": {
+    "eng": "Add patient to selection:",
+    "ger": "Füge Patient zur Auswahl hinzu:",
+    "rus": "- ? - ",
+    "cov": "Füge Patient zur Auswahl hinzu:"
+  },
+  "remove_patient_from_selection": {
+    "eng": "Remove patient from selection:",
+    "ger": "Entferne Patient von der Auswahl:",
+    "rus": "- ? - ",
+    "cov": "Entferne Patient von der Auswahl:"
+  },
+  "select_as_critical_patient": {
+    "eng": "Select as critical patient:",
+    "ger": "Wähle als kritischen Patienten aus:",
+    "rus": "- ? - ",
+    "cov": "Wähle als kritischen Patienten aus:"
+  },
+  "deselect_as_critical_patient": {
+    "eng": "De-select as critical patient:",
+    "ger": "Wähle kritischen Patienten ab:",
+    "rus": "- ? - ",
+    "cov": "Wähle kritischen Patienten ab:"
+  },
+  "load_contacts": {
+    "eng": "Load all contact-patients:",
+    "ger": "Lade alle Kontaktpatienten hinzu:",
+    "rus": "- ? - ",
+    "cov": "Lade alle Kontaktpatienten hinzu:"
   }
 }

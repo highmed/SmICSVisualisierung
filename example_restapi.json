@@ -1,6 +1,6 @@
 {
   "Patient_Labordaten_Ps": [
-   {
+    {
       "LabordatenID": "99999900003",
       "Eingangsdatum": "2021-05-04T11:00:00+02:00",
       "ZeitpunktProbeneingang": "2021-05-04T12:00:00+02:00",
@@ -3353,30 +3353,12 @@
   ],
   "RKIalgo": {
     "Ausbruchswahrscheinlichkeit": [
-      0.001161518,
-      1.096367e-5,
-      0.0002443953,
-      0.00158494,
-      0.0002150398,
-      0.0002150398,
-      0.0009353649,
-      0.005211076,
-      0.02678244,
-      0.4743124,
-      0.9857236
+      0.001161518, 1.096367e-5, 0.0002443953, 0.00158494, 0.0002150398,
+      0.0002150398, 0.0009353649, 0.005211076, 0.02678244, 0.4743124, 0.9857236
     ],
     "p-Value": [
-      0.5924994,
-      0.9999537,
-      0.9784418,
-      0.7918422,
-      0.918405,
-      0.918405,
-      0.6585426,
-      0.294011,
-      0.1392881,
-      0.005967464,
-      0.001688944
+      0.5924994, 0.9999537, 0.9784418, 0.7918422, 0.918405, 0.918405, 0.6585426,
+      0.294011, 0.1392881, 0.005967464, 0.001688944
     ],
     "Zeitstempel": [
       "2020-12-31",
@@ -3393,30 +3375,12 @@
     ],
     "Erregeranzahl": [10, 1, 2, 4, 6, 6, 9, 12, 13, 13, 14],
     "Endemisches Niveau": [
-      10.41247,
-      9.981067,
-      5.745939,
-      5.44373,
-      9.648803,
-      9.648803,
-      9.923865,
-      9.918659,
-      9.200353,
-      5.705549,
-      5.501382
+      10.41247, 9.981067, 5.745939, 5.44373, 9.648803, 9.648803, 9.923865,
+      9.918659, 9.200353, 5.705549, 5.501382
     ],
     "Epidemisches Niveau": [
-      17.38755,
-      17.4166,
-      11.03118,
-      9.471747,
-      17.40882,
-      17.40882,
-      17.40269,
-      17.36081,
-      16.7655,
-      11.3142,
-      11.9321
+      17.38755, 17.4166, 11.03118, 9.471747, 17.40882, 17.40882, 17.40269,
+      17.36081, 16.7655, 11.3142, 11.9321
     ],
     "Obergrenze": [22, 21, 14, 14, 21, 21, 21, 21, 20, 14, 14],
     "Faelle unter der Obergrenze": [10, 1, 2, 4, 6, 6, 9, 12, 13, 13, 14],
@@ -3696,110 +3660,6 @@
       "AussageFehlendeInfo": null
     }
   ],
-  "Metadaten": [
-    {
-      "PatientID": "52afa449-07a2-4d57-bb7a-86e7960124ac",
-      "Zeitpunkt_der_Probenentnahme": "2020-02-08T11:13:00+01:00",
-      "Aufnahme_Datum": "2020-02-08T12:13:00+01:00",
-      "Entlastung_Datum": "2020-02-20T12:13:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": false,
-      "Impfstoff": null,
-      "Anzahl_Impfungen": null
-    },
-    {
-      "PatientID": "959c26c9-de4a-40b8-bf76-a315574d3da7",
-      "Zeitpunkt_der_Probenentnahme": "2020-12-01T09:13:09+01:00",
-      "Aufnahme_Datum": "2020-11-27T12:13:00+01:00",
-      "Entlastung_Datum": "2020-12-12T12:13:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": false,
-      "Impfstoff": null,
-      "Anzahl_Impfungen": null
-    },
-    {
-      "PatientID": "386ff697-7fe4-4fe0-942c-eb389b81704f",
-      "Zeitpunkt_der_Probenentnahme": "2020-12-02T12:13:33+01:00",
-      "Aufnahme_Datum": "2020-11-28T12:13:00+01:00",
-      "Entlastung_Datum": "2020-12-12T12:13:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": false,
-      "Impfstoff": null,
-      "Anzahl_Impfungen": null
-    },
-    {
-      "PatientID": "c74f6215-4fc2-42a5-a3ad-f92536ca64dc",
-      "Zeitpunkt_der_Probenentnahme": "2021-01-01T11:00:00+01:00",
-      "Aufnahme_Datum": "2021-01-01T09:00:00+01:00",
-      "Entlastung_Datum": "2021-01-05T15:00:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": true,
-      "Impfstoff": [
-        "Vaccine product containing only Severe acute respiratory syndrome coronavirus 2 antigen (medicinal product)"
-      ],
-      "Anzahl_Impfungen": ["1"]
-    },
-    {
-      "PatientID": "96cdcae3-6c08-4eb7-8e41-45b012bf61d4",
-      "Zeitpunkt_der_Probenentnahme": "2021-01-02T11:00:00+01:00",
-      "Aufnahme_Datum": "2021-01-02T09:00:00+01:00",
-      "Entlastung_Datum": "2021-01-07T15:00:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": true,
-      "Impfstoff": [
-        "Vaccine product containing only Severe acute respiratory syndrome coronavirus 2 antigen (medicinal product)"
-      ],
-      "Anzahl_Impfungen": ["1"]
-    },
-    {
-      "PatientID": "059d9e68-c096-4ee7-8551-c088a5488813",
-      "Zeitpunkt_der_Probenentnahme": "2021-01-03T11:00:00+01:00",
-      "Aufnahme_Datum": "2021-01-02T09:00:00+01:00",
-      "Entlastung_Datum": "2021-01-09T15:00:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": true,
-      "Impfstoff": [
-        "Vaccine product containing only Severe acute respiratory syndrome coronavirus 2 antigen (medicinal product)"
-      ],
-      "Anzahl_Impfungen": ["1"]
-    },
-    {
-      "PatientID": "7dab2503-06f1-4c42-b4a4-76ddaae08794",
-      "Zeitpunkt_der_Probenentnahme": "2021-01-03T11:00:00+01:00",
-      "Aufnahme_Datum": "2021-01-03T09:00:00+01:00",
-      "Entlastung_Datum": "2021-01-09T15:00:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": true,
-      "Impfstoff": [
-        "Vaccine product containing only Severe acute respiratory syndrome coronavirus 2 messenger ribonucleic acid (medicinal product)"
-      ],
-      "Anzahl_Impfungen": ["1"]
-    },
-    {
-      "PatientID": "db7be72a-db86-4dc6-b55b-dcf510b0f23e",
-      "Zeitpunkt_der_Probenentnahme": "2021-01-03T11:00:00+01:00",
-      "Aufnahme_Datum": "2021-01-03T09:00:00+01:00",
-      "Entlastung_Datum": "2021-01-09T15:00:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": true,
-      "Impfstoff": [
-        "Vaccine product containing only Severe acute respiratory syndrome coronavirus 2 messenger ribonucleic acid (medicinal product)"
-      ],
-      "Anzahl_Impfungen": ["1"]
-    },
-    {
-      "PatientID": "11fcaa10-d510-4eb7-a4a4-c96add98bae2",
-      "Zeitpunkt_der_Probenentnahme": "2021-01-03T11:00:00+01:00",
-      "Aufnahme_Datum": "2021-01-03T09:00:00+01:00",
-      "Entlastung_Datum": "2021-01-09T15:00:00+01:00",
-      "Infektion": "Wahrscheinliche Nosokomiale Infektion",
-      "Impfung": true,
-      "Impfstoff": [
-        "Vaccine product containing only Severe acute respiratory syndrome coronavirus 2 messenger ribonucleic acid (medicinal product)"
-      ],
-      "Anzahl_Impfungen": ["2"]
-    }
-  ],
   "OutbreakDetectionResultSet": [
     {
       "timestamp": 1609372800000,
@@ -3982,32 +3842,6 @@
     {
       "name": "Config-Name",
       "StationID": "Coronastation"
-    }
-  ],
-  "PredictionDummy": [
-    {
-      "date": "2014-12-19",
-      "prediction": 0.684397162005102,
-      "layer": "date",
-      "patients": [13058017, 14661428, 14290246]
-    },
-    {
-      "date": "2014-12-20",
-      "prediction": 0.761091045939672,
-      "layer": "date",
-      "patients": [13058017, 13058019, 14661428, 13051773]
-    },
-    {
-      "date": "2014-12-21",
-      "prediction": 0.697582551273711,
-      "layer": "date",
-      "patients": [14661428, 13051773, 14290246]
-    },
-    {
-      "date": "2014-12-24",
-      "prediction": 0.6498532692048791,
-      "layer": "date",
-      "patients": [13040529, 14661428, 13039364, 14290246]
     }
   ]
 }

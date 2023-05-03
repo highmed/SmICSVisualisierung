@@ -65,12 +65,26 @@ export default class CONFIG {
    */
   public static readonly use_logging: boolean =
     process.env.USE_LOGGING !== undefined
-      ? process.env.USE_LOGGING.toLowerCase() !== "true"
+      ? process.env.USE_LOGGING.toLowerCase() !== "false"
       : false
 
   /**
+   * This flag is used to declare the time when the restAPI is asked for
+   * the new 'OutbreakDetectionConfigurations' data
+   * By default it is set to 6:00
+   */
+  public static readonly daily_req: string =
+    process.env.DAILY_REQ !== undefined ? process.env.DAILY_REQ : "6:00"
+
+  /**
+   * This flag defines the database to connect to.
+   * Default is the restAPI
+   */
+  public static readonly datasource: string =
+    process.env.DATASOURCE !== undefined ? process.env.DATASOURCE : "rest"
+
+  /**
    * The configuration for connecting with the internal MySQL database. See #PoolConfig for available options.
-   * ! Note: This configuration is not used at the moment !
    */
   public static readonly igd_database_config: PoolConfig = {
     host: "highmeddatstring.igd.fraunhofer.de",

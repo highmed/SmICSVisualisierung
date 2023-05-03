@@ -233,10 +233,6 @@ class AnnotationTimeline extends Component {
     this.draw_vis() // Initiales zeichnen?
   }
 
-  requestVisData = () => {
-    // TODO: example getVisData -> parsing the data and caching it
-  }
-
   componentWillUnmount() {
     this.socket.off("annotationTimeline")
 

@@ -20,7 +20,7 @@ export type Bewegungen = {
   /**
    * this is only called 'number', but is really a textual identifier
    */
-  ZimmerNr?: string;
+  ZimmerNr?: string | null;
   CaseID?: number;
   CaseType_l?: string;
   CaseType_k?: string;

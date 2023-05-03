@@ -6,9 +6,12 @@
   // justify-content: flex-start;
   align-items: flex-start;
 
+  align-content: flex-start;
+
   // overflow-y: scroll;
 
   // height: 100%;
+  height: inherit;
 
   overflow-x: hidden;
 }
@@ -55,6 +58,22 @@
 
 .delete_clickable:hover {
   color: red;
+
+  transform: scale(1);
+}
+
+.set_as_critical_patient_clickable {
+  cursor: pointer;
+
+  text-align: bottom;
+
+  transform: scale(0.8);
+
+  vertical-align: bottom;
+}
+
+.set_as_critical_patient_clickable:hover {
+  color: blue;
 
   transform: scale(1);
 }

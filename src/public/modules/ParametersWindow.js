@@ -11,6 +11,19 @@ import ArrowDropUp from "@material-ui/icons/ArrowDropUp"
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown"
 import CheckIcon from "@material-ui/icons/Check"
 
+import KontaktIcon from "@mui/icons-material/Share"
+import LinelistIcon from "@mui/icons-material/List"
+import DetaillistIcon from "@mui/icons-material/FormatListBulleted"
+import EpicurveIcon from "@mui/icons-material/BarChart"
+import StorylineIcon from "@mui/icons-material/AirlineStops"
+
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import ErrorIcon from "@mui/icons-material/Error"
+// import ErrorIcon from "@mui/icons-material/Cancel"
+
+import AutorenewIcon from "@material-ui/icons/Autorenew"
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload"
+
 import "./scss/parameters_window.scss"
 
 export default class ParametersWindow extends Component {
@@ -26,6 +39,28 @@ export default class ParametersWindow extends Component {
     }
 
     this.translate = props.translate
+  }
+
+  create_button = (name, symbol, callback, toggled, width) => {
+    let variant = toggled ? "outlined" : "contained"
+    let style = {}
+    if (width) {
+      style = { width: width }
+    }
+    return (
+      <Button
+        className="data-button"
+        key={name}
+        title={name}
+        variant={variant}
+        style={style}
+        onClick={() => {
+          callback()
+        }}
+      >
+        {symbol}
+      </Button>
+    )
   }
 
   wrap_input_element = (el) => {
@@ -435,15 +470,205 @@ export default class ParametersWindow extends Component {
       ),
     ]
 
+    // let modules_loading_status_open = []
+    // let modules_loading_status_not_open = []
+
+    let button_request_data = this.create_button(
+      this.translate("loadData"),
+      <AutorenewIcon />,
+      this.props.requestVisData,
+      false,
+      "100%"
+    )
+
+    // !DEV: nur zum debuggen benötigt
+    let button_show_cache = this.create_button(
+      this.translate("showCache"),
+      <CloudDownloadIcon />,
+      this.props.requestCacheData,
+      false,
+      "100%"
+    )
+
+    let modules_loading_status = [
+      // button_request_data,
+      // button_show_cache, //! nur für Dev Zwecke
+      // this.translate("progress_title"),
+    ]
+
+    this.props.all_module_names.forEach((module_name) => {
+      let module_loading_status_object =
+        this.props.module_specific_data_loading_status[module_name]
+
+      let module_icon = null
+      let time_display = "-"
+      let status_icon = null
+
+      switch (module_name) {
+        case "patientdetail":
+          module_icon = (
+            <DetaillistIcon
+              onMouseDown={(e) => this.props.onAddDragMouseDown(e, "detail")}
+              onTouchStart={(e) => this.props.onAddDragMouseDown(e, "detail")}
+              style={{ cursor: "move" }}
+            />
+          )
+          break
+        case "linelist":
+          module_icon = (
+            <LinelistIcon
+              onMouseDown={(e) => this.props.onAddDragMouseDown(e, "linelist")}
+              onTouchStart={(e) => this.props.onAddDragMouseDown(e, "linelist")}
+              style={{ cursor: "move" }}
+            />
+          )
+          break
+        case "epikurve":
+          module_icon = (
+            <EpicurveIcon
+              onMouseDown={(e) => this.props.onAddDragMouseDown(e, "epicurve")}
+              onTouchStart={(e) => this.props.onAddDragMouseDown(e, "epicurve")}
+              style={{ cursor: "move" }}
+            />
+          )
+          break
+        case "kontaktnetzwerk":
+          module_icon = (
+            <KontaktIcon
+              onMouseDown={(e) => this.props.onAddDragMouseDown(e, "contact")}
+              onTouchStart={(e) => this.props.onAddDragMouseDown(e, "contact")}
+              style={{ cursor: "move" }}
+            />
+          )
+          break
+        case "storyline":
+          module_icon = (
+            <StorylineIcon
+              onMouseDown={(e) => this.props.onAddDragMouseDown(e, "storyline")}
+              onTouchStart={(e) =>
+                this.props.onAddDragMouseDown(e, "storyline")
+              }
+              style={{ cursor: "move" }}
+            />
+          )
+          break
+      }
+
+      // let test_seconds = Math.random() * 10000
+
+      // console.log("test seconds", test_seconds)
+
+      let loading_time = module_loading_status_object.seconds
+
+      // // Calculate in Hours, Minutes and Seconds
+      let ms = Math.floor((loading_time - Math.floor(loading_time)) * 10)
+      let seconds = Math.floor(loading_time) % 60
+      let minutes = Math.floor(loading_time / 60) % 60
+      let hours = Math.floor(loading_time / 60 / 60)
+
+      // console.log(hours, minutes, seconds)
+
+      time_display = ""
+
+      if (hours > 0) {
+        time_display += hours + "h "
+      }
+
+      if (minutes > 0) {
+        time_display += minutes + "m "
+      }
+      if (ms > 0 || seconds > 0 || (hours === 0 && minutes === 0)) {
+        time_display += seconds + "," + ms + "s "
+      }
+
+      let loading_status = module_loading_status_object.loading_status
+      let error_string = module_loading_status_object.user_description
+
+      let alert_string = `${module_loading_status_object.user_description}
+
+${module_loading_status_object.dev_description}`
+      if (loading_status === "success") {
+        status_icon = <CheckCircleIcon style={{ color: "#1b9e77" }} />
+      } else if (loading_status === "error") {
+        //         let error_string = "Errors loading data for " + module_name + ":"
+
+        //         for (let error_obj of module_loading_status_object.module_errors) {
+        //           error_string += `
+        // ${error_obj.error_desc}`
+        //         }
+
+        status_icon = (
+          <ErrorIcon
+            style={{ color: "#d95f02", cursor: "pointer" }}
+            onClick={() => {
+              console.log("Errors loading data for " + module_name + ":")
+              console.log(module_loading_status_object.module_errors)
+              window.alert(alert_string)
+            }}
+          />
+        )
+      } else {
+        // no data loaded
+        status_icon = null
+      }
+
+      let cName = "progress_bg"
+
+      let loading_bar_max_width = 120
+      // let load_percent = Math.max(0.05, Math.random()) * loading_bar_max_width
+      let load_percent =
+        module_loading_status_object.loading_progress * loading_bar_max_width
+
+      modules_loading_status.push(
+        <div
+          key={module_name}
+          className={cName}
+          title={
+            // module_loading_status_object.module_errors.length +
+            // " " +
+            // this.translate("errors")
+            error_string
+          }
+        >
+          {module_icon}
+          <div className="progress_bar_container">
+            <div
+              className="progress_bar progress_success"
+              style={{ width: load_percent + "px" }}
+            >
+              {time_display}
+            </div>
+          </div>
+          {status_icon}
+        </div>
+      )
+    })
+
+    modules_loading_status.push(button_request_data)
+    //! nur für Dev Zwecke
+    modules_loading_status.push(button_show_cache)
+
+    let module_specific_loading_status = (
+      <div key="module_specific_loading_status" style={{ marginTop: "10px" }}>
+        {modules_loading_status}
+      </div>
+    )
+
     let unwrapped_elements = [
+      module_specific_loading_status,
       start_time,
       end_time,
       pathogen_list_orig,
       config_selection,
       // station_list,
       // TODO: nur fuer Version Ende März so
-      contact_patient_selection,
+      // contact_patient_selection,
       patient_list,
+      // <div key="progress_title" className="progress_title">
+      //   {this.translate("progress_title")}
+      // </div>,
+      // button_request_data,
+      // button_show_cache,
     ]
     let wrapped_elements = []
     unwrapped_elements.forEach((e) => {

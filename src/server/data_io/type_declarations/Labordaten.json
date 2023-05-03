@@ -2,7 +2,7 @@
   "$id": "data/Labordaten",
   "$schema": "http://json-schema.org/schema#",
   "type": "array",
-  "uniqueItems": true,
+  "uniqueItems": false,
   "description": "for both viruses and bacteria",
   "items": {
     "type": "object",

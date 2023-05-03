@@ -4,6 +4,11 @@
   background: white;
 }
 
+.no_loaded_data_rects {
+  mask: url(#mask-stripe);
+  fill: rgba(175, 175, 175, 0.2);
+}
+
 .epidemiKeimContainer .gyAxis .tick line {
   opacity: 0.5;
   stroke-dasharray: 4, 6;

@@ -9,19 +9,32 @@ class Linelist extends Component {
 
     this.module_id = props.create_new_id()
     this.module_type = "linelist"
+    /**
+     * TODOS:
+     * - mouse line/timestamp selection/ drag slider
+     * - show patient labels at side
+     * - show timestamp current time at mouseline
+     * - Ziehbare Balken aus Epikurve hier implementieren um Zeitraum einzuschränken
+     * - bei draw_vis das "nicht" zeichne nwenn window zu klein: ALLES ENTFERNEN
+     */
 
     /**
      * TODO: hier für das Module feste Parameter/"globale" variablen
      */
-    this.state = {
-      stations: [],
-      selected_stations: [],
-    }
-    this.selected_stations = []
+    // this.state = {
+    //   stations: [],
+    //   selected_stations: [],
+    // }
 
-    this.data
-    this.parameters
-    this.timestamp
+    this.min_width = 150
+    this.min_height = 150
+
+    this.dragging_active = false
+    this.drag_x_start = 0
+
+    this.state = {
+      too_small: false,
+    }
 
     this.width
     this.height
@@ -32,39 +45,23 @@ class Linelist extends Component {
 
     this.default_movement_color = "lightgray"
 
-    this.margin = {
-      top: 25,
-      bottom: 25,
-      left: 25,
-      right: 25,
-    }
-
     this.title = this.translate("Linelist")
 
-    this.transition_duration = 200
     this.row_height = 50
-    // this.movement_rectangle_height = this.row_height / 5
-    this.movement_rectangle_height = this.row_height / 8
-    this.investigation_rectangle_height = (this.row_height / 8) * 6
-    this.investigation_rect_width = 10
 
-    this.treatment_circle_r = this.movement_rectangle_height / 2
-
-    this.title_height = 50
-    this.timestamp_height = 25
-
+    // TODO de-selektierte Patienten niedriger machen?
     /**
-     * Variables
+     * Würde rewrite der y-psoitions-berechnung benötigen:
+     * - sortierte Liste der Patienten mit den entsprechenden höhen abhängig vom Selektiert-Status
+     * - Aktuell/davor: eifnach index des Patienten mit der generischen Reihenhöhe multiplizieren
      */
-    this.zoom = 1
-    this.lastZoomK = 1
-    this.lastZoomX = 0
-    this.lastTransformedX = 0
+    this.row_height_small = 20
 
+    // TODO needs to be reset to 0 if new data is incoming...
+    // currently new data arrives at main.js and it just calls draw_vis on every module
     this.currentPixelOffset = 0
 
-    //TODO: Datumsformate
-
+    // TODO: global auslagern
     this.locale = {
       dateTime: "%A, der %e. %B %Y, %X",
       date: "%d.%m.%Y",
@@ -121,45 +118,26 @@ class Linelist extends Component {
     /**
      * = margin bars außenrum
      */
-    this.vis_margin = {
-      top: 50,
+    this.margin = {
+      top: 20,
       // top: this.title_height + this.timestamp_height * 2,
       // top: 0,
-      bottom: 50,
+      bottom: 20,
       left: 50,
-      right: 0,
+      right: 25,
     }
+  }
 
-    this.v_margin_bars_data = [
-      {
-        x: () => this.width - this.vis_margin.right,
-        y: () => 0,
-        width: () => this.vis_margin.right,
-        height: () => this.height,
-      },
-      {
-        x: () => 0,
-        y: () => 0,
-        width: () => this.vis_margin.left,
-        height: () => this.height,
-      },
-    ]
-
-    this.h_margin_bars_data = [
-      {
-        x: () => 0,
-        y: () => 0,
-        width: () => this.width,
-        height: () => this.vis_margin.top,
-      },
-
-      {
-        x: () => 0,
-        y: () => this.height - this.vis_margin.bottom,
-        width: () => this.width,
-        height: () => this.vis_margin.bottom,
-      },
-    ]
+  move_linelist_container_x = (x_offset) => {
+    this.gGraphics
+      // .select(".linelist")
+      .attr(
+        "transform",
+        (d) => "translate(" + x_offset + " " + this.currentPixelOffset + ")"
+      )
+    this.gUIContainer
+      // .select(".linelist")
+      .attr("transform", (d) => "translate(" + x_offset + " " + "0" + ")")
   }
 
   // TODO: das ist copy pasted vom alten Dashboard...
@@ -270,6 +248,7 @@ class Linelist extends Component {
           //   this.translate("antibiotika"),
           //   this.translate("material"),
           //   this.translate("id"),
+          this.translate("number"),
           this.translate("KeimID"),
           // this.translate("MREclass"),
           this.translate("material"),
@@ -285,12 +264,18 @@ class Linelist extends Component {
           // o.Antibiotikum_l,
           // o.Material_l,
           // o.id,
+          o.count,
           o.KeimID,
           // o.MREKlasseID,
           o.Material_l,
           o.Befundkommentar,
         ])
       })
+    } else if (i === "infection_status") {
+      tableObj = {
+        header: ["Patient"],
+        content: [d.patient_id],
+      }
     } else {
       tableObj = i + " not defined"
     }
@@ -309,25 +294,105 @@ class Linelist extends Component {
     this.props.update_tooltip([tableObj])
   }
 
+  filter_data = () => {
+    let pfv = this.props.get_possible_filter_values()
+
+    let { station, min_ts, max_ts, patients } = this.props.get_filter_values()
+
+    let original_data = this.props.get_original_data(this.module_type)
+
+    let movement_rects = []
+    let movement_dots = []
+
+    let investigation_rects = []
+    let status_rects = []
+
+    let data_length = 0
+
+    if (original_data && original_data.data) {
+      data_length =
+        original_data.data.status_rects.length +
+        original_data.data.investigation_rects.length +
+        original_data.data.movement_dots.length +
+        original_data.data.movement_rects.length
+    }
+    if (original_data && original_data.data && data_length > 0) {
+      // ! Panning preload
+      let timespan_to_add = max_ts - min_ts
+      if (timespan_to_add < 3 * 1000 * 60 * 60 * 24) {
+        timespan_to_add = 3 * 1000 * 60 * 60 * 24
+      }
+      min_ts = min_ts - timespan_to_add
+      max_ts = max_ts + timespan_to_add
+
+      movement_rects = original_data.data.movement_rects.filter(
+        (d) =>
+          patients.includes(d.patient_id) &&
+          !(d.begin > max_ts + 1000 * 60 * 60 * 24 || d.end < min_ts)
+      )
+
+      movement_dots = original_data.data.movement_dots.filter(
+        (d) =>
+          patients.includes(d.patient_id) &&
+          !(d.begin > max_ts + 1000 * 60 * 60 * 24 || d.end < min_ts)
+      )
+
+      investigation_rects = original_data.data.investigation_rects.filter(
+        (d) =>
+          patients.includes(d.patient_id) &&
+          !(d.timestamp > max_ts + 1000 * 60 * 60 * 24 || d.timestamp < min_ts)
+      )
+
+      status_rects = original_data.data.status_rects.filter(
+        (d) => !(d.begin > max_ts + 1000 * 60 * 60 * 24 || d.end < min_ts)
+      )
+
+      // adjust the filtered data to the selected filters (colorizatin, resizing, ...)
+      let fv = this.props.get_filter_values()
+
+      let timespan = [fv.min_ts, fv.max_ts + 1000 * 60 * 60 * 24]
+
+      this.filtered_data = {
+        movement_rects,
+        movement_dots,
+        investigation_rects,
+        status_rects,
+        patientList: original_data.data.patientList, // TODO
+      }
+    } else {
+      this.filtered_data = undefined
+    }
+  }
+
   componentDidMount() {
     let self = this
 
     console.log("linelist module did mount")
 
-    this.socket.on("linelist", this.handle_data)
-
-    this.props.register_module(this.module_id, this.module_type, this.draw_vis)
+    this.props.register_module(this.module_id, this.module_type, {
+      draw_vis: this.draw_vis,
+      filter_data: this.filter_data,
+    })
 
     /**
      * Modul auf Größenänderung alle 100ms überprüfen.
      * Falls eine Größenänderung vorliegt, die Visualisierung resizen.
      */
     this.checkSize = setInterval(() => {
-      let newWidth = parseInt(d3.select(self.svgRoot).style("width"))
-      let newHeight = parseInt(d3.select(self.svgRoot).style("height"))
+      let newWidth = parseInt(d3.select(self.module_container).style("width"))
+      let newHeight = parseInt(d3.select(self.module_container).style("height"))
       if (newWidth !== self.width || newHeight !== self.height) {
         self.width = newWidth
         self.height = newHeight
+        self.setState((prevState) => {
+          if (newWidth < this.min_width || newHeight < this.min_height) {
+            prevState.too_small = true
+          } else {
+            prevState.too_small = false
+          }
+          return prevState
+        })
+
         // console.log(`newWidth: ${newWidth}, newHeight: ${newHeight}`)
         // if (self.data) {
         self.draw_vis()
@@ -335,263 +400,188 @@ class Linelist extends Component {
       }
     }, 100)
 
-    this.width = parseInt(d3.select(self.svgRoot).style("width"))
-    this.height = parseInt(d3.select(self.svgRoot).style("height"))
-
-    let mouseLine = (this.mouseLine = () => {
-      if (!self.data) {
-        return
-      }
-
-      let containerWidth = parseInt(d3.select(self.svgRoot).style("width"))
-      let containerHeight = parseInt(d3.select(self.svgRoot).style("height"))
-      let offsetX = d3.event.offsetX - self.lastTransformedX
-      self.offsetX = offsetX
-      self.gUIContainer
-        .selectAll(".mouseLine")
-        .attr(
-          "transform",
-          "translate(" + (offsetX + self.lastTransformedX) + ",0)"
-        )
-        .attr("x1", 0)
-        .attr("x2", 0)
-        .attr("y1", self.vis_margin.top)
-        .attr("y2", self.height - self.vis_margin.bottom / 2)
-
-      let newText = offsetX
-      if (self.scaleReverseX) {
-        newText =
-          moment(self.scaleReverseX(offsetX)).format(
-            self.translate("dateFormat")
-          ) +
-          " " +
-          this.translate("clock")
-      }
-
-      let anchor = "middle"
-      if (offsetX > containerWidth / 2) {
-        anchor = "end"
-      } else if (offsetX < containerWidth / 2) {
-        anchor = "start"
-      }
-
-      // self.gGraphics
-      self.gUIContainer
-        .selectAll(".mouseLabel")
-        .text(newText)
-        // .transition()
-        // .duration(self.props.transTime)
-        // .attr("transform", "translate(" + offsetX + ",0)")
-        .attr(
-          "transform",
-          "translate(" +
-            (offsetX + self.lastTransformedX) +
-            "," +
-            (containerHeight - self.vis_margin.bottom / 2) +
-            ")"
-        )
-        .attr("text-anchor", anchor)
-
-      let patientLabel = self.gUIContainer
-        .selectAll(".patientLabel")
-        .data(self.data.patientList)
-
-      // let inspecHeight =
-      //   self.state.getMinimaleAnzeige === 0 ? self.inspecHeight : 0
-
-      let inspecHeight = 0
-
-      patientLabel
-        .enter()
-        .append("text")
-        .merge(patientLabel)
-        .attr("class", "patientLabel")
-        // .text((d) => "P" + d)
-        // .text((d) => d)
-        .text((d, i) => {
-          let y_offset =
-            self.height -
-            self.vis_margin.bottom -
-            i * self.row_height -
-            // + self.rowHeight
-            inspecHeight -
-            // self.labelMargin +
-            2 +
-            self.currentPixelOffset
-          if (
-            y_offset < self.vis_margin.top ||
-            y_offset > self.height - self.vis_margin.bottom
-          ) {
-            return ""
-          } else {
-            return d
-          }
-        })
-        // .attr("font-size", self.labelHeight)
-        .attr("font-size", 12)
-        // .attr(
-        //   "transform",
-        //   (d, i) =>
-        //     "translate(" +
-        //     offsetX +
-        //     "," +
-        //     (self.svgMarginY +
-        //       i * self.rowHeight +
-        //       self.rowHeight -
-        //       self.inspecHeight -
-        //       10) +
-        //     ")"
-        // )
-        .attr(
-          "transform",
-          (d, i) =>
-            "translate(" +
-            (false
-              ? containerWidth - self.lastTransformedX
-              : offsetX + self.lastTransformedX) +
-            "," +
-            (self.height -
-              self.vis_margin.bottom -
-              i * self.row_height -
-              // + self.rowHeight
-              inspecHeight -
-              // self.labelMargin +
-              2 +
-              self.currentPixelOffset +
-              // 0 +
-              ")")
-        )
-        .attr("text-anchor", false ? "end" : anchor)
-
-      patientLabel.exit().remove()
-    })
-
-    let zoom = d3.zoom().on("zoom", () => {
-      let containerWidth = parseInt(d3.select(self.svgRoot).style("width"))
-      // let mitteModul = containerWidth / 2
-      // statt Mitte Modul die Mausposition:
-      if (!d3.event.sourceEvent) {
-        // Wenn es null oder undefined oder so ist...
-        console.error("d3.event.sourceEvent gibt fehler ?")
-        return
-      }
-      let mitteModul = d3.event.sourceEvent.offsetX
-      if (d3.event.sourceEvent.type === "wheel") {
-        let prozentVerschiebung =
-          (self.lastTransformedX - mitteModul) / (containerWidth * self.zoom)
-
-        let newK = d3.event.transform.k
-        if (newK > self.lastZoomK) {
-          // rangezoomt
-          self.zoom = self.zoom * 1.1
-        } else {
-          self.zoom = self.zoom / 1.1
-          if (self.zoom < 1) {
-            self.zoom = 1
-          }
-        }
-        // MAX ZOOM
-        if (self.zoom > 200) {
-          self.zoom = 200
-        }
-        self.lastZoomK = newK
-        self.lastZoomX = JSON.parse(JSON.stringify([d3.event.transform.x]))[0]
-
-        let calculatedX =
-          prozentVerschiebung * self.zoom * containerWidth + mitteModul
-
-        if (self.zoom === 1) {
-          calculatedX = 0
-        }
-        self.draw_vis(true)
-
-        let deltaSVGx = containerWidth * self.zoom - containerWidth
-        if (deltaSVGx + calculatedX < 0) {
-          calculatedX = -deltaSVGx
-        } else if (calculatedX > 0) {
-          calculatedX = 0
-        }
-        self.lastTransformedX = calculatedX
-        // self.gGraphics.attr(
-        //   "transform",
-        //   "translate(" + calculatedX + " " + self.currentPixelOffset + ")"
-        // )
-        self.gGraphics.attr(
-          "transform",
-          "translate(" + calculatedX + " " + self.currentPixelOffset + ")"
-        )
-
-        self.gGridlines.attr(
-          "transform",
-          "translate(" +
-            calculatedX +
-            " " +
-            // (self.height - self.svgMarginY / 2) +
-            (this.height - this.margin.bottom / 2) +
-            ")"
-        )
-        // let inspecHeight = 0
-        // self.gUIContainer.selectAll(".patientLabel").attr(
-        //   "transform",
-        //   (d, i) =>
-        //     "translate(" +
-        //     ((self.offsetX || 0) + self.lastTransformedX) +
-        //     "," +
-        //     (self.height -
-        //       self.vis_margin.bottom -
-        //       i * self.row_height -
-        //       // + self.rowHeight
-        //       inspecHeight -
-        //       // self.labelMargin +
-        //       2 +
-        //       self.currentPixelOffset +
-        //       // 0 +
-        //       ")")
-        // )
-      } else if (d3.event.sourceEvent.type === "mousemove") {
-        let deltaX = d3.event.transform.x - self.lastZoomX
-        let calculatedX = self.lastTransformedX
-        let svgWidth = containerWidth * self.zoom
-        let deltaSVGx = svgWidth - containerWidth
-
-        // Diagramm verschiebt sich nach links
-        // deltaSVGx - calculated x muss immer >= 0 sein
-        calculatedX = calculatedX + deltaX
-        if (deltaSVGx + calculatedX < 0) {
-          calculatedX = -deltaSVGx
-        } else if (calculatedX > 0) {
-          calculatedX = 0
-        }
-        self.lastTransformedX = calculatedX
-        // self.gGraphics.attr(
-        //   "transform",
-        //   "translate(" + calculatedX + " " + self.currentPixelOffset + ")"
-        // )
-        self.gGraphics.attr(
-          "transform",
-          "translate(" + calculatedX + " " + self.currentPixelOffset + ")"
-        )
-        self.gGridlines.attr(
-          "transform",
-          "translate(" +
-            calculatedX +
-            " " +
-            // (self.height - self.svgMarginY / 2) +
-            (this.height - this.margin.bottom / 2) +
-            ")"
-        )
-        self.lastZoomX = self.lastZoomX + deltaX
-      }
-    })
-
     /**
      * TODO: hier werden die "g" objecte initialisiert (und andere Sachen)
      */
 
     let svg = (this.gGraphics = d3
       .select(self.svgRoot)
-      .call(zoom)
-      .on("mousemove", mouseLine)
+      .on("mouseup", (e, d) => {
+        // console.log("mouseup")
+
+        if (this.dragging_active) {
+          this.dragging_active = false
+          this.move_linelist_container_x(0)
+
+          let x_pixels_diff = this.drag_x_start - d3.event.layerX
+
+          let pfv = this.props.get_possible_filter_values()
+          let fv = this.props.get_filter_values()
+
+          // Zeit ausrechnen
+          let timespan = [fv.min_ts, fv.max_ts + 1000 * 60 * 60 * 24]
+          let x_pixels = [this.margin.left, this.width - this.margin.right]
+          let ms_pro_pixel =
+            (timespan[1] - timespan[0]) / (x_pixels[1] - x_pixels[0])
+          let ms_diff = ms_pro_pixel * x_pixels_diff
+
+          if (fv.min_ts + ms_diff <= pfv.min_ts) {
+            ms_diff = pfv.min_ts - fv.min_ts
+          } else if (fv.max_ts + ms_diff >= pfv.max_ts) {
+            ms_diff = pfv.max_ts - fv.max_ts
+          } else {
+            // hier auf einen ganzen Tag runden!
+            let days_diff = Math.floor(ms_diff / (1000 * 60 * 60 * 24))
+            if (ms_diff < 0) {
+              days_diff = Math.ceil(ms_diff / (1000 * 60 * 60 * 24))
+            }
+            ms_diff = days_diff * (1000 * 60 * 60 * 24)
+          }
+
+          this.props.change_filter_timespan(
+            fv.min_ts + ms_diff,
+            fv.max_ts + ms_diff
+          )
+        }
+      })
+      .on("mousedown", (e, d) => {
+        // console.log("mousedown")
+
+        this.dragging_active = true
+        this.drag_x_start = d3.event.layerX
+      })
+      .on("dblclick", (e, d) => {
+        // console.log("dblclick")
+      })
+      .on("mouseout", (e, d) => {
+        // console.log("mouseout")
+        // this.dragging_active = false
+      })
+      .on("mousemove", (e, d) => {
+        if (this.dragging_active) {
+          // let x_diff = d3.event.layerX - this.drag_x_start
+          // console.log(x_diff)
+
+          let x_pixels_diff = this.drag_x_start - d3.event.layerX
+
+          let pfv = this.props.get_possible_filter_values()
+          let fv = this.props.get_filter_values()
+
+          // Zeit ausrechnen
+          let timespan = [fv.min_ts, fv.max_ts + 1000 * 60 * 60 * 24]
+          let x_pixels = [this.margin.left, this.width - this.margin.right]
+          let ms_pro_pixel =
+            (timespan[1] - timespan[0]) / (x_pixels[1] - x_pixels[0])
+          let ms_diff = ms_pro_pixel * x_pixels_diff
+
+          if (fv.min_ts + ms_diff < pfv.min_ts) {
+            ms_diff = pfv.min_ts - fv.min_ts
+          } else if (fv.max_ts + ms_diff > pfv.max_ts) {
+            ms_diff = pfv.max_ts - fv.max_ts
+          }
+
+          let x_diff = ms_diff / ms_pro_pixel
+
+          this.move_linelist_container_x(-x_diff)
+        }
+        // console.log("mousemove")
+      })
+      .on("mouseenter", (e, d) => {
+        // console.log("mouseenter")
+      })
+      .on("mouseleave", (e, d) => {
+        // console.log("mouseleave")
+
+        if (this.dragging_active) {
+          this.dragging_active = false
+          this.move_linelist_container_x(0)
+
+          let x_pixels_diff = this.drag_x_start - d3.event.layerX
+
+          let pfv = this.props.get_possible_filter_values()
+          let fv = this.props.get_filter_values()
+
+          // Zeit ausrechnen
+          let timespan = [fv.min_ts, fv.max_ts + 1000 * 60 * 60 * 24]
+          let x_pixels = [this.margin.left, this.width - this.margin.right]
+          let ms_pro_pixel =
+            (timespan[1] - timespan[0]) / (x_pixels[1] - x_pixels[0])
+          let ms_diff = ms_pro_pixel * x_pixels_diff
+
+          if (fv.min_ts + ms_diff <= pfv.min_ts) {
+            ms_diff = pfv.min_ts - fv.min_ts
+          } else if (fv.max_ts + ms_diff >= pfv.max_ts) {
+            ms_diff = pfv.max_ts - fv.max_ts
+          } else {
+            // hier auf einen ganzen Tag runden!
+            let days_diff = Math.floor(ms_diff / (1000 * 60 * 60 * 24))
+            if (ms_diff < 0) {
+              days_diff = Math.ceil(ms_diff / (1000 * 60 * 60 * 24))
+            }
+            ms_diff = days_diff * (1000 * 60 * 60 * 24)
+          }
+
+          this.props.change_filter_timespan(
+            fv.min_ts + ms_diff,
+            fv.max_ts + ms_diff
+          )
+        }
+      })
+      .on("wheel", (e, d) => {
+        let fv = this.props.get_filter_values()
+        let pfv = this.props.get_possible_filter_values()
+
+        // Negativ = Rad nach oben schieben = Zoom In
+        // Positiv = Rad nach unten schieben = Zoom out
+        let scroll = d3.event.deltaY
+
+        let percentage_days = 0.1
+        let current_ammount_of_days =
+          (fv.max_ts - fv.min_ts) / (1000 * 60 * 60 * 24)
+
+        let max_days = (pfv.max_ts - pfv.min_ts) / (1000 * 60 * 60 * 24)
+
+        let days_to_modify = Math.ceil(
+          percentage_days * current_ammount_of_days
+        )
+
+        if (days_to_modify === 0) {
+          days_to_modify = 1
+        }
+
+        // most-left: 0
+        // most-right: 1
+        // middle: 0.5
+        let pointer_x_position = d3.event.layerX / this.width
+        let invert_pointer_x_position = 1 - pointer_x_position
+
+        let days_left = Math.round(pointer_x_position * days_to_modify)
+        let days_right = Math.round(invert_pointer_x_position * days_to_modify)
+
+        let new_min_ts = fv.min_ts
+        let new_max_ts = fv.max_ts
+
+        if (scroll < 0) {
+          if (current_ammount_of_days <= 1) {
+            return
+          }
+          new_min_ts = fv.min_ts + days_left * 1000 * 60 * 60 * 24
+          new_max_ts = fv.max_ts - days_right * 1000 * 60 * 60 * 24
+        } else if (scroll > 0) {
+          if (current_ammount_of_days === max_days) {
+            return
+          }
+          new_min_ts = Math.max(
+            pfv.min_ts,
+            fv.min_ts - days_left * 1000 * 60 * 60 * 24
+          )
+          new_max_ts = Math.min(
+            pfv.max_ts,
+            fv.max_ts + days_right * 1000 * 60 * 60 * 24
+          )
+        }
+        this.props.change_filter_timespan(new_min_ts, new_max_ts)
+      })
       .append("g")
       .attr("class", "linelist"))
 
@@ -614,52 +604,35 @@ class Linelist extends Component {
     /**
      * Helping Graphics
      */
-    // this.gHorizontalMarginBars = svg
     this.gHorizontalMarginBars = uicontainer
       .append("g")
       .attr("class", "gHorizontalMarginBars")
 
-    // this.gGridlines = svg.append("g").attr("class", "gGridlines")
     this.gGridlines = uicontainer.append("g").attr("class", "gGridlines")
-    // this.gxAxis = svg.append("g").attr("class", "gxAxis")
-    // this.gyAxis = svg.append("g").attr("class", "gyAxis")
 
     // this.gVerticalMarginBars = svg
     this.gVerticalMarginBars = uicontainer
       .append("g")
       .attr("class", "gVerticalMarginBars")
 
-    this.gMouselineText = svg.append("g").attr("class", "gMouselineText")
     this.gLegend = svg.append("g").attr("class", "gLegend")
 
-    uicontainer
-      .append("line")
-      .attr("class", "mouseLine")
-      .attr("pointer-events", "none")
-      .attr("opacity", 0.5)
-      .attr("stroke-width", 1)
-      .attr("stroke", "black")
-
-    uicontainer
-      .append("text")
-      .attr("class", "mouseLabel")
-      .attr("pointer-events", "none")
-
-    this.gScrollableGraphics = svg
+    this.gCritical_patient_border = svg
       .append("g")
-      .attr("class", "gScrollableGraphics")
-      .attr("fill", "none")
+      .attr("class", "gCritical_patient_border")
+
+    this.gMarginBars = d3
+      .select(self.svgRoot)
+      .append("g")
+      .attr("class", "gMarginBars")
 
     this.gScrollbar = d3
       .select(self.svgRoot)
       .append("g")
       .attr("class", "gScrollbar")
 
+    self.filter_data()
     this.draw_vis()
-  }
-
-  requestVisData = () => {
-    // TODO: example getVisData -> parsing the data and caching it
   }
 
   componentWillUnmount() {
@@ -670,446 +643,199 @@ class Linelist extends Component {
     clearInterval(this.checkSize)
   }
 
-  handle_data = (data) => {
-    console.log("linelist vis data received")
-    console.log(data)
-    let self = this
-
-    this.data = data.data
-    this.parameters = data.parameters
-    this.timestamp = data.timestamp
-
-    this.zoom = 1
-    this.lastZoomK = 1
-    this.lastZoomX = 0
-    this.lastTransformedX = 0
-
-    this.currentPixelOffset = 0
-
-    this.gGraphics.attr(
-      "transform",
-      "translate(" +
-        this.lastTransformedX +
-        " " +
-        // (this.height - this.svgMarginY / 2) +
-        0 +
-        ")"
-    )
-
-    if (data.data.allStations) {
-      self.ward_color = d3
-        .scaleOrdinal()
-        .range([
-          // "#b831d4",
-          // "#bdd7e7",
-          "#bae4b3",
-          // "#f2f0f7",
-          "#cbc9e2",
-          "#9e9ac8",
-          // "#cc4c02",
-
-          // "#6a51a3",
-          // "#8da0cb",
-          "#66c2a5",
-          // "#a6cee3",
-          // "#1f78b4",
-          // "#33a02c",
-          "#ffffb3",
-          // "#fbb4ae",
-          "#fdcdac",
-          "#74c476",
-        ])
-        .domain(data.data.allStations)
-
-      let stations = []
-      this.selected_stations = []
-      data.data.allStations.forEach((s) => {
-        stations.push({
-          name: s,
-          color: self.ward_color(s),
-        })
-      })
-      this.setState((prevState) => {
-        prevState.stations = stations
-        prevState.selected_stations = []
-        return prevState
-      })
+  calculate_rect_width = (d, movement_rect_height, scale_x) => {
+    let begin_px = scale_x(d.begin)
+    if (begin_px < this.margin.left) {
+      begin_px = this.margin.left
     }
 
-    this.draw_vis()
+    let end_px = scale_x(d.end)
+    if (end_px > this.width - this.margin.right) {
+      end_px = this.width - this.margin.right
+    }
+
+    let rec_w = end_px - begin_px
+    if (rec_w < movement_rect_height / 2) {
+      rec_w = movement_rect_height / 2
+    }
+
+    return rec_w
   }
 
-  /**
-   * TODO: die "Zeichnen"-Funktion; wird aufgerufen on-resize und bei neuen Daten
-   */
-  draw_vis = (zooming) => {
-    let self = this
-    let data = this.data
+  y_row_offset = (row_height, patient_id, patientList) => {
+    let index = patientList.findIndex((pid) => pid === patient_id)
+    let yPos = index * row_height
+    return this.height - yPos - this.margin.bottom
+  }
 
-    let trans_duration = this.transition_duration
-    if (zooming) {
-      trans_duration = 0
+  y_movement_offset = (d, movement_rect_height, row_height, patientList) => {
+    let yPos = 0
+    if (!d.top) {
+      yPos += movement_rect_height
     }
+    return (
+      this.y_row_offset(row_height, d.patient_id, patientList) -
+      row_height / 2 +
+      yPos
+    )
+  }
 
-    // console.log("drawing linelist")
-    // console.log(`currentPixelOffset ${this.currentPixelOffset}`)
+  y_treatment_offset = (
+    patient_id,
+    patientList,
+    row_height,
+    movement_rect_height
+  ) => {
+    return (
+      this.y_row_offset(row_height, patient_id, patientList) -
+      row_height +
+      1.5 * movement_rect_height
+    )
+  }
 
-    /**
-     * Titel + Timestamp
-     */
-    // let title = this.gLegend.selectAll(".title").data([this.title])
+  y_investigation_offset = (
+    d,
+    investigation_rectangle_height,
+    patientList,
+    row_height
+  ) => {
+    return (
+      this.y_row_offset(row_height, d.patient_id, patientList) -
+      investigation_rectangle_height
+    )
+  }
 
-    // title
-    //   .enter()
-    //   .append("text")
-    //   .attr("class", "title")
-    //   .merge(title)
-    //   .transition()
-    //   .duration(trans_duration)
-    //   .text((d) => d)
-    //   .attr("font-size", this.title_height)
-    //   .attr("x", this.width / 2)
-    //   .attr("y", this.title_height)
-    //   .attr("text-anchor", "middle")
+  boundary_x_scale = (scale_x, val) => {
+    let px = scale_x(val)
+    if (px < this.margin.left) {
+      px = this.margin.left
+    } else if (px > this.widh - this.margin.right) {
+      px = this.width - this.margin.right
+    }
+    return px
+  }
 
-    // title.exit().remove()
+  draw_vis = () => {
+    let self = this
 
-    if (this.data === undefined) {
+    let data = this.filtered_data
+
+    if (
+      data === undefined ||
+      this.width <= this.min_width ||
+      this.height <= this.min_height ||
+      this.height === undefined ||
+      this.width === undefined
+    ) {
       return
     }
 
-    /**
-     * Showing the timestamp, when the data/vis was generated
-     */
-    // let timestamp = this.gLegend
-    //   .selectAll(".timestamp")
-    //   .data([
-    //     `(Stand: ${moment(this.timestamp).format("DD.MM.YYYY HH:mm:ss")})`,
-    //   ])
+    let fv = this.props.get_filter_values()
 
-    // timestamp
-    //   .enter()
-    //   .append("text")
-    //   .attr("class", "timestamp")
-    //   .merge(timestamp)
-    //   .transition()
-    //   .duration(trans_duration)
-    //   .text((d) => d)
-    //   .attr("font-size", this.timestamp_height)
-    //   .attr("x", this.width / 2)
-    //   .attr("y", this.title_height + this.timestamp_height)
-    //   .attr("text-anchor", "middle")
+    let timespan = [fv.min_ts, fv.max_ts + 1000 * 60 * 60 * 24]
 
-    // timestamp.exit().remove()
+    let x_pixels = [this.margin.left, this.width - this.margin.right]
 
-    let zoom = this.zoom
+    let y_pixel_diff = this.height - this.margin.bottom - this.margin.top
 
-    moment.locale("de")
-
-    let xPixels = [
-      this.vis_margin.left + 10,
-      this.width * zoom - this.vis_margin.right - 10,
-    ]
-
-    let time_range = [data.ts_start, data.ts_end]
-
-    let maxPatientRows = Math.floor(
-      (this.height - this.vis_margin.top - this.vis_margin.bottom) /
-        this.row_height
-    )
-
-    let rowHeight = this.row_height
+    let row_height = this.row_height
 
     /**
-     * die nächste Zeile ist dafür da, "zu viele" Patienten wegzuschneiden
+     * Drawing Margin bars for
+     * ! Panning preload
      */
-    // patients = patients.slice(0, maxPatientRows)
-    /**
-     * Falls es mehr Patienten-Zeilen gibt als angezeigt werden kann
-     */
-    // if (self.needScrollInit) {
-    if (true) {
-      // if (patients.length > maxPatientRows) {
-      self.gScrollbar.selectAll("*").remove()
+    let marginbars = this.gMarginBars.selectAll(".marginbar").data([
+      { x: 0, width: this.margin.left, height: this.height },
+      {
+        x: this.width - this.margin.right,
+        width: this.margin.right,
+        height: this.height,
+      },
+      // Top Margin bar lasse ich weg
+      // { x: 0, width: this.width, height: this.margin.top },
+    ])
 
-      // if (patients.length > maxPatientRows) {
-      if (true) {
-        let maxPixelOffset =
-          // (self.data.patientList.length - maxPatientRows - 1) * rowHeight
-          (self.data.patientList.length - maxPatientRows) * rowHeight
-        if (maxPixelOffset < 0) {
-          maxPixelOffset = 0
-        }
+    marginbars
+      .enter()
+      .append("rect")
+      .attr("class", "marginbar")
+      .merge(marginbars)
+      .attr("fill", "white")
+      .attr("x", (d) => d.x)
+      .attr("y", 0)
+      .attr("width", (d) => d.width)
+      .attr("height", (d) => d.height)
 
-        if (self.currentPixelOffset > maxPixelOffset) {
-          self.currentPixelOffset = maxPixelOffset
-        }
-        if (self.currentPixelOffset < 0) {
-          self.currentPixelOffset = 0
-        }
+    marginbars.exit().remove()
 
-        let handle
-
-        let hue = (h, start_drag) => {
-          // console.log(`HUE CurrentPielfOffset ${self.currentPixelOffset}`)
-          handle.attr("cy", y(h))
-          self.currentPixelOffset = h
-          self.gScrollableGraphics.attr(
-            "transform",
-            "translate(" +
-              self.lastTransformedX +
-              // 0 +
-              " " +
-              self.currentPixelOffset +
-              ")"
-          )
-          self.gGraphics.attr(
-            "transform",
-            "translate(" +
-              self.lastTransformedX +
-              " " +
-              self.currentPixelOffset +
-              ")"
-          )
-
-          if (start_drag === true) {
-            let inspecHeight = 0
-            self.gUIContainer
-              .selectAll(".patientLabel")
-              .text((d, i) => {
-                let y_offset =
-                  self.height -
-                  self.vis_margin.bottom -
-                  i * self.row_height -
-                  // + self.rowHeight
-                  inspecHeight -
-                  // self.labelMargin +
-                  2 +
-                  self.currentPixelOffset
-                if (
-                  y_offset < self.vis_margin.top ||
-                  y_offset > self.height - self.vis_margin.bottom
-                ) {
-                  return ""
-                } else {
-                  return d
-                }
-              })
-              .attr(
-                "transform",
-                (d, i) =>
-                  "translate(" +
-                  ((self.offsetX || 0) + self.lastTransformedX) +
-                  "," +
-                  (self.height -
-                    self.vis_margin.bottom -
-                    i * self.row_height -
-                    // + self.rowHeight
-                    inspecHeight -
-                    // self.labelMargin +
-                    2 +
-                    self.currentPixelOffset +
-                    // 0 +
-                    ")")
-              )
-          }
-
-          // self.draw_vis(true)
-        }
-
-        let y = d3
-          .scaleLinear()
-          .domain([0, maxPixelOffset])
-          // .range([height - self.margin.bottom, self.margin.top])
-          .range([
-            this.height - this.vis_margin.bottom,
-            // this.vis_margin.top,
-            this.vis_margin.bottom,
-          ])
-          .clamp(true)
-
-        let slider = self.gScrollbar
-          .append("g")
-          .attr("class", "slider")
-          .attr(
-            "transform",
-            "translate(" + self.margin.left / 2 + "," + 0 + ")"
-          )
-
-        slider
-          .append("line")
-          .attr("class", "track")
-          .attr("stroke-linecap", "round")
-          .attr("y1", y.range()[0])
-          .attr("y2", y.range()[1])
-          .select(function () {
-            return this.parentNode.appendChild(this.cloneNode(true))
-          })
-          .attr("class", "track-inset")
-          .select(function () {
-            return this.parentNode.appendChild(this.cloneNode(true))
-          })
-          .attr("class", "track-overlay")
-          .attr("stroke-linecap", "round")
-          .attr("cursor", "pointer")
-          .call(
-            d3
-              .drag()
-              .on("start.interrupt", function () {
-                slider.interrupt()
-              })
-              .on("start drag", function () {
-                hue(y.invert(d3.event.y), true)
-              })
-          )
-
-        // slider
-        //   .insert("g", ".track-overlay")
-        //   .attr("class", "ticks")
-        //   .attr("transform", "translate(25,0)")
-        //   .selectAll("text")
-        //   .data(y.ticks(10))
-        //   .enter()
-        //   .append("text")
-        //   .attr("y", y)
-        //   .attr("text-anchor", "middle")
-        //   .text(function(d) {
-        //     return d + "°"
-        //   })
-
-        handle = slider
-          .insert("circle", ".track-overlay")
-          .attr("class", "handle")
-          .attr("stroke-linecap", "round")
-          .attr("r", 9)
-
-        if (this.data.patientList.length <= maxPatientRows) {
-          self.currentPixelOffset = 0
-        }
-
-        hue(self.currentPixelOffset)
-
-        // slider
-        //   .transition() // Gratuitous intro!
-        //   .duration(2000)
-        //   .tween("hue", function() {
-        //     let offset = self.currentPixelOffset
-        //     let i = d3.interpolate(y.invert(0), y.invert(self.savedOffset))
-        //     return function(t) {
-        //       hue(i(t))
-        //     }
-        //   })
-      }
-
-      if (this.data.patientList.length <= maxPatientRows) {
-        self.gScrollbar.selectAll("*").remove()
-      }
-      self.needScrollInit = false
+    // TODO: this is to scale to height
+    if (false) {
+      row_height = y_pixel_diff / data.patientList.length
     }
 
-    /**
-     * Drawing the margin bars, to hide the visualization at the edges for the scroll- and drag- interaction
-     */
-    let v_margin_bars = this.gVerticalMarginBars
-      .selectAll(".v_margin_bar")
-      .data(this.v_margin_bars_data)
+    let movement_rectangle_height = row_height / 8
+    let investigation_rectangle_height = (row_height / 8) * 6
+    let investigation_rect_width = movement_rectangle_height
 
-    v_margin_bars
-      .enter()
-      .append("rect")
-      .attr("class", "v_margin_bar")
-      .merge(v_margin_bars)
-      .transition()
-      .duration(trans_duration)
-      .attr("x", (d) => d.x())
-      .attr("y", (d) => d.y())
-      .attr("height", (d) => d.height())
-      .attr("width", (d) => d.width())
-      // .attr("fill", "lightblue")
-      .attr("fill", "white")
-      .attr("stroke", "none")
-    // .attr("opacity", 0.8)
+    let treatment_circle_r = movement_rectangle_height / 2
 
-    v_margin_bars.exit().remove()
+    let x_scale = d3.scaleLinear().domain(timespan).range(x_pixels)
+    // let y_scale = d3.scaleLinear().domain([0, maxPixelOffset])
 
-    let h_margin_bars = this.gHorizontalMarginBars
-      .selectAll(".h_margin_bar")
-      .data(this.h_margin_bars_data)
+    let parse_time = d3.timeParse("%Q")
+    // ! Panning preload
+    let timespan_diff = timespan[1] - timespan[0]
+    // ! Panning preload
+    let x_pixels_diff = x_pixels[1] - x_pixels[0]
 
-    h_margin_bars
-      .enter()
-      .append("rect")
-      .attr("class", "h_margin_bar")
-      .merge(h_margin_bars)
-      .transition()
-      .duration(trans_duration)
-      .attr("x", (d) => d.x())
-      .attr("y", (d) => d.y())
-      .attr("height", (d) => d.height())
-      .attr("width", (d) => d.width())
-      // .attr("fill", "lightgray")
-      .attr("fill", "white")
-    // .attr("opacity", 0.8)
+    let x_axis_scale = d3
+      .scaleTime()
+      // .domain(d3.extent(timespan, (d) => parse_time(d)))
+      // .range(x_pixels)
+      // ! Panning preload
+      .domain(
+        d3.extent(
+          [timespan[0] - timespan_diff, timespan[1] + timespan_diff],
+          (d) => parse_time(d)
+        )
+      )
+      // ! Panning preload
+      .range([x_pixels[0] - x_pixels_diff, x_pixels[1] + x_pixels_diff])
 
-    h_margin_bars.exit().remove()
+    let x_axis = d3
+      .axisBottom(x_axis_scale)
+      // .ticks(5)
+      // ! Panning preload
+      .ticks(15)
+      .tickSizeInner([-(this.height - this.margin.bottom - this.margin.top)])
+
+    this.gGridlines
+      .attr(
+        "transform",
+        "translate(" + 0 + "," + (this.height - this.margin.bottom) + ")"
+      )
+      .call(x_axis)
+
+    this.gGridlines
+      .selectAll(".tick")
+      .selectAll("line")
+      .attr("opacity", 0.5)
+      .attr("stroke-dasharray", "4, 6")
+      .attr("stroke-width", 1)
 
     /**
      * Movement Rectangles
      */
 
-    let scale_x = d3
-      .scaleLinear()
-      .domain(time_range)
-      // .range([0 + this.margin.left, this.width - this.margin.right])
-      // TODO: SMICS-0.8
-      .range(xPixels)
-
-    this.scaleReverseX = d3.scaleLinear().range(time_range).domain(xPixels)
-
-    let y_row_offset = (d) => {
-      let { patient_id } = d
-      let index = data.patientList.findIndex((pid) => pid === patient_id)
-      let yPos = index * this.row_height
-      // return this.height - yPos - this.margin.bottom
-      return this.height - yPos - this.vis_margin.bottom
-    }
-
-    let y_movement_offset = (d) => {
-      let { top } = d
-
-      let yPos = 0
-      if (!top) {
-        yPos += this.movement_rectangle_height
-      }
-      return y_row_offset(d) - this.row_height / 2 + yPos
-    }
-
-    let y_treatment_offset = (d) => {
-      return y_row_offset(d) - this.row_height + this.treatment_circle_r * 5
-    }
-
-    let y_investigation_offset = (d) => {
-      return y_row_offset(d) - this.investigation_rectangle_height
-    }
-
-    let rect_width = (d) => {
-      let rec_w = scale_x(d.end) - scale_x(d.begin)
-      if (rec_w < this.movement_rectangle_height) {
-        rec_w = this.movement_rectangle_height
-      }
-
-      return rec_w
-    }
-
-    let movement_rects = this.gMovement_rects
+    let movement_rect = this.gMovement_rects
       .selectAll(".movement_rect")
       .data(data.movement_rects)
 
-    movement_rects
+    movement_rect
       .enter()
       .append("rect")
       .attr("class", "movement_rect")
-      .merge(movement_rects)
+      .merge(movement_rect)
       .on("mouseenter", (d) => {
         this.update_tooltip(d, "link")
       })
@@ -1121,19 +847,44 @@ class Linelist extends Component {
         this.props.hide_tooltip()
       })
       .on("click", (d) => {
-        console.log(d)
-        self.select_station(d.station_id)
+        // TODO
+        let stat_id = d.station_id
+        if (fv.station === stat_id) {
+          stat_id = ""
+        }
+        self.props.change_filter_station(stat_id)
       })
-      .transition()
-      .duration(trans_duration)
-      .attr("x", (d) => scale_x(d.begin))
-      .attr("width", (d) => rect_width(d))
-      .attr("y", (d) => y_movement_offset(d))
-      .attr("height", this.movement_rectangle_height)
+      .attr("x", (d) =>
+        // this.boundary_x_scale(x_scale, d.begin)
+        // ! Panning preload
+        x_scale(d.begin)
+      )
+      .attr("width", (d) => {
+        // this.calculate_rect_width(d, movement_rectangle_height, x_scale)
+        // ! Panning preload
+        let rec_w = x_scale(d.end) - x_scale(d.begin)
+        if (rec_w < movement_rectangle_height / 2) {
+          rec_w = movement_rectangle_height / 2
+        }
+
+        return rec_w
+      })
+      .attr("y", (d) =>
+        this.y_movement_offset(
+          d,
+          movement_rectangle_height,
+          row_height,
+          data.patientList
+        )
+      )
+      .attr("height", movement_rectangle_height)
       .attr("fill", (d) => {
-        let col = self.default_movement_color
-        if (self.selected_stations.includes(d.station_id)) {
-          col = self.ward_color(d.station_id)
+        // let col = self.default_movement_color
+        let col = "white"
+
+        if (fv.station === d.station_id) {
+          // col = "#1b9e77"
+          col = this.props.get_station_color(d.station_id)
         }
         return col
       })
@@ -1141,7 +892,7 @@ class Linelist extends Component {
       .attr("stroke-width", 1)
       .attr("cursor", "pointer")
 
-    movement_rects.exit().remove()
+    movement_rect.exit().remove()
 
     let movement_dots = this.gMovement_dots
       .selectAll(".movement_dot")
@@ -1165,33 +916,29 @@ class Linelist extends Component {
       .on("click", (d) => {
         console.log(d)
       })
-      .transition()
-      .duration(trans_duration)
-      .attr("cx", (d) => scale_x(d.begin))
-      .attr("cy", (d) => y_treatment_offset(d))
-      .attr("r", this.treatment_circle_r)
-      .attr("fill", "cyan")
+      .attr("cx", (d) => x_scale(d.begin))
+      .attr("cy", (d) =>
+        this.y_treatment_offset(
+          d.patient_id,
+          data.patientList,
+          row_height,
+          movement_rectangle_height
+        )
+      )
+      .attr("r", treatment_circle_r)
+      // .attr("fill", "cyan")
+      .attr("fill", "white")
       .attr("stroke", "black")
       .attr("stroke-width", 1)
 
     movement_dots.exit().remove()
 
     /**
-     * Investigation Rectangles
+     * Investigation Rects
      */
-    let filtered_investigation_rects = data.investigation_rects.filter(
-      // (d) => d.pathogen_id === "869"
-      // TODO: SMICS-0.8
-      (d) =>
-        d.pathogen_id === "869" ||
-        d.pathogen_id === "94500-6" ||
-        d.pathogen_id === "94558-4" ||
-        d.pathogen_id === "94745-7"
-    )
 
     let investigation_rects = this.gInvestigation_rects
       .selectAll(".investigation_rect")
-      // .data(filtered_investigation_rects)
       .data(data.investigation_rects)
 
     investigation_rects
@@ -1212,17 +959,23 @@ class Linelist extends Component {
       .on("click", (d) => {
         console.log(d)
       })
-      .transition()
-      .duration(trans_duration)
       // Beginn des Investigation Rects sollte eigentlich auch linke Kante sein
       // und nicht die Mitte des Reccts (?!)
-      .attr(
-        "x",
-        (d) => scale_x(d.timestamp) - this.investigation_rect_width / 2
+      .attr("x", (d) =>
+        // this.boundary_x_scale(x_scale, d.timestamp)
+        // ! Panning preload
+        x_scale(d.timestamp)
       )
-      .attr("width", (d) => this.investigation_rect_width)
-      .attr("y", (d) => y_investigation_offset(d))
-      .attr("height", this.investigation_rectangle_height)
+      .attr("width", (d) => investigation_rect_width)
+      .attr("y", (d) =>
+        this.y_investigation_offset(
+          d,
+          investigation_rectangle_height,
+          data.patientList,
+          row_height
+        )
+      )
+      .attr("height", investigation_rectangle_height)
       .attr("fill", (d) => {
         let c = "white"
         switch (d.result) {
@@ -1246,36 +999,36 @@ class Linelist extends Component {
     investigation_rects.exit().remove()
 
     /**
-     * Status Rectangles
+     * critical patient highlight
      */
 
-    let filtered_status_rects = data.status_rects.filter(
-      // (d) => d.pathogen_id === undefined
-      // (d) => d.pathogen_id === "869"
-      // TODO: SMICS-0.8
-      (d) =>
-        d.pathogen_id === "869" ||
-        d.pathogen_id === "94500-6" ||
-        d.pathogen_id === "94558-4" ||
-        d.pathogen_id === "94745-7"
-    )
-
-    let patients_with_status_rects = []
-    // filtered_investigation_rects.forEach((sr) => {
-    // data.investigation_rects.forEach((sr) => {
-    data.status_rects.forEach((sr) => {
-      if (!patients_with_status_rects.includes(sr.patient_id)) {
-        patients_with_status_rects.push(sr.patient_id)
-      }
-    })
-    if (patients_with_status_rects.length < data.patientList.length) {
-      data.patientList.forEach((pID) => {
-        if (!patients_with_status_rects.includes(pID)) {
-          // filtered_status_rects.push(data.unknown_rects[pID])
-          data.status_rects.push(data.unknown_rects[pID])
-        }
-      })
+    let crit_pat = []
+    if (fv.critical_patient !== "") {
+      crit_pat = [fv.critical_patient]
     }
+
+    let critical_patient_border = this.gCritical_patient_border
+      .selectAll(".critical_patient_border")
+      .data(crit_pat)
+
+    critical_patient_border
+      .enter()
+      .append("rect")
+      .attr("class", "critical_patient_border")
+      .merge(critical_patient_border)
+      .attr("width", self.width - self.margin.left - self.margin.right)
+      .attr("height", row_height)
+      .attr("x", self.margin.left)
+      .attr(
+        "y",
+        (d) => this.y_row_offset(row_height, d, data.patientList) - row_height
+      )
+
+    critical_patient_border.exit().remove()
+
+    /**
+     * Status Rects
+     */
 
     let status_rects = this.gStatus_rects
       .selectAll(".status_rect")
@@ -1287,15 +1040,52 @@ class Linelist extends Component {
       .append("rect")
       .attr("class", "status_rect")
       .merge(status_rects)
+      .attr("cursor", "pointer")
+      .on("contextmenu", (d) => {
+        this.props.init_contextmenu(d.patient_id)
+      })
       .on("click", (d) => {
         console.log(d)
+        // this.props.change_filter_critical_patient(d.patient_id)
+
+        if (fv.patients.includes(d.patient_id)) {
+          this.props.change_filter_patients_delete(d.patient_id)
+        } else {
+          this.props.change_filter_patients_add(d.patient_id)
+        }
       })
-      .transition()
-      .duration(trans_duration)
-      .attr("x", (d) => scale_x(d.begin))
-      .attr("width", (d) => rect_width(d))
-      .attr("y", (d) => y_row_offset(d) - this.row_height)
-      .attr("height", this.row_height)
+      .on("mouseenter", (d) => {
+        this.update_tooltip(d, "infection_status")
+      })
+      .on("mousemove", () => {
+        this.props.move_tooltip(d3.event.pageX, d3.event.pageY)
+        this.props.show_tooltip()
+      })
+      .on("mouseout", () => {
+        this.props.hide_tooltip()
+      })
+      .attr("x", (d) =>
+        // this.boundary_x_scale(x_scale, d.begin)
+        // ! Panning preload
+        x_scale(d.begin)
+      )
+      .attr("width", (d) => {
+        // this.calculate_rect_width(d, movement_rectangle_height, x_scale)
+        // ! Panning preload
+        let rec_w = x_scale(d.end) - x_scale(d.begin)
+        if (rec_w < movement_rectangle_height / 2) {
+          rec_w = movement_rectangle_height / 2
+        }
+
+        return rec_w
+      })
+      .attr(
+        "y",
+        (d) =>
+          this.y_row_offset(row_height, d.patient_id, data.patientList) -
+          row_height
+      )
+      .attr("height", row_height)
       .attr("fill", (d) => {
         let c = "yellow"
         switch (d.status) {
@@ -1318,7 +1108,13 @@ class Linelist extends Component {
       })
       .attr("stroke", "black")
       .attr("stroke-width", 0)
-      .attr("opacity", 0.5)
+      .attr("opacity", (d) => {
+        let o = 0.5
+        if (!fv.patients.includes(d.patient_id)) {
+          o = 0.1
+        }
+        return o
+      })
 
     status_rects.exit().remove()
 
@@ -1326,80 +1122,148 @@ class Linelist extends Component {
      * Horizontal Lines
      */
 
-    // TODO: horizontal lines hier implementieren
-    let patient_lines_data = []
-    for (let i = 1; i < data.patientList.length; i++) {
-      patient_lines_data.push(i)
-    }
     let patient_lines = this.gHorizontal_Lines
       .selectAll(".h_line")
-      .data(patient_lines_data)
+      .data(data.patientList)
 
     patient_lines
       .enter()
       .append("line")
       .attr("class", "h_line")
       .merge(patient_lines)
-      .transition()
-      .duration(trans_duration)
-      .attr("x1", (d) => 0)
-      .attr("x2", (d) => this.width * zoom)
+      // ! Panning preload
+      .attr("x1", (d) => this.margin.left - x_pixels_diff)
+      .attr("x2", (d) => this.width - this.margin.right + x_pixels_diff)
       .attr(
         "y1",
         (d, i) =>
-          this.height - this.vis_margin.bottom - (i + 1) * this.row_height
+          // ! Panning preload
+          this.y_row_offset(row_height, d, data.patientList) - row_height
       )
       .attr(
         "y2",
         (d, i) =>
-          this.height - this.vis_margin.bottom - (i + 1) * this.row_height
+          this.y_row_offset(row_height, d, data.patientList) - row_height
       )
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      .attr("opacity", 0.5)
+    // .attr("opacity", 0.5)
 
     patient_lines.exit().remove()
 
-    /**
-     * Axis
-     */
+    /** Scroll Bar */
 
-    // d3.timeFormatDefaultLocale("de")
-    let parseTime = d3.timeParse("%Q")
-    let xAxisScale = d3
-      .scaleTime()
-      .domain(d3.extent(time_range, (d) => parseTime(d)))
-      // .range([this.margin.left, this.width - this.margin.right])
-      // TODO: SMICS-0.8
-      .range(xPixels)
+    self.gScrollbar.selectAll("*").remove()
 
-    let xAxis = d3
-      .axisBottom(xAxisScale)
-      .ticks(self.zoom * 5)
-      .tickSizeInner([
-        -(
-          this.height -
-          this.margin.bottom -
-          this.vis_margin.top +
-          3 * this.movement_rectangle_height
-        ),
+    let max_patient_rows = Math.floor(
+      (this.height - this.margin.top - this.margin.bottom) / row_height
+    )
+    let max_pixel_offset =
+      (data.patientList.length - max_patient_rows) * row_height
+
+    if (max_pixel_offset < 0) {
+      max_pixel_offset = 0
+    }
+
+    if (self.currentPixelOffset > max_pixel_offset) {
+      self.currentPixelOffset = max_pixel_offset
+    }
+    if (self.currentPixelOffset < 0) {
+      self.currentPixelOffset = 0
+    }
+
+    let handle
+
+    let hue = (h, start_drag) => {
+      handle.attr("cy", y(h))
+      self.currentPixelOffset = h
+
+      self.gGraphics.attr(
+        "transform",
+        "translate(" + 0 + " " + self.currentPixelOffset + ")"
+      )
+    }
+
+    let y = d3
+      .scaleLinear()
+      .domain([0, max_pixel_offset])
+      .range([this.height - this.margin.bottom, this.margin.top])
+      .clamp(true)
+
+    let slider = self.gScrollbar
+      .append("g")
+      .attr("class", "slider")
+      .attr("transform", "translate(" + self.margin.left / 4 + "," + 0 + ")")
+
+    slider
+      .append("line")
+      .attr("class", "track")
+      .attr("stroke-linecap", "round")
+      .attr("y1", y.range()[0])
+      .attr("y2", y.range()[1])
+      .select(function () {
+        return this.parentNode.appendChild(this.cloneNode(true))
+      })
+      .attr("class", "track-inset")
+      .select(function () {
+        return this.parentNode.appendChild(this.cloneNode(true))
+      })
+      .attr("class", "track-overlay")
+      .attr("stroke-linecap", "round")
+      .attr("cursor", "pointer")
+      .call(
+        d3
+          .drag()
+          .on("start.interrupt", function () {
+            slider.interrupt()
+          })
+          .on("start drag", function () {
+            hue(y.invert(d3.event.y), true)
+          })
+      )
+
+    handle = slider
+      .insert("circle", ".track-overlay")
+      .attr("class", "handle")
+      .attr("stroke-linecap", "round")
+      .attr("r", 9)
+
+    if (data.patientList.length <= max_patient_rows) {
+      self.currentPixelOffset = 0
+    }
+
+    hue(self.currentPixelOffset)
+
+    if (data.patientList.length <= max_patient_rows) {
+      self.gScrollbar.selectAll("*").remove()
+    }
+
+    let h_margin_bars = this.gHorizontalMarginBars
+      .selectAll(".h_margin_bar")
+      .data([
+        {
+          // x: this.margin.left,
+          x: 0,
+          y: this.height - this.margin.bottom,
+          width: this.width,
+          height: this.margin.bottom,
+        },
       ])
 
-    this.gGridlines
-      .attr(
-        "transform",
-        "translate(" + 0 + "," + (this.height - this.margin.bottom / 2) + ")"
-      )
-      .transition()
-      .duration(trans_duration)
-      .call(xAxis)
+    h_margin_bars
+      .enter()
+      .append("rect")
+      .attr("class", "h_margin_bar")
+      .merge(h_margin_bars)
+      .attr("x", (d) => d.x)
+      .attr("y", (d) => d.y)
+      .attr("height", (d) => d.height)
+      .attr("width", (d) => d.width)
+      // .attr("fill", "lightgray")
+      .attr("fill", "white")
+    // .attr("opacity", 0.8)
 
-    this.gGridlines
-      .selectAll(".tick")
-      .selectAll("line")
-      .attr("opacity", 0.5)
-      .attr("stroke-dasharray", "4, 6")
-      .attr("stroke-width", 1)
+    h_margin_bars.exit().remove()
   }
 
   select_station = (d) => {
@@ -1414,61 +1278,55 @@ class Linelist extends Component {
       (prevState) => (prevState.selected_stations = self.selected_stations)
     )
 
+    self.filter_data()
     self.draw_vis()
   }
 
   render() {
     let self = this
 
-    let station_color_legend_names = []
-    // let station_color_legend_colors = []
-    self.state.stations.forEach((s, i) => {
-      let col = self.default_movement_color
-      if (self.state.selected_stations.includes(s.name)) {
-        col = s.color
-      }
-      station_color_legend_names.push(
-        <th
-          style={{
-            background: col,
-            border: "1px solid black",
-            cursor: "pointer",
-            padding: "0px 5px 0px 5px",
-          }}
-          onClick={() => {
-            self.select_station(s.name)
-          }}
-          key={s.name}
-        >
-          {s.name}
-        </th>
+    let element_to_draw = null
+    if (this.props.get_original_data(this.module_type) === undefined) {
+      element_to_draw = (
+        <div className="error_message">{this.translate("no_data_loaded")}</div>
       )
-      // station_color_legend_colors.push(
-      //   <td style={{ background: s.color, height: "20px" }}></td>
-      // )
-    })
+      if (this.props.waiting_for_data) {
+        element_to_draw = (
+          <div className="error_message" style={{ cursor: "wait" }}>
+            <div className="loader"></div>
+            {this.translate("loading_data")}
+          </div>
+        )
+      }
+    }
+
+    if (element_to_draw === null && this.state.too_small) {
+      element_to_draw = (
+        <div className="too_small">{this.translate("viewport_too_small")}</div>
+      )
+    }
+
+    if (element_to_draw === null && this.filtered_data === undefined) {
+      element_to_draw = (
+        <div className="too_small">{this.translate("empty_data")}</div>
+      )
+    }
 
     return (
-      <div style={{ width: "100%", height: "100%", background: "white" }}>
+      <div
+        ref={(element) => (this.module_container = element)}
+        className="module_container"
+      >
+        {element_to_draw}
         <svg
           // style={{ width: "100%", height: "100%" }}
           className="svgRoot"
           ref={(element) => (this.svgRoot = element)}
+          style={{
+            pointerEvents: "all",
+            display: element_to_draw === null ? "block" : "none",
+          }}
         />
-        <div
-          className="testdiv2"
-          style={{ position: "absolute", top: "10px", left: "100px" }}
-        >
-          {
-            // <table style={{ border: "1px solid black" }}>
-            <table>
-              <tbody>
-                <tr>{station_color_legend_names}</tr>
-                {/* <tr>{station_color_legend_colors}</tr> */}
-              </tbody>
-            </table>
-          }
-        </div>
       </div>
     )
   }

@@ -13,7 +13,7 @@ class Epikurve extends Component {
     this.module_id = props.create_new_id()
     this.module_type = "epikurve"
 
-    this.data
+    this.filtered_data
     this.width
     this.height
 
@@ -21,16 +21,9 @@ class Epikurve extends Component {
     this.translate = props.translate
     this.get_color = props.get_color
 
-    // this.margin = {
-    //   top: 25,
-    //   bottom: 25,
-    //   left: 25,
-    //   right: 25,
-    // }
+    this.min_width = 150
+    this.min_height = 150
 
-    // this.title = this.translate("EpidemieKeim")
-
-    // this.transition_duration = 200
     this.transition_duration = props.transition_duration
 
     /**
@@ -40,6 +33,7 @@ class Epikurve extends Component {
     this.defaultStation = "Klinik"
 
     this.state = {
+      too_small: false,
       getStationID: undefined, // TODO: = selected_station filter
       getConfigName: undefined, // TODO: = selected_config -> setzt station ?
       stationIDs: [],
@@ -50,11 +44,9 @@ class Epikurve extends Component {
 
     this.margin = {
       top: 50,
-      right: 20,
-      // right: 0,
+      right: 25,
       bottom: 20,
       left: 50,
-      // left: 0,
       text: 20,
     }
 
@@ -62,16 +54,6 @@ class Epikurve extends Component {
     this.niveau_curve_names = ["Endemisches Niveau", "Epidemisches Niveau"]
 
     this.timeSpans = [7, 28]
-    this.dataType = 1
-
-    this.dataTypeTop = {
-      type: "Anzahl_cs",
-      name: () => this.translate("firstInfections_CS"),
-    }
-    this.dataTypeBottom = {
-      type: "Anzahl",
-      name: () => this.translate("firstInfections"),
-    }
   }
 
   switchStation = (e) => {
@@ -100,37 +82,164 @@ class Epikurve extends Component {
     if (self.niveau_curve_index >= self.niveau_curve_names.length) {
       self.niveau_curve_index = 0
     }
+    self.filter_data()
     self.draw_vis()
+  }
+
+  filter_data = () => {
+    let pfv = this.props.get_possible_filter_values()
+
+    let { station, min_ts, max_ts } = this.props.get_filter_values()
+
+    if (station === "") {
+      station = "klinik"
+    }
+
+    let original_data = this.props.get_original_data(this.module_type)
+
+    if (
+      original_data &&
+      original_data.data &&
+      original_data.data.data &&
+      Object.getOwnPropertyNames(original_data.data.data).length > 0 &&
+      Object.getOwnPropertyNames(original_data.data).length > 0
+    ) {
+      let time_stamps_top = [pfv.min_ts, pfv.max_ts + 1000 * 60 * 60 * 24]
+      let time_stamps_bottom = [min_ts, max_ts]
+      let data_top = []
+      let data_bottom = []
+
+      let y_max_top = 1
+      let y_max_bottom = 1
+
+      let no_data_rects_top = []
+      let no_data_rects_bottom = []
+
+      if (original_data.data.stationIDs.includes(station)) {
+        let data_begin = original_data.data.timespan[0]
+        let data_end = original_data.data.timespan[1]
+
+        let pathogenIDname = "K" + original_data.data.pathogenIDs[0]
+
+        data_top = original_data.data.data[pathogenIDname][station]
+        data_bottom = original_data.data.data[pathogenIDname][station].filter(
+          (d) => min_ts <= d.timestamp && d.timestamp <= max_ts
+        )
+
+        y_max_top = d3.max(data_top, (d) => d["Anzahl_cs"])
+
+        data_top.forEach((d) => {
+          if (d.rki_data && d.rki_data[niveau_curve_names[0]] > y_max_top) {
+            y_max_top = d.rki_data[niveau_curve_names[0]]
+          }
+          if (d.rki_data && d.rki_data[niveau_curve_names[1]] > y_max_top) {
+            y_max_top = d.rki_data[niveau_curve_names[1]]
+          }
+        })
+        y_max_top = Math.round(y_max_top + 1 + 0.1 * y_max_top)
+        let y_max_bottom_value = d3.max(data_bottom, (d) => d[["Anzahl"]])
+        let y_max_bottom_mean = d3.max(data_bottom, (d) => d["avg7_cs"])
+        // TODO: zum testen, weil stimmt die skallierung dadurch nicht...
+        // TODO: weil der Wert avg7_cs sonst nirgens benutzt wird! (exisiert für untere Kurve nicht), daher Fehler nur auf SQL Data Sichtbar?
+        y_max_bottom_mean = 0
+        y_max_bottom = Math.max(y_max_bottom_value, y_max_bottom_mean)
+        y_max_bottom = Math.round(y_max_bottom + 1 + 0.1 * y_max_bottom)
+
+        if (!y_max_bottom) {
+          y_max_bottom = y_max_top
+        }
+
+        /**
+         * Create rectangles to display, that data was not loaded for this timespan
+         */
+
+        if (pfv.min_ts < data_begin) {
+          no_data_rects_top.push({
+            begin: pfv.min_ts,
+            end: data_begin,
+          })
+        }
+
+        if (pfv.max_ts > data_end) {
+          no_data_rects_top.push({
+            begin: data_end,
+            end: pfv.max_ts,
+          })
+        }
+
+        if (min_ts < data_begin) {
+          no_data_rects_bottom.push({
+            begin: min_ts,
+            end: Math.min(data_begin, max_ts),
+          })
+        }
+
+        if (max_ts > data_end) {
+          no_data_rects_bottom.push({
+            begin: Math.max(data_end, min_ts),
+            end: max_ts,
+          })
+        }
+      } else {
+        // selected station id is not in the loaded data -> generate "no data hatching rects" for top and bottom
+        no_data_rects_top.push({
+          begin: pfv.min_ts,
+          end: pfv.max_ts,
+        })
+
+        no_data_rects_bottom.push({
+          begin: min_ts,
+          end: max_ts,
+        })
+      }
+
+      this.filtered_data = {
+        time_stamps_top,
+        time_stamps_bottom,
+        y_max_top,
+        y_max_bottom,
+        data_top,
+        data_bottom,
+        no_data_rects_top,
+        no_data_rects_bottom,
+      }
+    } else {
+      this.filtered_data = undefined
+    }
   }
 
   componentDidMount() {
     let self = this
 
-    console.log("epikurve module did mount")
-
-    this.socket.on("epikurve", this.handle_data)
-
-    this.props.register_module(this.module_id, this.module_type, this.draw_vis)
+    this.props.register_module(this.module_id, this.module_type, {
+      draw_vis: this.draw_vis,
+      filter_data: this.filter_data,
+    })
 
     /**
      * Modul auf Größenänderung alle 100ms überprüfen.
      * Falls eine Größenänderung vorliegt, die Visualisierung resizen.
      */
     this.checkSize = setInterval(() => {
-      let newWidth = parseInt(d3.select(self.svgRoot).style("width"))
-      let newHeight = parseInt(d3.select(self.svgRoot).style("height"))
+      let newWidth = parseInt(d3.select(self.module_container).style("width"))
+      let newHeight = parseInt(d3.select(self.module_container).style("height"))
+
       if (newWidth !== self.width || newHeight !== self.height) {
         self.width = newWidth
         self.height = newHeight
-        // console.log(`newWidth: ${newWidth}, newHeight: ${newHeight}`)
-        // if (self.data) {
+
+        self.setState((prevState) => {
+          if (newWidth < this.min_width || newHeight < this.min_height) {
+            prevState.too_small = true
+          } else {
+            prevState.too_small = false
+          }
+          return prevState
+        })
+
         self.draw_vis()
-        // }
       }
     }, 100)
-
-    this.width = parseInt(d3.select(self.svgRoot).style("width"))
-    this.height = parseInt(d3.select(self.svgRoot).style("height"))
 
     let svg = (this.gGraphics = d3
       .select(self.svgRoot)
@@ -141,19 +250,16 @@ class Epikurve extends Component {
 
     let svgTop = (self.gGraphicsTop = d3
       .select(self.svgRoot)
-      // .on()
       .append("g")
       .attr("class", "gContainer topContainer epidemiKeimContainer"))
 
     let svgBottom = (self.gGraphicsBottom = d3
       .select(self.svgRoot)
-      // .on()
       .append("g")
       .attr("class", "gContainer bottomContainer epidemiKeimContainer"))
 
     let svgBoth = (self.gGraphicsBoth = d3
       .select(self.svgRoot)
-      // .on()
       .append("g")
       .attr("class", "gContainer bothContainer epidemiKeimContainer"))
 
@@ -163,9 +269,6 @@ class Epikurve extends Component {
       "gMean",
       "gxAxis",
       "gyAxis",
-      // "gMean7",
-      // "gMean28",
-      // "gMean",
       "gMouseListener",
     ]
 
@@ -175,9 +278,6 @@ class Epikurve extends Component {
         .append("g")
         .attr("class", (a) => d + "Bottom")
     })
-    // gContainersBottom.forEach(d => {
-    //     self[d] = svgBottom.append("g").attr("class", d => d + "Bottom")
-    // })
 
     self.gMouseListenerTop
       .append("line")
@@ -215,111 +315,9 @@ class Epikurve extends Component {
       .attr("fill", "none")
       .attr("cursor", "col-resize")
 
-    // self.gTimeLenseLines.append("line")
-    //     .attr("class", "dragTimeLenseLineRight")
-    //     .classed("dragNotActive", true)
-    //     .attr("y1", 0)
-    //     .attr("y2", 0)
-    //     .attr("x1", 0)
-    //     .attr("x2", 0)
-
-    /**
-     * TOP Y-AXIS
-     */
-    // let yTop = d3.scaleLinear().range([0, 0])
-    // let yAxisTop = d3.axisLeft(yTop)
-    // // .ticks(5)
-    // self.gyAxisTop
-    //   // .attr("transform", "translate(0," + 0 + ")")
-    //   .call(yAxisTop)
-    //   .append("text")
-    //   .attr("transform", "rotate(-90)")
-    //   .attr("class", "label clickable")
-    //   .attr("y", -40)
-    //   .attr("x", 0)
-    //   .attr("dy", "0.71em")
-    //   .attr("font", "sans-serif")
-    //   .attr("font-size", 10)
-    //   .attr("fill", "black")
-    //   .attr("cursor", "pointer")
-    //   .style("text-anchor", "middle")
-    //   // .text("initialized")
-    //   .on("click", () => {
-    //     self.switchDataType()
-    //   })
-
-    /**
-     * BOTTOM Y-AXIS
-     */
-    // let yBottom = d3.scaleLinear().range([0, 0])
-    // let yAxisBottom = d3.axisLeft(yBottom)
-    // // .ticks(5)
-    // self.gyAxisBottom
-    //   // .attr("transform", "translate(0," + 0 + ")")
-    //   .call(yAxisBottom)
-    //   .append("text")
-    //   .attr("transform", "rotate(-90)")
-    //   .attr("class", "label clickable")
-    //   .attr("y", -40)
-    //   .attr("x", 0)
-    //   .attr("dy", "0.71em")
-    //   .attr("font", "sans-serif")
-    //   .attr("font-size", 10)
-    //   .attr("fill", "black")
-    //   .attr("cursor", "pointer")
-    //   .style("text-anchor", "middle")
-    // .text("initialized")
-    // .on("click", () => {
-    //   self.switchDataType()
-    // })
-
-    /**
-     * TOP X-AXIS
-     */
-    // let xTop = d3.scaleTime().range([0, 0])
-    // let xAxisTop = d3.axisBottom(xTop)
-    // // .ticks(5)
-    // self.gxAxisTop
-    //   // .attr("transform", "translate(0," + 0 + ")")
-    //   .call(xAxisTop)
-    //   .append("text")
-    //   .attr("class", "label clickable title")
-    // .attr("y", -40)
-    // .attr("x", 0)
-    // .attr("dy", "0.71em")
-    // .attr("font", "sans-serif")
-    // .attr("font-size", 10)
-    // .attr("fill", "black")
-    // .attr("cursor", "pointer")
-    // .style("text-anchor", "middle")
-    // .text("initialized")
-    // .on("click", () => {
-    //   self.switchTimeSpan()
-    // })
-
-    /**
-     * BOTTOM X-AXIS
-     */
-    // let xBottom = d3.scaleTime().range([0, 0])
-    // let xAxisBottom = d3.axisBottom(xBottom)
-    // // .ticks(5)
-    // self.gxAxisBottom
-    //   // .attr("transform", "translate(0," + 0 + ")")
-    //   .call(xAxisBottom)
-    //   .append("text")
-    // .attr("class", "label clickable title")
-    // .attr("dy", "0.71em")
-    // .attr("font", "sans-serif")
-    // .attr("font-size", 10)
-    // .attr("fill", "black")
-    // .attr("cursor", "pointer")
-    // .style("text-anchor", "middle")
-    // .text("initialized")
-    // .on("click", () => {
-    //   self.swtichMeanCurve()
-    // })
     //TODO: tickSizeInner wie in Timeline.js von der größe abhängig machen
 
+    this.filter_data()
     this.draw_vis()
   }
 
@@ -331,123 +329,34 @@ class Epikurve extends Component {
     clearInterval(this.checkSize)
   }
 
-  handle_data = (data) => {
-    console.log("epikurve vis data recieved")
-    console.log(data)
-
-    this.data = data
-    // this.initial_timelense_timestamps = JSON.parse(
-    //   JSON.stringify(data.data.initial_timelense_timestamps)
-    // )
-
-    let pfv = this.props.get_possible_filter_values()
-    this.initial_timelense_timestamps = [pfv.min_ts, pfv.max_ts]
-
-    // prepare the selection for the new data
-    let stations = []
-    this.selected_station = undefined
-    data.data.stationIDs.forEach((s_id, i) => {
-      stations.push(s_id)
-      if (i === 0) {
-        this.selected_station = s_id
-      }
-    })
-
-    let confs = []
-    this.selected_config = undefined
-    data.data?.rki_configs?.forEach((conf, i) => {
-      confs.push(conf.name)
-    })
-
-    // !select the station and config based on config_name of parameters
-    if (data.data.config_stationid !== undefined)
-      this.selected_station = data.data.config_stationid
-    this.selected_config = data.data.configName
-
-    this.setState((prevState) => {
-      prevState.stationIDs = stations
-      prevState.configNames = confs
-      prevState.getStationID = this.selected_station
-      prevState.getConfigName = this.selected_config
-      return prevState
-    })
-
-    this.draw_vis()
-  }
-
   draw_vis = (stationID, pathogenID) => {
     let self = this
-    let data = this.data
 
-    console.log("drawing epikurve")
-
-    /**
-     * Titel + Timestamp
-     */
-
-    // let title = this.gLegend.selectAll(".title").data([this.title])
-
-    // title
-    //   .enter()
-    //   .append("text")
-    //   .attr("class", "title")
-    //   .merge(title)
-    //   .transition()
-    //   .duration(this.transition_duration)
-    //   .text((d) => d)
-    //   .attr("font-size", this.margin.top / 2)
-    //   .attr("x", this.width / 2)
-    //   .attr("y", (this.margin.top * 2) / 3)
-    //   .attr("text-anchor", "middle")
-
-    // title.exit().remove()
+    let data = this.filtered_data
 
     if (
-      this.data === undefined ||
-      this.data.data === undefined ||
-      Object.getOwnPropertyNames(this.data.data).length <= 0
-      // !Array.isArray(this.data.data) ||
-      // this.data.data.length === 0
+      data === undefined ||
+      this.width <= this.min_width ||
+      this.height <= this.min_height ||
+      this.height === undefined ||
+      this.width === undefined
     ) {
+      // no data or viewport is too small
       return
     }
 
-    // let timestamp = this.gLegend
-    //   .selectAll(".timestamp")
-    //   .data([
-    //     `(Stand: ${moment(data.timestamp).format("DD.MM.YYYY HH:mm:ss")})`,
-    //   ])
-
-    // timestamp
-    //   .enter()
-    //   .append("text")
-    //   .attr("class", "timestamp")
-    //   .merge(timestamp)
-    //   .transition()
-    //   .duration(this.transition_duration)
-    //   .text((d) => d)
-    //   .attr("font-size", this.margin.top / 4)
-    //   .attr("x", this.width / 2)
-    //   .attr("y", this.margin.top)
-    //   .attr("text-anchor", "middle")
-
-    // timestamp.exit().remove()
-
     let locale = this.props.get_locale()
 
-    /**
-     * from old module
-     */
-    if (!stationID) {
-      stationID = self.state.getStationID
-      // stationID = data.data.stationIDs[0]
-    }
-    if (!pathogenID) {
-      // pathogenID = self.state.getPathogenID
-      pathogenID = data.data.pathogenIDs[0]
-    }
-    let stationIDname = stationID
-    let pathogenIDname = "K" + pathogenID
+    let {
+      y_max_top,
+      y_max_bottom,
+      data_top,
+      data_bottom,
+      time_stamps_top,
+      time_stamps_bottom,
+      no_data_rects_top,
+      no_data_rects_bottom,
+    } = data
 
     let svg = d3.select(self.svgRoot)
     let width =
@@ -456,50 +365,8 @@ class Epikurve extends Component {
       parseInt(svg.style("height")) -
       2 * self.margin.top -
       2 * self.margin.bottom
-    // let data = self.data
-
-    let dataTypeTop = this.dataTypeTop
-    let dataTypeBottom = this.dataTypeBottom
 
     let offsetBottomLinesY = height / 2 + self.margin.top + self.margin.bottom
-
-    // let timeStampsTop = [
-    //   dataTop[0].timestamps[0],
-    //   dataTop[dataTop.length - 1].timestamps[
-    //     dataTop[dataTop.length - 1].timestamps.length - 1
-    //   ] +
-    //     1000 * 60 * 60 * 24,
-    // // ]
-    // let timeStampsTop = self.initial_timelense_timestamps
-
-    // let timeStampsBottom = [dataBottom[0].timeStamp, dataBottom[dataBottom.length - 1].timeStamp + 1000 * 60 * 60 * 24]
-    /**
-     * Hier die Bottom Daten filtern
-     */
-    let dataBottomOrg = data.data.data[pathogenIDname][stationIDname]
-
-    // let timeStampsTop = [
-    //   dataBottomOrg[0].timestamp,
-    //   dataBottomOrg[dataBottomOrg.length - 1].timestamp + 1000 * 60 * 60 * 24,
-    // ]
-    let pfv = this.props.get_possible_filter_values()
-    let timeStampsTop = [pfv.min_ts, pfv.max_ts + 1000 * 60 * 60 * 24]
-    console.log(dataBottomOrg)
-
-    // TODO: temporär, müsste so erstmal klappen...
-    console.warn("before and after")
-    console.log(self.initial_timelense_timestamps)
-    self.initial_timelense_timestamps = [
-      self.props.filter_values.min_ts,
-      self.props.filter_values.max_ts,
-    ]
-    console.log(self.initial_timelense_timestamps)
-
-    let timeStampsBottom = self.initial_timelense_timestamps
-    let dataBottom = data.data.data[pathogenIDname][stationIDname].filter(
-      (d) =>
-        timeStampsBottom[0] <= d.timestamp && d.timestamp <= timeStampsBottom[1]
-    )
 
     self.gGraphicsTop.attr(
       "transform",
@@ -521,7 +388,6 @@ class Epikurve extends Component {
     /**
      * "Legende" für die Mean-Kurve
      */
-    // let legendLine = self.gGraphicsBottom.selectAll(".legendLine").data([0])
     let legendLine = self.gGraphicsTop.selectAll(".legendLine2").data([0])
 
     legendLine
@@ -529,23 +395,16 @@ class Epikurve extends Component {
       .append("line")
       .attr("class", "legendLine2")
       .merge(legendLine)
-      .transition()
-      .duration(self.transition_duration)
       .attr("x1", (width * 3) / 4)
       .attr("x2", (width * 3) / 4 + 20)
-      // .attr("y1", -15)
-      // .attr("y2", -15)
       .attr("y1", -35)
       .attr("y2", -35)
-      // .attr("stroke", "#ff7f00")
       .attr("stroke", "black")
       .attr("stroke-width", 3)
       .attr("fill", "none")
       .attr("opacity", 1)
 
     legendLine.exit().remove()
-
-    // let legendText = self.gGraphicsBottom.selectAll(".legendText").data([0])
     let legendText = self.gGraphicsTop.selectAll(".legendText").data([0])
 
     legendText
@@ -553,18 +412,14 @@ class Epikurve extends Component {
       .append("text")
       .attr("class", "legendText clickable")
       .on("click", () => {
-        // self.swtichMeanCurve()
         self.switch_niveau_curve_index()
       })
       .merge(legendText)
-      .transition()
-      .duration(self.transition_duration)
       .attr("x", (width * 3) / 4 + 25)
       // .attr("y", -10)
       .attr("y", -30)
       .attr("font-size", "80%")
       .attr("cursor", "pointer")
-      // .text(() => "Mean " + meanCurve + " " + self.translate("days"))
       .text(() => this.niveau_curve_names[this.niveau_curve_index])
 
     legendText.exit().remove()
@@ -572,32 +427,17 @@ class Epikurve extends Component {
     /**
      * TOP Y-AXIS
      */
-    // let yMaxTop = d3.max(dataTop, (d) => d[dataType.type])
-    let yMaxTop = d3.max(dataBottomOrg, (d) => d[dataTypeTop.type])
-
-    dataBottomOrg.forEach((d) => {
-      if (d.rki_data && d.rki_data[this.niveau_curve_names[0]] > yMaxTop) {
-        yMaxTop = d.rki_data[this.niveau_curve_names[0]]
-      }
-      if (d.rki_data && d.rki_data[this.niveau_curve_names[1]] > yMaxTop) {
-        yMaxTop = d.rki_data[this.niveau_curve_names[1]]
-      }
-    })
-
-    yMaxTop = Math.round(yMaxTop + 1 + 0.1 * yMaxTop)
 
     let scaleYTop = d3
       .scaleLinear()
       .range([height / 2, 0])
-      .domain([0, yMaxTop])
+      .domain([0, y_max_top])
     let yAxisTop = d3
       .axisLeft(scaleYTop)
       .ticks(height / 100)
       .tickSizeInner([-width])
 
     self.gyAxisTop
-      .transition()
-      .duration(self.transition_duration)
       .call(yAxisTop)
       .selectAll(".tick")
       .selectAll("text")
@@ -609,11 +449,8 @@ class Epikurve extends Component {
       .enter()
       .append("text")
       .attr("class", "label clickable")
-      // .on("click", self.switchDataType)
       .merge(yAxisLabelTop)
-      .transition()
-      .duration(self.transition_duration)
-      .text(() => dataTypeTop.name())
+      .text(() => this.translate("firstInfections_CS"))
       .attr("x", -height / 4)
       .attr("transform", "rotate(-90)")
       .attr("y", -40)
@@ -629,25 +466,17 @@ class Epikurve extends Component {
     /**
      * BOTTOM Y-AXIS
      */
-    let yMaxBottomValue = d3.max(dataBottom, (d) => d[dataTypeBottom.type])
-    let avgName = "avg7_cs"
-
-    let yMaxBottomMean = d3.max(dataBottom, (d) => d[avgName])
-    let yMaxBottom = Math.max(yMaxBottomValue, yMaxBottomMean)
-    yMaxBottom = Math.round(yMaxBottom + 1 + 0.1 * yMaxBottom)
 
     let scaleYBottom = d3
       .scaleLinear()
       .range([height / 2, 0])
-      .domain([0, yMaxBottom])
+      .domain([0, y_max_bottom])
     let yAxisBottom = d3
       .axisLeft(scaleYBottom)
       .ticks(height / 100)
       .tickSizeInner([-width])
 
     self.gyAxisBottom
-      .transition()
-      .duration(self.transition_duration)
       .call(yAxisBottom)
       .selectAll(".tick")
       .selectAll("text")
@@ -659,11 +488,8 @@ class Epikurve extends Component {
       .enter()
       .append("text")
       .attr("class", "label clickable")
-      // .on("click", self.switchDataType)
       .merge(yAxisLabelBottom)
-      .transition()
-      .duration(self.transition_duration)
-      .text(() => dataTypeBottom.name())
+      .text(() => this.translate("firstInfections"))
       .attr("x", -height / 4)
       .attr("transform", "rotate(-90)")
       .attr("y", -40)
@@ -682,26 +508,15 @@ class Epikurve extends Component {
     d3.timeFormatDefaultLocale(locale)
     let xParseTime = d3.timeParse("%Q")
 
-    // let yMaxTop = d3.max(data[1], d => d[dataType.type])
-    // yMaxTop = Math.round(yMaxTop + 1 + 0.1 * yMaxTop)
-
     let scaleXTop = d3
       .scaleTime()
-      .domain(d3.extent(timeStampsTop, (d) => xParseTime(d)))
+      .domain(d3.extent(time_stamps_top, (d) => xParseTime(d)))
       .range([0, width - 0])
-    // .range([height / 2, 0])
-    // .domain([0, yMaxTop])
     let xAxisTop = d3.axisBottom(scaleXTop).ticks(width / 150)
-    // .tickSizeInner([-width])
 
     self.gxAxisTop
       .attr("transform", "translate(" + 0 + "," + height / 2 + ")")
-      .transition()
-      .duration(self.transition_duration)
       .call(xAxisTop)
-    // .selectAll(".tick")
-    // .selectAll("text")
-    // .attr("x", -8)
 
     let xAxisLabelTop = self.gxAxisTop.selectAll(".label").data([1])
 
@@ -709,10 +524,7 @@ class Epikurve extends Component {
       .enter()
       .append("text")
       .attr("class", "label clickable")
-      // .text(() => "akkumulierte Anzahl Ersterkrankungen pro " + timeSpan + " Tage")
       .merge(xAxisLabelTop)
-      .transition()
-      .duration(self.transition_duration)
       .text(self.translate("EpiTopTitle"))
       .attr("x", width / 2)
       .attr("y", -height / 2 - self.margin.top / 2 + 10)
@@ -733,42 +545,29 @@ class Epikurve extends Component {
 
     let scaleXBottom = d3
       .scaleTime()
-      // .domain(d3.extent(timeStampsBottom, (d) => xParseTime2(d)))
       .domain(
         d3.extent(
-          [timeStampsBottom[0], timeStampsBottom[1] + 1000 * 60 * 60 * 24],
+          [time_stamps_bottom[0], time_stamps_bottom[1] + 1000 * 60 * 60 * 24],
           (d) => xParseTime2(d)
         )
       )
       .range([0, width - 0])
     let xAxisBottom = d3.axisBottom(scaleXBottom).ticks(width / 150)
-    // .tickSizeInner([-width])
 
     self.gxAxisBottom
       .attr("transform", "translate(" + 0 + "," + height / 2 + ")")
-      .transition()
-      .duration(self.transition_duration)
       .call(xAxisBottom)
-    // .selectAll(".tick")
-    // .selectAll("text")
-    // .attr("x", -8)
 
     let xAxisLabelBottom = self.gxAxisBottom.selectAll(".label").data([1])
 
     xAxisLabelBottom
       .enter()
       .append("text")
-      // .on("click", self.swtichMeanCurve)
-      // .text(() => timeSpan + " Tage")
+      .attr("class", "label clickable title")
       .merge(xAxisLabelBottom)
-      .transition()
-      .duration(self.transition_duration)
       .attr("x", width / 2)
       .attr("y", -height / 2 - self.margin.top / 2 + 10)
-      // .text("Anzahl täglicher Ersterkrankungen und " + meanCurve + "-Tage-Mean")
-      // .text("Epidemiekurve Ersterkrankungen (pro Tag)")
       .text(self.translate("EpiBottomTitle"))
-      .attr("class", "label clickable title")
       .attr("dy", "0.71em")
       .attr("font", "sans-serif")
       .attr("font-size", 10)
@@ -783,18 +582,16 @@ class Epikurve extends Component {
      */
     let timeLenseLineLeft = self.gTimeLenseLines
       .selectAll(".timeLenseLineLeft")
-      .data([self.initial_timelense_timestamps[0]])
+      .data([time_stamps_bottom[0]])
 
     timeLenseLineLeft
       .enter()
       .append("line")
       .attr("class", "timeLenseLineLeft timeLenseLine")
       .merge(timeLenseLineLeft)
-      .transition()
-      .duration(self.transition_duration)
       .attr("x1", (d) => scaleXTop(d))
       .attr("x2", (d) => scaleXTop(d))
-      .attr("y1", (d) => scaleYTop(yMaxTop))
+      .attr("y1", (d) => scaleYTop(y_max_top))
       .attr("y2", (d) => scaleYTop(0))
       .attr("fill", "none")
       .attr("stroke-width", 5)
@@ -805,18 +602,16 @@ class Epikurve extends Component {
 
     let timeLenseLineRight = self.gTimeLenseLines
       .selectAll(".timeLenseLineRight")
-      .data([self.initial_timelense_timestamps[1] + 1000 * 60 * 60 * 24])
+      .data([time_stamps_bottom[1] + 1000 * 60 * 60 * 24])
 
     timeLenseLineRight
       .enter()
       .append("line")
       .attr("class", "timeLenseLineRight timeLenseLine")
       .merge(timeLenseLineRight)
-      .transition()
-      .duration(self.transition_duration)
       .attr("x1", (d) => scaleXTop(d))
       .attr("x2", (d) => scaleXTop(d))
-      .attr("y1", (d) => scaleYTop(yMaxTop))
+      .attr("y1", (d) => scaleYTop(y_max_top))
       .attr("y2", (d) => scaleYTop(0))
       .attr("fill", "none")
       .attr("stroke-width", 5)
@@ -830,20 +625,16 @@ class Epikurve extends Component {
      */
     let staticTimeLenseLineLeft = self.gTimeLenseLines
       .selectAll(".staticTimeLenseLineLeft")
-      .data([self.initial_timelense_timestamps[0]])
+      .data([time_stamps_bottom[0]])
 
     staticTimeLenseLineLeft
       .enter()
       .append("line")
       .attr("class", "staticTimeLenseLineLeft timeLenseLine")
       .merge(staticTimeLenseLineLeft)
-      .transition()
-      .duration(self.transition_duration)
-      // .attr("x1", (d) => scaleXBottom(d))
-      // .attr("x2", (d) => scaleXBottom(d))
       .attr("x1", (d) => 0)
       .attr("x2", (d) => 0)
-      .attr("y1", (d) => offsetBottomLinesY + scaleYBottom(yMaxBottom))
+      .attr("y1", (d) => offsetBottomLinesY + scaleYBottom(y_max_bottom))
       .attr("y2", (d) => offsetBottomLinesY + scaleYBottom(0))
       .attr("fill", "none")
       .attr("stroke-width", 5)
@@ -854,20 +645,16 @@ class Epikurve extends Component {
 
     let staticTimeLenseLineRight = self.gTimeLenseLines
       .selectAll(".staticTimeLenseLineRight")
-      .data([self.initial_timelense_timestamps[1]])
+      .data([time_stamps_bottom[1]])
 
     staticTimeLenseLineRight
       .enter()
       .append("line")
       .attr("class", "staticTimeLenseLineRight timeLenseLine")
       .merge(staticTimeLenseLineRight)
-      .transition()
-      .duration(self.transition_duration)
-      // .attr("x1", (d) => scaleXBottom(d))
-      // .attr("x2", (d) => scaleXBottom(d))
       .attr("x1", (d) => width - 0)
       .attr("x2", (d) => width - 0)
-      .attr("y1", (d) => offsetBottomLinesY + scaleYBottom(yMaxBottom))
+      .attr("y1", (d) => offsetBottomLinesY + scaleYBottom(y_max_bottom))
       .attr("y2", (d) => offsetBottomLinesY + scaleYBottom(0))
       .attr("fill", "none")
       .attr("stroke-width", 5)
@@ -882,7 +669,7 @@ class Epikurve extends Component {
 
     let timeLenseLineTopLeftOverlay = self.gTimeLenseLines
       .selectAll(".timeLenseLineTopLeftOverlay")
-      .data([self.initial_timelense_timestamps[0]])
+      .data([time_stamps_bottom[0]])
 
     timeLenseLineTopLeftOverlay
       .enter()
@@ -903,24 +690,35 @@ class Epikurve extends Component {
             } else {
               newTimeMS = newTimeMS - roundUp
             }
+
             newTimeMS += timeOffset
-            if (newTimeMS <= timeStampsTop[0]) {
-              newTimeMS = timeStampsTop[0]
+            if (newTimeMS <= time_stamps_top[0]) {
+              newTimeMS = time_stamps_top[0]
             }
-            if (newTimeMS >= self.initial_timelense_timestamps[1]) {
-              newTimeMS = self.initial_timelense_timestamps[1]
+            if (newTimeMS >= time_stamps_bottom[1]) {
+              newTimeMS = time_stamps_bottom[1]
             }
 
             self.gTimeLenseLines
               .selectAll(".dragTimeLenseLine")
               .attr("x1", scaleXTop(newTimeMS))
               .attr("x2", scaleXTop(newTimeMS))
-              // .attr("x2", d3.event.x)
-              .attr("y1", scaleYTop(yMaxTop))
+              .attr("y1", scaleYTop(y_max_top))
               .attr("y2", scaleYTop(0))
               .classed("dragNotActive", false)
               .classed("dragActive", true)
               .attr("display", "block")
+
+            // self.gTimeLenseLines
+            //   .selectAll(".dragTimeLenseLine")
+            //   .classed("dragNotActive", true)
+            //   .classed("dragActive", false)
+            //   .attr("display", "none")
+
+            // time_stamps_bottom[0] = newTimeMS
+            // self.props.change_filter_starttime(newTimeMS)
+            // self.filter_data()
+            // self.draw_vis()
           })
           .on("end", (d) => {
             let newTime = new Date(scaleXTop.invert(d3.event.x))
@@ -933,12 +731,13 @@ class Epikurve extends Component {
             } else {
               newTimeMS = newTimeMS - roundUp
             }
+
             newTimeMS += timeOffset
-            if (newTimeMS <= timeStampsTop[0]) {
-              newTimeMS = timeStampsTop[0]
+            if (newTimeMS <= time_stamps_top[0]) {
+              newTimeMS = time_stamps_top[0]
             }
-            if (newTimeMS >= self.initial_timelense_timestamps[1]) {
-              newTimeMS = self.initial_timelense_timestamps[1]
+            if (newTimeMS >= time_stamps_bottom[1]) {
+              newTimeMS = time_stamps_bottom[1]
             }
 
             self.gTimeLenseLines
@@ -947,16 +746,12 @@ class Epikurve extends Component {
               .classed("dragActive", false)
               .attr("display", "none")
 
-            self.initial_timelense_timestamps[0] = newTimeMS
             self.props.change_filter_starttime(newTimeMS)
-            self.draw_vis()
           })
       )
-      .transition()
-      .duration(self.transition_duration)
       .attr("x1", (d) => scaleXTop(d))
       .attr("x2", (d) => scaleXTop(d))
-      .attr("y1", (d) => scaleYTop(yMaxTop))
+      .attr("y1", (d) => scaleYTop(y_max_top))
       .attr("y2", (d) => scaleYTop(0))
       .attr("stroke-width", 20)
       .attr("stroke-opacity", 0)
@@ -966,7 +761,7 @@ class Epikurve extends Component {
 
     let timeLenseLineTopRightOverlay = self.gTimeLenseLines
       .selectAll(".timeLenseLineTopRightOverlay")
-      .data([self.initial_timelense_timestamps[1] + 1000 * 60 * 60 * 24])
+      .data([time_stamps_bottom[1] + 1000 * 60 * 60 * 24])
 
     timeLenseLineTopRightOverlay
       .enter()
@@ -988,24 +783,29 @@ class Epikurve extends Component {
               newTimeMS = newTimeMS - roundUp
             }
             newTimeMS += timeOffset
-            if (newTimeMS <= self.initial_timelense_timestamps[0]) {
-              newTimeMS =
-                self.initial_timelense_timestamps[0] + 1000 * 60 * 60 * 24
+            if (newTimeMS <= time_stamps_bottom[0]) {
+              newTimeMS = time_stamps_bottom[0] + 1000 * 60 * 60 * 24
             }
-            if (newTimeMS >= timeStampsTop[1]) {
-              newTimeMS = timeStampsTop[1]
+            if (newTimeMS >= time_stamps_top[1]) {
+              newTimeMS = time_stamps_top[1]
             }
 
             self.gTimeLenseLines
               .selectAll(".dragTimeLenseLine")
               .attr("x1", scaleXTop(newTimeMS))
               .attr("x2", scaleXTop(newTimeMS))
-              // .attr("x2", d3.event.x)
-              .attr("y1", scaleYTop(yMaxTop))
+              .attr("y1", scaleYTop(y_max_top))
               .attr("y2", scaleYTop(0))
               .classed("dragNotActive", false)
               .classed("dragActive", true)
               .attr("display", "block")
+
+            newTimeMS = newTimeMS - 1000 * 60 * 60 * 24
+
+            // time_stamps_bottom[1] = newTimeMS
+            // self.props.change_filter_endtime(newTimeMS)
+            // self.filter_data()
+            // self.draw_vis()
           })
           .on("end", (d) => {
             let newTime = new Date(scaleXTop.invert(d3.event.x))
@@ -1019,12 +819,11 @@ class Epikurve extends Component {
               newTimeMS = newTimeMS - roundUp
             }
             newTimeMS += timeOffset
-            if (newTimeMS <= self.initial_timelense_timestamps[0]) {
-              newTimeMS =
-                self.initial_timelense_timestamps[0] + 1000 * 60 * 60 * 24
+            if (newTimeMS <= time_stamps_bottom[0]) {
+              newTimeMS = time_stamps_bottom[0] + 1000 * 60 * 60 * 24
             }
-            if (newTimeMS >= timeStampsTop[1]) {
-              newTimeMS = timeStampsTop[1]
+            if (newTimeMS >= time_stamps_top[1]) {
+              newTimeMS = time_stamps_top[1]
             }
 
             newTimeMS = newTimeMS - 1000 * 60 * 60 * 24
@@ -1035,16 +834,12 @@ class Epikurve extends Component {
               .classed("dragActive", false)
               .attr("display", "none")
 
-            self.initial_timelense_timestamps[1] = newTimeMS
             self.props.change_filter_endtime(newTimeMS)
-            self.draw_vis()
           })
       )
-      .transition()
-      .duration(self.transition_duration)
       .attr("x1", (d) => scaleXTop(d))
       .attr("x2", (d) => scaleXTop(d))
-      .attr("y1", (d) => scaleYTop(yMaxTop))
+      .attr("y1", (d) => scaleYTop(y_max_top))
       .attr("y2", (d) => scaleYTop(0))
       .attr("stroke-width", 20)
       .attr("stroke-opacity", 0)
@@ -1058,7 +853,7 @@ class Epikurve extends Component {
 
     let timeLenseLineBottomLeftOverlay = self.gTimeLenseLines
       .selectAll(".timeLenseLineBottomLeftOverlay")
-      .data([self.initial_timelense_timestamps[0]])
+      .data([time_stamps_bottom[0]])
 
     timeLenseLineBottomLeftOverlay
       .enter()
@@ -1080,11 +875,11 @@ class Epikurve extends Component {
               newTimeMS = newTimeMS - roundUp
             }
             newTimeMS += timeOffset
-            if (newTimeMS <= self.initial_timelense_timestamps[0]) {
-              newTimeMS = self.initial_timelense_timestamps[0]
+            if (newTimeMS <= time_stamps_bottom[0]) {
+              newTimeMS = time_stamps_bottom[0]
             }
-            if (newTimeMS >= self.initial_timelense_timestamps[1]) {
-              newTimeMS = self.initial_timelense_timestamps[1] // - 1000 * 60 * 60 * 24
+            if (newTimeMS >= time_stamps_bottom[1]) {
+              newTimeMS = time_stamps_bottom[1]
             }
 
             self.gTimeLenseLines
@@ -1092,7 +887,7 @@ class Epikurve extends Component {
               .attr("x1", scaleXBottom(newTimeMS))
               .attr("x2", scaleXBottom(newTimeMS))
               // .attr("x2", d3.event.x)
-              .attr("y1", offsetBottomLinesY + scaleYBottom(yMaxBottom))
+              .attr("y1", offsetBottomLinesY + scaleYBottom(y_max_bottom))
               .attr("y2", offsetBottomLinesY + scaleYBottom(0))
               .classed("dragNotActive", false)
               .classed("dragActive", true)
@@ -1110,11 +905,11 @@ class Epikurve extends Component {
               newTimeMS = newTimeMS - roundUp
             }
             newTimeMS += timeOffset
-            if (newTimeMS <= self.initial_timelense_timestamps[0]) {
-              newTimeMS = self.initial_timelense_timestamps[0]
+            if (newTimeMS <= time_stamps_bottom[0]) {
+              newTimeMS = time_stamps_bottom[0]
             }
-            if (newTimeMS >= self.initial_timelense_timestamps[1]) {
-              newTimeMS = self.initial_timelense_timestamps[1]
+            if (newTimeMS >= time_stamps_bottom[1]) {
+              newTimeMS = time_stamps_bottom[1]
             }
 
             self.gTimeLenseLines
@@ -1123,16 +918,15 @@ class Epikurve extends Component {
               .classed("dragActive", false)
               .attr("display", "none")
 
-            self.initial_timelense_timestamps[0] = newTimeMS
+            // time_stamps_bottom[0] = newTimeMS
             self.props.change_filter_starttime(newTimeMS)
-            self.draw_vis()
+            // self.filter_data()
+            // self.draw_vis()
           })
       )
-      .transition()
-      .duration(self.transition_duration)
       .attr("x1", (d) => scaleXBottom(d))
       .attr("x2", (d) => scaleXBottom(d))
-      .attr("y1", (d) => offsetBottomLinesY + scaleYBottom(yMaxBottom))
+      .attr("y1", (d) => offsetBottomLinesY + scaleYBottom(y_max_bottom))
       .attr("y2", (d) => offsetBottomLinesY + scaleYBottom(0))
       .attr("stroke-width", 20)
       .attr("stroke-opacity", 0)
@@ -1142,7 +936,7 @@ class Epikurve extends Component {
 
     let timeLenseLineBottomRightOverlay = self.gTimeLenseLines
       .selectAll(".timeLenseLineBottomRightOverlay")
-      .data([self.initial_timelense_timestamps[1] + 1000 * 60 * 60 * 24])
+      .data([time_stamps_bottom[1] + 1000 * 60 * 60 * 24])
 
     timeLenseLineBottomRightOverlay
       .enter()
@@ -1164,21 +958,18 @@ class Epikurve extends Component {
               newTimeMS = newTimeMS - roundUp
             }
             newTimeMS += timeOffset
-            if (newTimeMS <= self.initial_timelense_timestamps[0]) {
-              newTimeMS =
-                self.initial_timelense_timestamps[0] + 1000 * 60 * 60 * 24
+            if (newTimeMS <= time_stamps_bottom[0]) {
+              newTimeMS = time_stamps_bottom[0] + 1000 * 60 * 60 * 24
             }
-            if (newTimeMS > self.initial_timelense_timestamps[1]) {
-              newTimeMS =
-                self.initial_timelense_timestamps[1] + 1000 * 60 * 60 * 24
+            if (newTimeMS > time_stamps_bottom[1]) {
+              newTimeMS = time_stamps_bottom[1] + 1000 * 60 * 60 * 24
             }
 
             self.gTimeLenseLines
               .selectAll(".dragTimeLenseLine")
               .attr("x1", scaleXBottom(newTimeMS))
               .attr("x2", scaleXBottom(newTimeMS))
-              // .attr("x2", d3.event.x)
-              .attr("y1", offsetBottomLinesY + scaleYBottom(yMaxBottom))
+              .attr("y1", offsetBottomLinesY + scaleYBottom(y_max_bottom))
               .attr("y2", offsetBottomLinesY + scaleYBottom(0))
               .classed("dragNotActive", false)
               .classed("dragActive", true)
@@ -1196,12 +987,11 @@ class Epikurve extends Component {
               newTimeMS = newTimeMS - roundUp
             }
             newTimeMS += timeOffset
-            if (newTimeMS <= self.initial_timelense_timestamps[0]) {
-              newTimeMS = self.initial_timelense_timestamps[0]
+            if (newTimeMS <= time_stamps_bottom[0]) {
+              newTimeMS = time_stamps_bottom[0]
             }
-            if (newTimeMS > self.initial_timelense_timestamps[1]) {
-              newTimeMS =
-                self.initial_timelense_timestamps[1] + 1000 * 60 * 60 * 24
+            if (newTimeMS > time_stamps_bottom[1]) {
+              newTimeMS = time_stamps_bottom[1] + 1000 * 60 * 60 * 24
             }
 
             newTimeMS = newTimeMS - 1000 * 60 * 60 * 24
@@ -1212,16 +1002,15 @@ class Epikurve extends Component {
               .classed("dragActive", false)
               .attr("display", "none")
 
-            self.initial_timelense_timestamps[1] = newTimeMS
+            // time_stamps_bottom[1] = newTimeMS
             self.props.change_filter_endtime(newTimeMS)
-            self.draw_vis()
+            // self.filter_data()
+            // self.draw_vis()
           })
       )
-      .transition()
-      .duration(self.transition_duration)
       .attr("x1", (d) => scaleXBottom(d))
       .attr("x2", (d) => scaleXBottom(d))
-      .attr("y1", (d) => offsetBottomLinesY + scaleYBottom(yMaxBottom))
+      .attr("y1", (d) => offsetBottomLinesY + scaleYBottom(y_max_bottom))
       .attr("y2", (d) => offsetBottomLinesY + scaleYBottom(0))
       .attr("stroke-width", 20)
       .attr("stroke-opacity", 0)
@@ -1242,20 +1031,18 @@ class Epikurve extends Component {
       .data([
         [
           {
-            x: scaleXTop(self.initial_timelense_timestamps[0]),
-            y: scaleYTop(yMaxTop),
+            x: scaleXTop(time_stamps_bottom[0]),
+            y: scaleYTop(y_max_top),
           },
           {
-            x: scaleXTop(self.initial_timelense_timestamps[0]),
+            x: scaleXTop(time_stamps_bottom[0]),
             y: scaleYTop(0),
           },
           {
-            // x: scaleXBottom(self.initial_timelense_timestamps[0]),
             x: 0,
-            y: offsetBottomLinesY + scaleYBottom(yMaxBottom),
+            y: offsetBottomLinesY + scaleYBottom(y_max_bottom),
           },
           {
-            // x: scaleXBottom(self.initial_timelense_timestamps[0]),
             x: 0,
             y: offsetBottomLinesY + scaleYBottom(0),
           },
@@ -1267,8 +1054,6 @@ class Epikurve extends Component {
       .append("path")
       .attr("class", "timeLenseInterpolateLeft timeLenseInterpolate")
       .merge(timeLenseInterpolateLeft)
-      .transition()
-      .duration(self.transition_duration)
       .attr("d", timeLenseInterpolateFunction)
       .attr("fill", "none")
       .attr("stroke-width", 5)
@@ -1282,24 +1067,18 @@ class Epikurve extends Component {
       .data([
         [
           {
-            x: scaleXTop(
-              self.initial_timelense_timestamps[1] + 1000 * 60 * 60 * 24
-            ),
-            y: scaleYTop(yMaxTop),
+            x: scaleXTop(time_stamps_bottom[1] + 1000 * 60 * 60 * 24),
+            y: scaleYTop(y_max_top),
           },
           {
-            x: scaleXTop(
-              self.initial_timelense_timestamps[1] + 1000 * 60 * 60 * 24
-            ),
+            x: scaleXTop(time_stamps_bottom[1] + 1000 * 60 * 60 * 24),
             y: scaleYTop(0),
           },
           {
-            // x: scaleXBottom(self.initial_timelense_timestamps[1]),
             x: width - 0,
-            y: offsetBottomLinesY + scaleYBottom(yMaxBottom),
+            y: offsetBottomLinesY + scaleYBottom(y_max_bottom),
           },
           {
-            // x: scaleXBottom(self.initial_timelense_timestamps[1]),
             x: width - 0,
             y: offsetBottomLinesY + scaleYBottom(0),
           },
@@ -1311,8 +1090,6 @@ class Epikurve extends Component {
       .append("path")
       .attr("class", "timeLenseInterpolateRight timeLenseInterpolate")
       .merge(timeLenseInterpolateRight)
-      .transition()
-      .duration(self.transition_duration)
       .attr("d", timeLenseInterpolateFunction)
       .attr("fill", "none")
       .attr("stroke-width", 5)
@@ -1321,302 +1098,109 @@ class Epikurve extends Component {
 
     timeLenseInterpolateRight.exit().remove()
 
-    let rects_instead_of_polygons = true
+    /**
+     * TOP Epidemikurve
+     */
+    let topEpidemikurve = self.gEpidemikurveTop
+      .selectAll(".keimkurve_rects")
+      .data(data_top)
 
-    if (rects_instead_of_polygons) {
-      /**
-       * TOP Epidemikurve
-       */
-      let topEpidemikurve = self.gEpidemikurveTop
-        .selectAll(".keimkurve_rects")
-        // .data([dataTop])
-        .data(dataBottomOrg)
+    topEpidemikurve
+      .enter()
+      .append("rect")
+      .merge(topEpidemikurve)
+      .on("click", (d) => {
+        console.log(d)
+      })
+      .attr("class", (d) => "keimkurve_rects")
+      .attr("fill", (d) => {
+        let col = "#bbbbbb"
 
-      topEpidemikurve
-        .enter()
-        .append("rect")
-        .merge(topEpidemikurve)
-        .on("click", (d) => {
-          console.log(d)
-        })
-        .transition()
-        .duration(self.transition_duration)
-        .attr("class", (d) => "keimkurve_rects")
-        // .attr("fill", this.get_color("infectedCarrier"))
-        .attr("fill", (d) => {
-          let col = "#bbbbbb"
+        if (d.rki_data) {
+          let val = d.rki_data.Ausbruchswahrscheinlichkeit
+          val = val / 0.5 + 0.5
+          col = d3.interpolateOranges(val)
+        }
 
-          if (d.rki_data) {
-            let val = d.rki_data.Ausbruchswahrscheinlichkeit
-            val = val / 0.5 + 0.5
-            col = d3.interpolateOranges(val)
-          }
-
-          return col
-        })
-        // .attr("opacity", 0.5)
-        .attr("x", (d, i) => {
-          // return (i * width) / dataBottomOrg.length - 1
-          return scaleXTop(new Date(d.Datum).getTime())
-        })
-        .attr("y", (d) => {
-          return scaleYTop(d[dataTypeTop.type])
-        })
-        .attr("width", (d) => {
-          // return width / dataBottomOrg.length + 1
-          return (
-            scaleXTop(new Date(d.Datum).getTime() + 1000 * 60 * 60 * 24) -
-            scaleXTop(new Date(d.Datum).getTime())
-          )
-        })
-        .attr("height", (d) => {
-          return scaleYTop(yMaxTop - d[dataTypeTop.type])
-        })
-      // .attr(
-      //   "transform",
-      //   (d) => "translate(" + 0 + "," + scaleYTop(yMaxTop) + ")"
-      // )
-
-      topEpidemikurve.exit().remove()
-
-      /**
-       * BOTTOM Epidemikurve
-       */
-      let bottomEpidemikurve = self.gEpidemikurveBottom
-        .selectAll(".keimkurve_rects")
-        .data(dataBottom)
-
-      bottomEpidemikurve
-        .enter()
-        .append("rect")
-        .merge(bottomEpidemikurve)
-        .on("click", (d) => {
-          console.log(d)
-        })
-        .transition()
-        .duration(self.transition_duration)
-        .attr("class", (d) => "keimkurve_rects")
-        // .attr("opacity", 0.2)
-        // .attr("fill", "#ff7f00")
-        // .attr("fill", this.get_color("infectedCarrier"))
-        .attr("fill", (d) => {
-          let col = "#bbbbbb"
-
-          if (d.rki_data) {
-            let val = d.rki_data.Ausbruchswahrscheinlichkeit
-            val = val / 0.5 + 0.5
-            col = d3.interpolateOranges(val)
-            console.log(val)
-          }
-
-          return col
-        })
-        .attr("x", (d, i) => {
-          // return (i * width) / dataBottom.length - 1
-          return scaleXBottom(new Date(d.Datum).getTime())
-        })
-        .attr("y", (d) => {
-          return scaleYBottom(d[dataTypeBottom.type])
-        })
-        .attr("width", (d) => {
-          // return width / dataBottom.length + 1
-          return (
-            scaleXBottom(new Date(d.Datum).getTime() + 1000 * 60 * 60 * 24) -
-            scaleXBottom(new Date(d.Datum).getTime())
-          )
-        })
-        .attr("height", (d) => {
-          return scaleYBottom(yMaxBottom - d[dataTypeBottom.type])
-        })
-      // .attr(
-      //   "transform",
-      //   (d) => "translate(" + 0 + "," + scaleYBottom(yMaxBottom) + ")"
-      // )
-
-      bottomEpidemikurve.exit().remove()
-    } else {
-      /**
-       * TOP Epidemikurve
-       */
-      let topEpidemikurve = self.gEpidemikurveTop
-        .selectAll("polygon")
-        // .data([dataTop])
-        .data([dataBottomOrg])
-
-      topEpidemikurve
-        .enter()
-        .append("polygon")
-        .merge(topEpidemikurve)
-        .on("click", (d) => {
-          console.log(d)
-        })
-        .transition()
-        .duration(self.transition_duration)
-        .attr("class", (d) => "keimKurve")
-        // .attr("opacity", 0.2)
-        // .attr("fill", "#ff7f00")
-        .attr("fill", this.get_color("infectedCarrier"))
-        .attr("opacity", 0.5)
-        // Adaption, dass oben eine andere Kurve angezeigt wird...
-        .attr("points", (d) => {
-          scaleYTop.domain([yMaxTop, 0])
-          let bottomPoints = width + ",0, 0,0"
-          let points = ""
-          for (let i = 0; i < d.length; i++) {
-            points =
-              points +
-              ((i * width) / d.length).toString() +
-              ",-" +
-              scaleYTop(d[i][dataTypeTop.type]).toString() +
-              ", "
-            points =
-              points +
-              (((i + 1) * width) / d.length).toString() +
-              ",-" +
-              scaleYTop(d[i][dataTypeTop.type]).toString() +
-              ", "
-          }
-          return points + bottomPoints
-        })
-        // .attr("points", (d) => {
-        //   scaleYTop.domain([yMaxTop, 0])
-        //   let bottomPoints = width + ",0, 0,0"
-        //   let points = ""
-        //   /**
-        //    * wird nur einmal aufgerufen; die For-Schleife ist noch von der alten Epidemikurve
-        //    */
-        //   for (let i = 0; i < d.length; i++) {
-        //     /**
-        //      * Der Versuch bei 7 und 28 EpiKurve gleich viele Punkte zu verwenden
-        //      * aber leider kleiner Offset wegen dem Punkt auserhalb der Schleife
-        //      */
-        //     // points = points + (i * width / (dataBottomOrg.length / timeSpan)).toString() + ",-"
-        //     //     + (scaleYTop(d[i][dataType.type]).toString()) + ", "
-        //     // d[i].timeStamps.forEach(t => {
-        //     //     points = points +
-        //     //         ((i) * width / (dataBottomOrg.length / timeSpan) + width / (dataBottomOrg.length / timeSpan) * (d[i].timeStamps.length / timeSpan)).toString() + ",-"
-        //     //         + (scaleYTop(d[i][dataType.type])).toString() + ", "
-        //     // })
-
-        //     points =
-        //       points +
-        //       ((i * width) / (dataBottomOrg.length / timeSpan)).toString() +
-        //       ",-" +
-        //       scaleYTop(d[i][dataType.type]).toString() +
-        //       ", "
-
-        //     if (i === d.length - 1) {
-        //       /**
-        //        * sodass der letzte Balken nicht übersteht
-        //        * statt i + 1 mal die Balkenbreite, nur i mal PLUS den letzten kleineren Balken
-        //        */
-        //       points =
-        //         points +
-        //         (
-        //           (i * width) / (dataBottomOrg.length / timeSpan) +
-        //           (width / (dataBottomOrg.length / timeSpan)) *
-        //             (d[i].timestamps.length / timeSpan)
-        //         ).toString() +
-        //         ",-" +
-        //         scaleYTop(d[i][dataType.type]).toString() +
-        //         ", "
-        //     } else {
-        //       points =
-        //         points +
-        //         (
-        //           ((i + 1) * width) /
-        //           (dataBottomOrg.length / timeSpan)
-        //         ).toString() +
-        //         ",-" +
-        //         scaleYTop(d[i][dataType.type]).toString() +
-        //         ", "
-        //     }
-        //   }
-        //   return points + bottomPoints
-        // })
-        .attr(
-          "transform",
-          (d) => "translate(" + 0 + "," + scaleYTop(yMaxTop) + ")"
+        return col
+      })
+      .attr("x", (d, i) => {
+        return scaleXTop(new Date(d.Datum).getTime())
+      })
+      .attr("y", (d) => {
+        return scaleYTop(d["Anzahl_cs"])
+      })
+      .attr("width", (d) => {
+        return (
+          scaleXTop(new Date(d.Datum).getTime() + 1000 * 60 * 60 * 24) -
+          scaleXTop(new Date(d.Datum).getTime())
         )
+      })
+      .attr("height", (d) => {
+        return scaleYTop(y_max_top - d["Anzahl_cs"])
+      })
 
-      topEpidemikurve.exit().remove()
+    topEpidemikurve.exit().remove()
 
-      /**
-       * BOTTOM Epidemikurve
-       */
-      let bottomEpidemikurve = self.gEpidemikurveBottom
-        .selectAll("polygon")
-        .data([dataBottom])
+    /**
+     * BOTTOM Epidemikurve
+     */
+    let bottomEpidemikurve = self.gEpidemikurveBottom
+      .selectAll(".keimkurve_rects")
+      .data(data_bottom)
 
-      bottomEpidemikurve
-        .enter()
-        .append("polygon")
-        .merge(bottomEpidemikurve)
-        .on("click", (d) => {
-          console.log(d)
-        })
-        .transition()
-        .duration(self.transition_duration)
-        .attr("class", (d) => "keimKurve")
-        // .attr("opacity", 0.2)
-        // .attr("fill", "#ff7f00")
-        .attr("fill", this.get_color("infectedCarrier"))
-        .attr("opacity", 0.5)
-        .attr("points", (d) => {
-          scaleYBottom.domain([yMaxBottom, 0])
-          let bottomPoints = width + ",0, 0,0"
-          let points = ""
-          for (let i = 0; i < d.length; i++) {
-            points =
-              points +
-              ((i * width) / d.length).toString() +
-              ",-" +
-              scaleYBottom(d[i][dataTypeBottom.type]).toString() +
-              ", "
-            points =
-              points +
-              (((i + 1) * width) / d.length).toString() +
-              ",-" +
-              scaleYBottom(d[i][dataTypeBottom.type]).toString() +
-              ", "
-          }
-          return points + bottomPoints
-        })
-        .attr(
-          "transform",
-          (d) => "translate(" + 0 + "," + scaleYBottom(yMaxBottom) + ")"
+    bottomEpidemikurve
+      .enter()
+      .append("rect")
+      .merge(bottomEpidemikurve)
+      .on("click", (d) => {
+        console.log(d)
+      })
+      .attr("class", (d) => "keimkurve_rects")
+      .attr("fill", (d) => {
+        let col = "#bbbbbb"
+
+        if (d.rki_data) {
+          let val = d.rki_data.Ausbruchswahrscheinlichkeit
+          val = val / 0.5 + 0.5
+          col = d3.interpolateOranges(val)
+        }
+
+        return col
+      })
+      .attr("x", (d, i) => {
+        return scaleXBottom(new Date(d.Datum).getTime())
+      })
+      .attr("y", (d) => {
+        return scaleYBottom(d["Anzahl"])
+      })
+      .attr("width", (d) => {
+        return (
+          scaleXBottom(new Date(d.Datum).getTime() + 1000 * 60 * 60 * 24) -
+          scaleXBottom(new Date(d.Datum).getTime())
         )
+      })
+      .attr("height", (d) => {
+        return scaleYBottom(y_max_bottom - d["Anzahl"])
+      })
 
-      bottomEpidemikurve.exit().remove()
-    }
+    bottomEpidemikurve.exit().remove()
 
     /**
      * BOTTOM MEAN7 bzw MEAN28
      */
-    // let avgName = "avg" + meanCurve
-    // if (self.dataType === 1) {
-    //   avgName += "_cs"
-    // }
-
-    // let bottomMean = self.gMeanBottom.selectAll("polygon").data([dataBottom])
-    let bottomMean = self.gMeanTop.selectAll("polygon").data([dataBottomOrg])
+    let bottomMean = self.gMeanTop.selectAll("polygon").data([data_top])
 
     bottomMean
       .enter()
       .append("polygon")
       .merge(bottomMean)
-      .transition()
-      .duration(self.transition_duration)
-      // .attr("class", (d) => "meanKurve7 meanKurve")
-      // .attr("opacity", 0.2)
-      // .attr("stroke", "#ff7f00")
       .attr("stroke", "black")
       .attr("stroke-width", 3)
       .attr("opacity", 1)
       .attr("fill", "none")
       .attr("points", (d) => {
-        // scaleYBottom.domain([yMaxBottom, 0])
-        scaleYTop.domain([yMaxTop, 0])
+        scaleYTop.domain([y_max_top, 0])
         let bottomPoints = width + ",0, 0,0"
         let points = ""
         for (let i = 0; i < d.length; i++) {
@@ -1631,14 +1215,12 @@ class Epikurve extends Component {
             points +
             ((i * width) / d.length).toString() +
             ",-" +
-            // scaleYBottom(d[i][avgName]).toString() +
             scaleYTop(num).toString() +
             ", "
           points =
             points +
             (((i + 1) * width) / d.length).toString() +
             ",-" +
-            // scaleYBottom(d[i][avgName]).toString() +
             scaleYTop(num).toString() +
             ", "
         }
@@ -1646,11 +1228,72 @@ class Epikurve extends Component {
       })
       .attr(
         "transform",
-        // (d) => "translate(" + 0 + "," + scaleYBottom(yMaxBottom) + ")"
-        (d) => "translate(" + 0 + "," + scaleYTop(yMaxTop) + ")"
+        (d) => "translate(" + 0 + "," + scaleYTop(y_max_top) + ")"
       )
 
     bottomMean.exit().remove()
+
+    /**
+     * no loaded data hatching (schraffur)
+     */
+
+    let top_no_loaded_data_rects = self.gEpidemikurveTop
+      .selectAll(".no_loaded_data_rects")
+      .data(no_data_rects_top)
+
+    top_no_loaded_data_rects
+      .enter()
+      .append("rect")
+      .merge(top_no_loaded_data_rects)
+      .attr("class", (d) => "no_loaded_data_rects")
+      // .attr("fill", (d) => {
+      //   let col = "yellow"
+
+      //   return col
+      // })
+      .attr("x", (d, i) => {
+        return scaleXTop(d.begin)
+      })
+      .attr("y", (d) => {
+        return scaleYTop(0)
+      })
+      .attr("width", (d) => {
+        return scaleXTop(d.end) - scaleXTop(d.begin)
+      })
+      .attr("height", (d) => {
+        return scaleYTop(y_max_top)
+      })
+
+    top_no_loaded_data_rects.exit().remove()
+
+    let bottom_no_loaded_data_rects = self.gEpidemikurveBottom
+      .selectAll(".no_loaded_data_rects")
+      .data(no_data_rects_bottom)
+
+    bottom_no_loaded_data_rects
+      .enter()
+      .append("rect")
+      .merge(bottom_no_loaded_data_rects)
+      .attr("class", (d) => "no_loaded_data_rects")
+      // .attr("fill", (d) => {
+      //   let col = "yellow"
+
+      //   return col
+      // })
+      .attr("x", (d, i) => {
+        return scaleXBottom(d.begin)
+      })
+      .attr("y", (d) => {
+        return scaleYBottom(y_max_bottom)
+      })
+      .attr("width", (d) => {
+        return scaleXBottom(d.end + 24 * 60 * 60 * 1000) - scaleXBottom(d.begin)
+      })
+      .attr("height", (d) => {
+        return scaleYBottom(0)
+      })
+
+    bottom_no_loaded_data_rects.exit().remove()
 
     d3.select(self.svgRoot)
       .selectAll(".tick")
@@ -1658,13 +1301,6 @@ class Epikurve extends Component {
       .attr("opacity", 0.5)
       .attr("stroke-dasharray", "4, 6")
       .attr("stroke--width", 1)
-    //.attr("display", (d,i) =>  {
-    //  let r = ""
-    //  if(i === 0) {
-    //    r = "none"
-    //  }
-    //  return ""
-    //})
 
     d3.select(self.svgRoot)
       //.selectAll(".gxAxis")
@@ -1707,14 +1343,75 @@ class Epikurve extends Component {
       )
     }
 
+    let element_to_draw = null
+    if (this.props.get_original_data(this.module_type) === undefined) {
+      element_to_draw = (
+        <div className="error_message">{this.translate("no_data_loaded")}</div>
+      )
+      if (this.props.waiting_for_data) {
+        element_to_draw = (
+          <div className="error_message" style={{ cursor: "wait" }}>
+            <div className="loader"></div>
+            {this.translate("loading_data")}
+          </div>
+        )
+      }
+    }
+    if (element_to_draw === null && this.state.too_small) {
+      element_to_draw = (
+        <div className="too_small">{this.translate("viewport_too_small")}</div>
+      )
+    }
+
+    if (element_to_draw === null && this.filtered_data === undefined) {
+      element_to_draw = (
+        <div className="too_small">{this.translate("empty_data")}</div>
+      )
+    }
+
     return (
-      <div style={{ width: "100%", height: "100%", background: "white" }}>
+      <div
+        ref={(element) => (this.module_container = element)}
+        className="module_container"
+      >
+        {element_to_draw}
         <svg
           className="svgRoot"
           ref={(element) => (this.svgRoot = element)}
-          // TODO: SEHR WICHTIG --> MUSS IN JEDEM MODUL SEIN
-          style={{ pointerEvents: "all" }}
-        />
+          style={{
+            pointerEvents: "all",
+            display: element_to_draw === null ? "block" : "none",
+          }}
+        >
+          {/* https://bl.ocks.org/jfsiii/7772281 */}
+          <defs>
+            <pattern
+              id="pattern-stripe"
+              width="20"
+              height="20"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(45)"
+            >
+              <rect
+                width="10"
+                height="20"
+                transform="translate(0,0)"
+                fill="white"
+              ></rect>
+            </pattern>
+            <mask id="mask-stripe">
+              <rect
+                x="0"
+                y="0"
+                // width="100%"
+                // height="100%"
+                width="5000px"
+                height="5000px"
+                fill="url(#pattern-stripe)"
+              />
+            </mask>
+          </defs>
+        </svg>
         <div
           className="testdiv2"
           style={{ position: "absolute", top: "10px", left: "100px" }}

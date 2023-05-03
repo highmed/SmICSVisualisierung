@@ -1,5 +1,4 @@
 import {
-  ARGUMENT_SCHEMAS,
   Arguments_Empty,
   Arguments_Ps,
   Arguments_TTEsKSs,
@@ -14,9 +13,9 @@ import {
   PathogenFlag,
   Praktikum_CF_2020_Result,
   ValidationResult,
-  PredictionDummy,
 } from "./types"
 import { call_Praktikum_CF_2020 } from "../foreign_libraries/interfaces/praktikumcf2020"
+import CONFIG from "../config"
 
 /**
  * This is the base interface that needs to be supported by *all* data sources.
@@ -99,14 +98,6 @@ export abstract class AbstractDataSource {
         arguments: "args/Arguments_Ps",
         results: "data/Patient_Vaccination",
       },
-      Metadaten: {
-        arguments: "args/Arguments_Ps",
-        results: "data/Metadaten",
-      },
-      PredictionDummy: {
-        arguments: "args/Arguments_Empty",
-        results: "data/PredictionDummy",
-      },
     })
   )
 
@@ -118,10 +109,22 @@ export abstract class AbstractDataSource {
   protected authToken: string
 
   /**
+   * The parameters for the api requests for different methods.
+   * Is overriden by subclasses since different subclasses using the same methods but call them with different parameters
+   */
+  protected readonly request_parameters: { [key: string]: string[] }
+
+  /**
    * Constructor used to initialize default values of abstract data provider.
    */
   constructor() {
     this.authToken = ""
+    this.request_parameters = {
+      Patient_Bewegung_Ps: [],
+      Patient_Labordaten_Ps: [],
+      Contact_NthDegree_TTKP_Degree: [],
+      Labor_ErregerProTag_TTEsKSs: [],
+    }
   }
 
   /**
@@ -139,7 +142,6 @@ export abstract class AbstractDataSource {
     parameter: object,
     authToken?: string
   ): Promise<ValidationResult<unknown>> => {
-    // TODO: Erst hier die spez. request_parameter für API-Anfrage holen!
     this.authToken = authToken || ""
     const specification = AbstractDataSource.MAPPING.get(name)
     if (specification === undefined)
@@ -158,43 +160,45 @@ export abstract class AbstractDataSource {
   }
 
   /**
+   * Collects the needed request parameters for @param procedureName from @param all_parameters
+   * Note: The needed parameters depend on the database the request is sent to
    * @param procedureName The name of the procedure call at the api
    * @param all_parameters All parameters that come with the payload
    * @returns The neccessary parameters for the procedure
    */
-  public static readonly getProcedureParameters = (
+  public readonly getProcedureParameters = (
     procedureName: string,
     all_parameters: any
   ): { [key: string]: string[] } => {
-    let args_tmp = AbstractDataSource.MAPPING.get(procedureName)?.arguments
-    let args: string
-    if (args_tmp === undefined) {
-      console.log(
-        `[getProcedureParameters]: There are no specified parameters for procedure ${procedureName}.`
-      )
-      // TODO: Hier einen Error setzen?
-      // Arguments_Empty case
-      return {}
-    } else {
-      args = args_tmp
+    const args = this.request_parameters[procedureName]
+    let parameters: { [key: string]: string[] } = {}
 
-      let JSON_schema: any
-
-      ARGUMENT_SCHEMAS.forEach((schema: any) => {
-        if (JSON.stringify(schema).indexOf(args) !== -1) {
-          JSON_schema = schema
-        }
-      })
-
-      let parameters: { [key: string]: string[] } = {}
-
-      JSON_schema.required.forEach((para: string) => {
-        parameters[para] = all_parameters[para]
-      })
-
+    if (args === undefined) {
+      // console.log(
+      //   `[getProcedureParameters]: No parameters for procedure '${procedureName}' and database '${CONFIG.datasource}'.`
+      // )
       return parameters
     }
+
+    if (args.length === 0) {
+      return parameters
+    }
+
+    args.forEach((para: string) => {
+      parameters[para] = all_parameters[para]
+    })
+
+    return parameters
   }
+
+  /**
+   * Function to enable the mapping of properties from different sources to one entity
+   */
+  public abstract mapping: (
+    procedureName: string,
+    data: ValidationResult<unknown>,
+    all_parameters: { [key: string]: string[] }
+  ) => Promise<Object>
 
   public abstract GetHospitals: (
     parameters: Arguments_Empty

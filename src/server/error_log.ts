@@ -1,200 +1,109 @@
 import * as cli_color from "cli-color"
 import hash = require("object-hash")
-import { RestAPI } from "./data_io/concrete_data_providers/rest_api"
 import module_parser from "./module_parser"
 import {
+  database,
   get_parameter_module_data,
   get_parameter_parsed_data,
 } from "./websocket_api"
 
-import fs = require("fs")
+import * as fs from "fs"
 
 /**
- * Note: For parsed_data and module_data 'parameters' will hold request parameters which are neccessary for the needed raw data
+ * Note: For parsed_data and module_data 'parameters' will hold the necessary request parameters for the needed raw_data
  *       For raw_data only the parameters which are neccessary for the procedure call
- * @param resolved_ts Timestamp which is set when the error is fixed
+ * @param solved_ts Timestamp which is set when the error is fixed
  * @param occurence_ts Timestamp which is set when the error first occured
+ * @param parameters Necessary paras for the procedure call, NOT for the hash
  */
 export type errorDataType = {
   data_name: string
   data_type: string
   parameters: { [key: string]: string[] }
-  error: string | object | any
+  error_desc: string
   priority: number
-  solved_ts: number | undefined
+  solved_ts: number
   occurence_ts: number
 }
 
+/**
+ * The description for each error priority. Different messages for devs and users.
+ */
 export const error_description: { readonly [key: number]: string[] } = {
-  0.0: [
-    "[ERROR 0.0]: ",
-    "Some request_parameters are missing or wrong. Please check the payload in /public/modules/main.js",
+  1.0: [
+    "Some request_parameters are missing or wrong. Please check the payload in /public/modules/main.js. The name of the function is 'requestVisData()",
     "Es fehlen Eingabeparameter für die Anfrage von Daten. Sind alle Felder ausgefüllt?",
   ],
   1.1: [
-    "[ERROR 1.1]: ",
-    "data request to the API failed. Please check the connection and the request parameters. We received no data, or we got data which is probably incorrect. The function that makes the call to the API is getDataFromREST() at websocket_api.ts.",
+    "Data request to the API failed. Please check connection & request parameters. We received no data, or incorrect data. The function that makes the call to the API is getDataFromREST() at src/server/websocket_api.ts.",
     "Die Datenbank ist zur Zeit nicht erreichbar. Bitte versuchen Sie es später erneut.",
   ],
   1.2: [
-    "[ERROR 1.2]: ",
-    "raw_data for data_parser.ts is not cached. This error occured in the function computeParsedData() at websocket_apt.ts",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Data request to the API failed. Please check connection & request parameters. We received no data, or incorrect data. The function that makes the call to the API is getDataFromREST() at src/server/websocket_api.ts.",
+    "Die Datenbank ist zur Zeit nicht erreichbar. Bitte versuchen Sie es später erneut.",
+    // "raw_data for data_parser.ts is not cached. This error occured in the function computeParsedData() at websocket_apt.ts",
+    // "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
   1.3: [
-    "[ERROR 1.3]: ",
-    "raw_data for data_parser.ts is cached but has an error. The issue occured in the function computeParsedData() at websocket_api.ts",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Data request to the API failed. Please check connection & request parameters. We received no data, or incorrect data. The function that makes the call to the API is getDataFromREST() at src/server/websocket_api.ts.",
+    "Die Datenbank ist zur Zeit nicht erreichbar. Bitte versuchen Sie es später erneut.",
+    // "raw_data for data_parser.ts is cached but has an error. The issue occured in the function computeParsedData() at websocket_api.ts",
+    // "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
   1.4: [
-    "[ERROR 1.4]: ",
     "raw_data.error !== undefined in data_parser.ts. ",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
   1.5: [
-    "[ERROR 1.5]: ",
     "raw_data for module_parser is not cached. This error occured in the function computeModuleData() at websocket_api.ts",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
   1.6: [
-    "[ERROR 1.6]: ",
     "raw_data for module_parser is cached but has an error. Error occured in the function computeModuleData() at websocket_api.ts",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
   1.7: [
-    "[ERROR 1.7]: ",
     "raw_data.error !== undefined in module_parser.ts. ",
-    "Die Berechnung der Daten ist fehlgeschlagen.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
 
   2.5: [
-    "[ERROR 2.5]: ",
     "parsed_data for module_parser.ts is not cached. This error occured in the function computeModuleData() at websocket_api.ts",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
   2.6: [
-    "[ERROR 2.6]: ",
     "parsed_data for module_parser.ts is cached but has an error. Error occured in the function computeModuleData() at websocket_api.ts ",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
   2.7: [
-    "[ERROR 2.7]: ",
     "parsed_data.error !== undefined in module_parser.ts. ",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
   2.8: [
-    "[ERROR 2.8]: ",
     "An error occured while computing ",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
 
   3: [
-    "[ERROR 3.0]: ",
     "An error occured while computing visualization data with ",
-    "Bei der Berechnung der Daten ist etwas schief gegangen. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
+    "Bei der Berechnung der Daten ist ein Fehler aufgetreten. Möglicherweiße werden Ihnen Teile der Visualisierung nicht vollständig angezeigt.",
   ],
 }
 
-/**
- * This function creates the correct error object for each cacheDatatype and returns it
- * @param name Name of the procedure
- * @param all_parameters All request parameters which are sent by client
- * @param prio The prio of the error. Depends on where the error occurs
- * @param errorMsg An description of the error or the original error-msg (e. g. send by the api)
- * @returns An error object of errorDataType
- */
-export const createError = (
-  name: string,
-  all_parameters: any,
-  prio: number = Infinity,
-  errorMsg?: undefined | object | string
-): errorDataType => {
-  let errorObj: string | object
-
-  let errLogObjTmp: errorDataType = {
-    data_name: name,
-    data_type: "unknown",
-    parameters: all_parameters,
-    error: undefined,
-    priority: prio,
-    solved_ts: undefined,
-    occurence_ts: new Date().getTime(),
-  }
-  switch (prio) {
-    case 0.0:
-      errLogObjTmp.data_type = "wrong_parameter / missing_parameter"
-
-      errorObj = {
-        dev_desc: error_description[prio][0] + error_description[prio][1],
-        error_msg: error_description[prio][0] + errorMsg,
-        user_desc: error_description[prio][2],
-      }
-      errLogObjTmp.error = errorObj
-      break
-    case 1.1:
-    case 1.2:
-    case 1.3:
-    case 1.4:
-    case 1.5:
-    case 1.6:
-    case 1.7:
-      errLogObjTmp.data_type = "raw_data"
-      errLogObjTmp.parameters = RestAPI.getProcedureParameters(
-        name,
-        all_parameters
-      )
-
-      errorObj = {
-        dev_desc: error_description[prio][0] + error_description[prio][1],
-        error_msg: errorMsg,
-      }
-      errLogObjTmp.error = errorObj
-      break
-
-    case 2.5:
-    case 2.6:
-    case 2.7:
-      errLogObjTmp.data_type = "parsed_data"
-      errLogObjTmp.parameters = get_parameter_parsed_data(name, all_parameters)
-      errorObj = {
-        dev_desc:
-          error_description[prio][0] +
-          error_description[prio][1] +
-          `Please take a look in the stack_trace below.`,
-        stack_trace: errorMsg,
-      }
-      errLogObjTmp.error = errorObj
-      break
-
-    case 2.8:
-      errLogObjTmp.data_type = "parsed_data"
-      errLogObjTmp.parameters = get_parameter_parsed_data(name, all_parameters)
-      errorObj = {
-        dev_desc:
-          error_description[prio][0] +
-          error_description[prio][1] +
-          `data_parser[${name}]. Please take a look in the stack_trace below.`,
-        stack_trace: errorMsg,
-      }
-      errLogObjTmp.error = errorObj
-      break
-
-    case 3:
-      errLogObjTmp.data_type = "module_data"
-      errLogObjTmp.parameters = get_parameter_module_data(name, all_parameters)
-      errorObj = {
-        dev_desc:
-          error_description[prio][0] +
-          error_description[prio][1] +
-          `module_parser[${name}]. Please take a look in the stack_trace below.`,
-        stack_trace: errorMsg,
-      }
-      errLogObjTmp.error = errorObj
-      break
-  }
-  return errLogObjTmp
+const error_prio: {
+  raw_data: number[]
+  parsed_data: number[]
+  module_data: number[]
+} = {
+  raw_data: [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7],
+  parsed_data: [2.5, 2.6, 2.7, 2.8],
+  module_data: [3],
 }
 
+/**
+ * This class implements all methods to log the specific errors which can occure
+ * during the data pipeline on the webserver.
+ */
 export class Error_Log {
   private log: errorDataType[]
   private index: number
@@ -202,58 +111,6 @@ export class Error_Log {
   public constructor() {
     this.log = []
     this.index = 0
-  }
-
-  /**
-   * Returns an specific errorDataType object in the log or undefined
-   * @param hashID Hash of an object with data_name, parameters, priority
-   */
-  private getErrorByID = (hashID: string): errorDataType | undefined => {
-    for (let i: number = 0; i < this.log.length; i++) {
-      let hashIDtmp: string = hash({
-        name: this.log[i].data_name,
-        para: this.log[i].parameters,
-        prio: this.log[i].priority,
-      })
-
-      if (hashID === hashIDtmp) {
-        return this.log[i]
-      }
-    }
-    return undefined
-  }
-
-  /**
-   * @param hashID Hash of an object with data_name, parameters, priority
-   */
-  private deleteErrorByID = (hashID: string) => {
-    for (let i: number = 0; i < this.log.length; i++) {
-      let hashIDtmp: string = hash({
-        name: this.log[i].data_name,
-        para: this.log[i].parameters,
-        prio: this.log[i].priority,
-      })
-
-      if (hashID === hashIDtmp) {
-        this.log.splice(i, 1)
-        break
-      }
-    }
-  }
-
-  /**
-   * Sort the log by occurence of the errors
-   */
-  private sortLogByOccurence = (): void => {
-    this.log.sort((errObj1: errorDataType, errObj2: errorDataType): number => {
-      if (errObj1.occurence_ts < errObj2.occurence_ts) {
-        return -1
-      }
-      if (errObj1.occurence_ts > errObj2.occurence_ts) {
-        return 1
-      }
-      return 0
-    })
   }
 
   /**
@@ -268,55 +125,106 @@ export class Error_Log {
   }
 
   /**
-   *
-   * @param errorID Hash of an object with data_name, parameters, priority of the error
-   * @returns true if an error with errorID is in the log, false otherwise
+   * Looks for unsolved errors in the log. Unsolved means that there is no
+   * valid data cached according to the error.
+   * @returns true if log includes unsolved errors, false otherwise
    */
-  public logIncludes = (errorID: string): boolean => {
-    for (let i: number = 0; i < this.log.length; i++) {
-      let hashIDtmp: string = hash({
-        name: this.log[i].data_name,
-        para: this.log[i].parameters,
-        prio: this.log[i].priority,
-      })
-      if (hashIDtmp === errorID) {
-        return true
-        break
-      }
-    }
+  public unsolvedErrors = (): boolean => {
+    for (let error of this.log) if (error.solved_ts === -1) return true
+
     return false
   }
 
   /**
-   * @returns The error log of the class
+   * Access to an specific error in the log based on it's hash
+   * @param hashID Hash of an object with data_name, parameters, priority
+   * @returns An specific errorDataType object in the log or undefined
    */
-  public getErrorLog = (): errorDataType[] => {
-    return this.log
+  private getErrorByID = (hashID: string): errorDataType | undefined => {
+    for (let i: number = 0; i < this.log.length; i++) {
+      let hashID_tmp = hash({
+        name: this.log[i].data_name,
+        para: this.log[i].parameters,
+        prio: this.log[i].priority,
+      })
+
+      if (hashID === hashID_tmp) {
+        return this.log[i]
+      }
+    }
+    return undefined
   }
 
   /**
-   * This function deletes the first error in the log and returns it
-   * @returns The error to be deleted or undefined if the errorLog is empty
+   * Function to make the logging of an error as easy as possible
+   * @param procedure_name Name of the procedure with the occured error
+   * @param all_parameters All input parameters given by the client
+   * @param priority Depends on data_type and occurence in the pipeline
+   * @param error_msg the string-msg you want to log for the error
    */
-  public getError = (): errorDataType | undefined => {
-    return this.log.shift()
-  }
+  public addError = (
+    procedure_name: string,
+    all_parameters: { [key: string]: string[] },
+    priority: number,
+    error_msg: string
+  ): void => {
+    let save_to_log: boolean = true
 
-  /**
-   * This function pushes an error to the log if it isn't already logged
-   * @param error The error to be logged
-   */
-  public addError = (error: errorDataType | undefined): void => {
-    let saveToLog: boolean = true
+    let error: errorDataType = {
+      data_name: procedure_name,
+      data_type: "unknown",
+      parameters: all_parameters,
+      error_desc: error_msg,
+      priority: priority,
+      solved_ts: -1,
+      occurence_ts: new Date().getTime(),
+    }
 
-    if (error === undefined) {
-      return
+    switch (priority) {
+      case 1.0:
+        error.data_type = "payload"
+        break
+      case 1.1:
+      case 1.2:
+      case 1.3:
+      case 1.4:
+      case 1.5:
+      case 1.6:
+      case 1.7:
+        error.data_type = "raw_data"
+        error.parameters = database.getProcedureParameters(
+          error.data_name,
+          all_parameters
+        )
+        break
+      case 2.5:
+      case 2.6:
+      case 2.7:
+      case 2.8:
+        error.data_type = "parsed_data"
+        error.parameters = get_parameter_parsed_data(
+          procedure_name,
+          all_parameters,
+          database
+        )
+        break
+      case 3:
+        error.data_type = "module_data"
+        error.parameters = get_parameter_module_data(
+          procedure_name,
+          all_parameters,
+          database
+        )
+        break
+      default:
+        error.data_type = "unknown priority - now datatype for error"
+        break
     }
 
     let hashID: string = hash({
-      name: error.data_name,
+      name: procedure_name,
       para: error.parameters,
-      prio: error.priority,
+      prio: priority,
     })
 
     this.log.forEach((logErr: errorDataType) => {
@@ -327,32 +235,23 @@ export class Error_Log {
       })
 
       if (hashID === hashIDtmp) {
-        saveToLog = false
+        /* this error already occured. However, we update the occurence of the error */
+        logErr.occurence_ts = new Date().getTime()
+        save_to_log = false
+        return
       }
     })
 
-    if (saveToLog) {
+    if (save_to_log) {
       this.log.push(error)
-
-      /* sort the error_log by priority -> prio 1: first - prio 3: last */
-      this.log = this.log.sort(
-        (errObj1: errorDataType, errObj2: errorDataType): number => {
-          if (errObj1.priority < errObj2.priority) {
-            return -1
-          }
-          if (errObj1.priority > errObj2.priority) {
-            return 1
-          }
-          return 0
-        }
-      )
     }
+    return
   }
 
   /**
    * Updates the @solved_ts timestamp for an error with @errorID in the log
    * @param errorID The specific hash of the error
-   * @returns true if there was an error that can be marked, false otherwise
+   * @returns true if an error was successfully marked, false otherwise
    */
   public markErrorSolved = (errorID: string): boolean => {
     let tmpErr = this.getErrorByID(errorID)
@@ -365,65 +264,139 @@ export class Error_Log {
   }
 
   /**
-   * @returns Number of all priority = 1.1 errors in the error_log
+   * Collects all errors according to a module (= datastructure holding all data for a vis)
+   * @param module_name The name of the module we want to look for occured errors
+   * @returns List of all errors which affect @module_name
    */
-  public getAllPrio1Errors = (): number => {
-    let prio1_counter = 0
+  public getErrorsByModule = (
+    module_name: string,
+    all_parameters: { [key: string]: string[] }
+  ): errorDataType[] => {
+    let all_error_hashes: string[] = []
 
-    this.log.forEach((err: errorDataType) => {
-      if (err.priority === 1.1) {
-        prio1_counter++
-      }
-    })
-
-    return prio1_counter
-  }
-
-  /**
-   *
-   * @param module_name The name of the module we want the errors for
-   * @returns List of all neccessary errors for @module_name
-   */
-  public getErrorsByModule = (module_name: string): errorDataType[] => {
-    let all_data: string[] = []
     module_parser[module_name].needed_raw_data.forEach((raw_data: string) => {
-      all_data.push(raw_data)
+      for (let i: number = 0; i < error_prio.raw_data.length; i++) {
+        all_error_hashes.push(
+          hash({
+            name: raw_data,
+            para: database.getProcedureParameters(raw_data, all_parameters),
+            prio: error_prio.raw_data[i],
+          })
+        )
+      }
     })
     module_parser[module_name].needed_parsed_data.forEach(
       (parsed_data: string) => {
-        all_data.push(parsed_data)
+        for (let i: number = 0; i < error_prio.parsed_data.length; i++) {
+          all_error_hashes.push(
+            hash({
+              name: parsed_data,
+              para: get_parameter_parsed_data(
+                parsed_data,
+                all_parameters,
+                database
+              ),
+              prio: error_prio.parsed_data[i],
+            })
+          )
+        }
       }
     )
+
+    all_error_hashes.push(
+      hash({
+        name: module_name,
+        // para: parameters,
+        para: get_parameter_module_data(module_name, all_parameters, database),
+        prio: 3,
+      })
+    )
+
     let module_log: errorDataType[] = []
-    this.log.forEach((err: errorDataType) => {
-      if (all_data.includes(err.data_name)) {
-        module_log.push(err)
+    for (let i: number = 0; i < all_error_hashes.length; i++) {
+      let error = this.getErrorByID(all_error_hashes[i])
+      if (error && error.solved_ts === -1) {
+        module_log.push(error)
       }
-    })
+    }
+    module_log = module_log.sort(
+      (errObj1: errorDataType, errObj2: errorDataType): number => {
+        if (errObj1.priority < errObj2.priority) {
+          return -1
+        }
+        if (errObj1.priority > errObj2.priority) {
+          return 1
+        }
+        return 0
+      }
+    )
     return module_log
   }
 
   /**
-   * This function exports all errors handled by an Error_Log class in a .log file
+   * This function deletes all elements in the log and returns them in a separate array
+   * Implemented for the logging in data_parser.ts and module_parser.ts
+   * @returns An array with the deleted elements of the log
+   */
+  public clearAndReturnLog = () => {
+    return this.log.splice(0, this.log.length)
+  }
+
+  /**
+   * Sorts the log by occurence of the errors
+   */
+  private sortLogByOccurence = (): void => {
+    this.log.sort((errObj1: errorDataType, errObj2: errorDataType): number => {
+      if (errObj1.occurence_ts < errObj2.occurence_ts) {
+        return -1
+      }
+      if (errObj1.occurence_ts > errObj2.occurence_ts) {
+        return 1
+      }
+      return 0
+    })
+  }
+
+  /**
+   * Sorts the log by the priority of the errors
+   */
+  private sortLogByPriority = (): void => {
+    this.log = this.log.sort(
+      (errObj1: errorDataType, errObj2: errorDataType): number => {
+        if (errObj1.priority < errObj2.priority) {
+          return -1
+        }
+        if (errObj1.priority > errObj2.priority) {
+          return 1
+        }
+        return 0
+      }
+    )
+  }
+
+  /**
+   * @returns The error log of the class
+   */
+  public getErrorLog = (): errorDataType[] => {
+    return this.log
+  }
+
+  /**
+   * This function exports all errors (from the start of the server) handled by an Error_Log class in a .log file
    * at ./src/server/logs
    * Note: The function creates one file for each day. The errors are sorted by occurence.
    * Note: The 'solved_ts' property is 'undefined' if the error is unsolved.
-   * @param log_type name for the error_log file
+   * @param log_name name for the error_log file
    */
   public exportErrorsToFile = (log_name: string): void => {
     const path: string = "./src/server/logs/"
-    const daysPerWeek = [
-      "null",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat",
-      "Sun",
-    ]
 
-    if (this.empty() || this.log.length === this.index) {
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path, { recursive: true })
+    }
+
+    if (this.empty()) {
+      // || this.log.length === this.index
       console.log(`[exportErrorsToFile]: Nothing to log. :-)`)
       return
     }
@@ -464,7 +437,7 @@ export class Error_Log {
       stream.write(
         `\n--------------------------------------------------------------------\n`
       )
-      for (let i = this.index; i < this.log.length; i++) {
+      for (let i = 0; i < this.log.length; i++) {
         let err_date = new Date(this.log[i].occurence_ts)
           .toISOString()
           .slice(0, 10)
@@ -474,27 +447,17 @@ export class Error_Log {
         }
         stream.write(`data_name: ${this.log[i].data_name}\n`)
         stream.write(`data_type: ${this.log[i].data_type}\n`)
+        stream.write(`error: ${JSON.stringify(this.log[i].error_desc)}\n`)
+        stream.write(`priority: ${JSON.stringify(this.log[i].priority)}\n`)
         stream.write(`occurence_ts: ${this.log[i].occurence_ts}\n`)
+        stream.write(`occurence_date: ${new Date(this.log[i].occurence_ts)}\n`)
         stream.write(`solved_ts: ${this.log[i].solved_ts}\n`)
-        stream.write(
-          `dev_desc: ${JSON.stringify(this.log[i].error.dev_desc)}\n`
-        )
-        if (this.log[i].data_type === "raw_data") {
-          stream.write(
-            `error: ${JSON.stringify(this.log[i].error.error_msg)}\n`
-          )
-        } else {
-          // TODO: hier wirklich der gesamte stack_trace oder nur der erste Error im Stack?
-          stream.write(
-            `stack_trace[0]: ${JSON.stringify(
-              this.log[i].error.stack_trace[0]
-            )}\n`
-          )
-        }
+        stream.write(`solved_date: ${new Date(this.log[i].solved_ts)}\n`)
         stream.write(`parameters: ${JSON.stringify(this.log[i].parameters)}\n`)
         stream.write(
           `--------------------------------------------------------------------\n`
         )
+        this.index++
       }
       stream.end()
       console.log(
@@ -506,9 +469,11 @@ export class Error_Log {
   }
 
   /**
-   * Prints the errorLog to the console
+   * Prints the log to the console
+   * (for debugging)
    */
   public printErrorLog = (): void => {
+    this.sortLogByPriority()
     console.log(cli_color.red(" ---------- ErrorLog ---------- "))
     for (let i = 0; i < this.log.length; i++) {
       if (i !== 0) {
@@ -517,7 +482,7 @@ export class Error_Log {
         console.log("data_name: ", this.log[i].data_name)
       }
       console.log("data_type: ", this.log[i].data_type)
-      console.log("error:     ", this.log[i].error)
+      console.log("error:     ", this.log[i].error_desc)
       console.log("priority:  ", this.log[i].priority)
       console.log("occurence: ", this.log[i].occurence_ts)
       console.log("solved_ts: ", this.log[i].solved_ts)

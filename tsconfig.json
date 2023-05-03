@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "build/server",
-    "allowJs": false,
+    "allowJs": true,
     "target": "ES5",
     "sourceMap": true,
     "locale": "en",
@@ -13,5 +13,5 @@
     "strict": true
   },
   "include": ["src/server/**/*"],
-  "exclude": ["src/server/foreign_libraries/**/*"]
+  "exclude": ["src/server/foreign_libraries/**/*", "node_modules"]
 }

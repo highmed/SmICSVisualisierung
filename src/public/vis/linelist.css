@@ -33,3 +33,11 @@
 .mouseLine {
   pointer-events: none;
 }
+
+.critical_patient_border {
+  fill: none;
+  pointer-events: none;
+  /* border: 5px black solid; */
+  stroke: black;
+  stroke-width: 3px;
+}

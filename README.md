@@ -170,11 +170,11 @@ npm run start +-+           | |                      | |
 
 Therefore, the `src/` directory is divided into the `src/public/` folder with the frontend and the `src/server/` folder with the backend.
 
-#### Structure of the frontend
+#### **Structure of the frontend**
 
 TODO: @Tom
 
-#### Structure of the backend
+#### **Structure of the backend**
 
 The following schema gives an overview over the data access via websockets:
 
@@ -194,13 +194,11 @@ The following schema gives an overview over the data access via websockets:
 |  src/server/websocket_api.ts  |          |HTTP(S)
 |                               |          |(JSON)     +----------------------+
 +---------^---------------------+          +----------->     MAH REST API     |
-          |                                            +----------------------+
-+---------v--------+
-|  GetDataSources  |
-+------------------+
+                                                       +----------------------+
+
 ```
 
-If something else than the special `GetDataSources` procedure is called, the following steps are performed (error handling aborts immediately):
+The following steps are performed when the server receives a valid request.
 
 ```asciiart via http://asciiflow.com/
 +-------------------------------+
@@ -217,17 +215,17 @@ If something else than the special `GetDataSources` procedure is called, the fol
 |          Data Access           |     ++--------------------+
 |  src/server/websocket_api.ts   | (3)  |
 |                                <------+
-|                                |
-|                                |     +-------------------------------------+
+|      Data Preprocessing        |
+|  src/server/data_parser.ts     |     +-------------------------------------+
 |                                |     |                                     |
-|                                |     |   Some Concrete Data Source         |
-|                                |     |                                     |
+|  Generate Visualization Data   |     |   Some Concrete Data Source         |
+|  src/server/module_parser.ts   |     |                                     |
 |                                | (4) |   +-----------------------------+   |
-|                                +--------->     Validate Parameters     |   |
-|                                |     |   +-----------+-----------------+   |
+|      Caching the Data          +--------->     Validate Parameters     |   |
+|     src/server/cache.ts        |     |   +-----------+-----------------+   |
 |                                |     |               | (5)                 |
-|                                |     |   +-----------v-----------------+   | (6) +---------------------------+
-|                                |     |   |     Transform Arguments     +--------->                           |
+|      Logging Data Errors       |     |   +-----------v-----------------+   | (6) +---------------------------+
+|    src/server/error_log.ts     |     |   |     Transform Arguments     +--------->                           |
 |                                |     |   +-----------------------------+   |     |                           |
 |                                |     |                                     |     |  Remote Database or API   |
 |                                |     |   +-----------------------------+   | (7) |                           |
@@ -241,11 +239,11 @@ If something else than the special `GetDataSources` procedure is called, the fol
 +--------------------------------+     +-------------------------------------+
 ```
 
-### How to extend this software
+### **How to extend this software**
 
 This section contains tutorials on how to extend various components of the system.
 
-#### Changing or Adding new JSON Schemas
+#### **Changing or Adding new JSON Schemas**
 
 Validation is performed using JSON Schemas. Information on how to use JSON schemas can be found in [the tutorial on the official website](https://json-schema.org/understanding-json-schema/). We use [ajv](https://ajv.js.org/) for the general validation and the plugin [ajv-moment](https://www.npmjs.com/package/ajv-moment) for validation of dates. Please referer to the libraries for documentation.
 
@@ -260,7 +258,7 @@ To add a new schema called `TheSchemaName`, two things must be done: (1) the act
 3. Import the interface/typing information by adding `import {TheSchemaName} from "./type_declarations/generated/TheSchemaName"` to the top of the file.
 4. Export the type similar to the other ones. This makes you new type `TheSchemaName` importable from the file `src/server/data_io/types.ts`, where all other declarations live.
 
-#### Adding new data sources
+#### **Adding new data sources**
 
 All data sources must extend the abstract class `AbstractDataSource` (found in `src/server/data_io/abstract_data_provider.ts`) and are usually placed in `src/server/data_io/concrete_data_providers/`.
 
@@ -268,15 +266,141 @@ The documentation of `AbstractDataSource` describes how the class should roughly
 
 In the end, make sure to add tests to `test/test_all_data_sources.ts` by extending `PROCEDURES`.
 
-#### Adding new procedures
+#### **Adding new procedures**
 
 New procedures can be added by first modifying the `AbstractDataSource` in `src/server/data_io/abstract_data_provider.ts`. Here, add a method to the end of the class, analogous to the other methods: `public abstract async Name_Of_The_Procedure(parameters: Arguments_Whatever): Promise<ResultingDataType>`. Also add an entry to `AbstractDataSource::MAPPING` to allow for dynamic calls via `AbstractDataSource::callByName`. Finally, the actual procedure must be implemented in all data sources, which may explicitly throw and error if they shall not or cannot support it.
 
+Note: `AbstractDataSource::callByName` validates the parameters for the procedure call against a JSON Schema. Make sure that you have added a schema for your new procedure as described [here](#changing-or-adding-new-json-schemas)
+
 In the end, make sure to add tests to `test/test_all_data_sources.ts` by extending `PROCEDURES`.
 
-### Documentation of the data sources
+#### **Documentation of the data sources**
 
 TODO: add link
+
+#### **Adding a new function to the module_parser**
+
+In [`src/server/module_parser.ts`](src/server/module_parser.ts) each vis module has an own function to compute the final data.
+To add a new function define it as part of the `module_parser` like the following template:
+
+```
+name_of_the_vis_module: {
+    needed_raw_data: ["raw_data_I", "raw_data_II", ... , "raw_data_N"],
+    needed_parsed_data: ["parsed_data_I", "parsed_data_II", ..., "parsed_data_N"],
+    call_function: (input_data: any, parameters: any, callback: Function) => {
+        /* put your code here */
+    },
+},
+```
+
+Make sure that you don't have errors in your raw\_/parsed_data when working on it. If an error occures you can log it with an instance of the class `Error_Log` defined at [`src/server/error_log.ts`](src/server/error_log.ts). Look at the following example if you want to log errors.
+
+```
+if(raw_data_I.error === undefined){
+    // working on the data
+}else{
+    // add an error to the log
+    error_log.addError(
+          "raw_data_I",
+          parameters,
+          error_prio,
+          raw_data_I.error
+        )
+}
+```
+
+To return the data define a callback like the following template. Make sure that it includes at least the line `return_log: error_log.clearAndReturnLog()` which is neccessary for the websocket api to handle the data pipeline, cache and error handling.
+
+```
+callback({
+        result_I,
+        ...,
+        result_N
+        return_log: error_log.clearAndReturnLog(),
+      })
+```
+
+#### **Adding a new function to the data_parser**
+
+Data preprocessing is handled in [`src/server/data_parser.ts`](src/server/data_parser.ts). The idea is to generate data based on `raw_data` (what we receive from the APIs), which we may want to access in different `module_parser` functions.
+
+The procedure to add a new function is the same as for the [module_parser](#adding-a-new-function-to-the-module_parser) with one exception: You can't access any parsed_data.
+
+Note: You don't need a callback here. Just return the data in an object and don't forget the `return_log`
+
+```
+return {
+        result_I,
+        ...,
+        result_N
+        return_log: error_log.clearAndReturnLog(),
+      }
+```
+
+#### **Error Handling and Description of the Error Codes**
+
+The server is trying to deal with errors that occure during the data request or the computation of data.
+
+There are three different types of data:
+
+- raw_data: All data the backend receives from an api
+- parsed_data: The output of the `data_parser.ts`. Input: raw_data
+- module_data: The output of the `module_parser.ts` Input: raw_data & parsed_data
+
+The error codes are structured on the data type and the occurence in the pipeline.
+All errors starting with `[ERROR 1.*]` affect the raw_data. `[ERROR 2.*]` affects parsed_data and `[ERROR 3.0]` the module_data.
+Furthermore the second number (from 1 to 8) indicates the location where the error occured. (e. g. data_parser, api call, ...)
+
+`[ERROR 1.0]`: Some request parameters are missing which are neccessary for the procedure call to an api. This is mostly caused by missing input parameters from the user
+
+`[ERROR 1.1]`: Data request to the API failed. Logged at: `getDataFromREST()` at `websocket_api.ts`
+
+`[ERROR 1.2]`: raw_data for data_parser not cached. Logged at: `computeParsedData()` at `websocket_api.ts`
+
+`[ERROR 1.3]`: raw_data for data_parser is cached and includes an error. Logged at: `computeParsedData()` at `websocket_api.ts`
+
+`[ERROR 1.4]`: raw_data.error !== undefined in a data_parser procedure.
+
+`[ERROR *.5]`: raw\_/parsed_data for module_parser not cached. Logged at: `computeModuleData()` at `websocket_api.ts`
+
+`[ERROR *.6]`: raw\_/parsed_data for module_parser is cached and includes an error. Logged at: `computeModuleData()` at `websocket_api.ts`
+
+`[ERROR *.7]`: raw\_/parsed_data.error !== undefined in a module_parser procedure.
+
+`[ERROR 2.8]`: Indicates that something went wrong in a data_parser procedure which results in incorrect parsed_data.
+
+`[ERROR 3.0]`: Indicates that something went wrong in a module_parser procedure which results in incorrect module_data.
+
+The errors are stored in a datastructure like the following template.
+
+```
+type errorDataType = {
+  data_name: string
+  data_type: string
+  parameters: { [key: string]: string[] }
+  error: string
+  priority: number
+  solved_ts: number
+  occurence_ts: number
+}
+```
+
+`priority` is equal to the error code. Note: The lowest number (1.0) has the HIGHEST priority.
+
+`solved_ts` is -1 for an unsolved error.
+
+`error` is a string describing the reason for the occurence of it.
+
+**Logging:** All errors can be exported to .log files. Each day gets an own file.
+There are two steps to enable the export.
+
+**(1)** set the `USE_LOGGING` flag at the [.env](.env) file to `true`
+
+**(2)** press the button which delivers the cache data. It will also trigger the export function
+
+The exported errors are located at [`src/server/logs`](src/server/logs)
+
+Note: The errors are only available as long as the webserver is running. A shutdown will make them unavailable as long as they are not exported.
 
 ## See also
 
@@ -291,3 +415,7 @@ TODO: add link
 - deploy (started in CI file)
 - License & license policy
 - Labordaten validierung: wenn befund da => dann KeimID auch da
+
+```
+
+```

@@ -1,9 +1,8 @@
 import * as cli_color from "cli-color"
 import os = require("os")
-import { Error_Log } from "./error_log"
 
 /**
- * This function deletes the complete cache if we have less than 2000MB left on the RAM
+ * This function deletes the complete cache if there is less than 2000MB left on the RAM
  * @param cache The data structure which holds the cached data
  */
 export const checkMemorySize = (cache: DataCache): void => {
@@ -49,7 +48,9 @@ export type _module_data = {
   required_parsed_data: string[]
 }
 
-/* data type for all objects stored in the cache */
+/* data type for all objects stored in the cache
+ * Note: This package is used for the hashes: https://www.npmjs.com/package/object-hash
+ */
 export type cacheDatatype = {
   data_name: string
   data_type: string
@@ -61,14 +62,16 @@ export type cacheDatatype = {
   parameters: { [key: string]: string[] }
 }
 
-export class DataCache extends Error_Log {
-  /* data structure which stores the cache data */
+/**
+ * This class implements all necessary methods of the cache
+ */
+export class DataCache {
+  /* data structure to store the data */
   private memory: Map<string, cacheDatatype>
 
   public constructor() {
-    super()
     this.memory = new Map<string, cacheDatatype>()
-    this.refreshCache(30)
+    this.refreshCache(300)
   }
 
   /**
@@ -94,20 +97,21 @@ export class DataCache extends Error_Log {
   /**
    * Checks if some data is already in the cache
    * @param hashID hashed parameters of the data
-   * @returns true if data is in cache, false otherwise
+   * @returns true if data is cached, false otherwise
    */
   public isInCache = (hashID: string): boolean => {
     return this.memory.has(hashID)
   }
 
   /**
-   * Saves some data to the cache
-   * @param item the data to be cached, make sure it is from type: cacheDatatype
+   * Saves data to the cache
+   * @param item the data to be cached
+   * @returns A promise of type string
    */
   public saveDataToCache = (item: cacheDatatype): Promise<string> => {
     return new Promise<string>((resolve, reject) => {
       console.log(
-        cli_color.blue(`[Cache]: Tryin to save '${item.data_name}' to cache`)
+        cli_color.blue(`[Cache]: Tryin to save '${item.data_name}' to cache.`)
       )
       if (!this.isInCache(item.hashID)) {
         this.memory.set(item.hashID, item)
@@ -123,7 +127,7 @@ export class DataCache extends Error_Log {
   }
 
   /**
-   * Get the whole cache
+   * Get the whole cache (to emit it to the client for debugging)
    * @returns An object with all items in the cache. Sorted by 'raw_data', 'parsed_data' and 'module_data'
    */
   public getCache = (): object => {
@@ -147,17 +151,16 @@ export class DataCache extends Error_Log {
   }
 
   /**
-   * Deletes all data in the cache
+   * Deletes ALL data in the cache
    */
   public clearCache = () => {
     this.memory.clear()
   }
 
   /**
-   * This function updates the timestamp of an object in the cache. The timestamp shows the last time
-   * we needed that data for some vis
+   * This function updates the @param refresh_ts of an object in the cache.
    * @param hashID The hash of the object
-   * @returns true if the update goes right, false otherwise
+   * @returns true if the update was successful, false otherwise
    */
   public setTimestamp = (hashID: string): boolean => {
     let tmpObj: cacheDatatype | undefined = this.getDataFromCache(hashID)
@@ -173,7 +176,7 @@ export class DataCache extends Error_Log {
   }
 
   /**
-   * @param hashID the hash of the parameters from the data
+   * @param hashID the hash of the parameters according to the data
    * @returns some specific data based on the hashID or undefined if the key don't exist
    */
   public getDataFromCache = (hashID: string): cacheDatatype | undefined => {
@@ -182,7 +185,7 @@ export class DataCache extends Error_Log {
 
   /**
    * This functions deletes a single data object in the cache based on the hashID
-   * @param hashID The ID of the data to be deleted
+   * @param hashID The hash of the data to be deleted
    */
   public deleteDataFromCache = (hashID: string): void => {
     this.memory.delete(hashID)
@@ -199,6 +202,8 @@ export class DataCache extends Error_Log {
     if (tmpCacheObject?.error !== undefined) {
       return false
     } else if (typeof tmpCacheObject === undefined) {
+      return false
+    } else if (tmpCacheObject?.data === undefined) {
       return false
     } else {
       return true

@@ -69,11 +69,11 @@ const parseToStorylineData = (input, specificKeimID) => {
     bewegung.eventType = "Bewegung"
     bewegung.timestamp = bewegung.ts_Beginn
     bewegung.patientID = bewegung.PatientID
-    bewegung.stationID = bewegung.StationID
+    bewegung.stationID = bewegung.Station
     // bewegung.PatientID = Number(bewegung.PatientID)
 
-    if (!stationList.includes(bewegung.StationID)) {
-      stationList.push(bewegung.StationID)
+    if (!stationList.includes(bewegung.Station)) {
+      stationList.push(bewegung.Station)
     }
   })
 
@@ -583,7 +583,7 @@ const parseToStorylineData = (input, specificKeimID) => {
            *        ____
            *        ___/
            */
-          let stationID = e.StationID
+          let stationID = e.Station
 
           if (e.letzteBewegung) {
             stationID = "home"
