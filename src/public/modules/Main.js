@@ -34,7 +34,7 @@ class Main extends Component {
     super(props)
     this.socket = props.socket.client
 
-    this.defaults = "sql_db"
+    this.defaults = "prod"
     // this.defaults = "pascal2"
 
     // TODO: was macht das/kann das entfernt werden/ersertzt?
@@ -183,6 +183,14 @@ class Main extends Component {
         pathogenList_string: "sau",
         stationList_string: "Coronastation",
         patientID: "Patient102",
+      },
+      prod:{
+        starttime: "2021-01-01",
+        endtime: "2021-01-02",
+        patientList_string: "",
+        pathogenList_string: "",
+        stationList_string: "",
+        patientID: "",
       },
       pathogenList_string: "COV",
       stationList_string: "Station 14",
