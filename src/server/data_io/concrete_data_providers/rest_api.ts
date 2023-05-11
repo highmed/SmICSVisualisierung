@@ -160,6 +160,9 @@ export class RestAPI extends AbstractDataSource {
         if (as_string !== undefined) bewegung.Bewegungstyp = as_string
         // else leave that field missing
       }
+
+      // Map "StationID" to "Station" for REST-API
+      bewegung.Station = bewegung.StationID
     }
 
     const sorted: unknown = data.sort((a, b) =>
